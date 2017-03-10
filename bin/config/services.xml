@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services>
+	<service id="manager.database">
+		<class>vendor.database.DatabaseManager</class>
+		<args>
+			<value>%database.server%</value>
+			<value>%database.name%</value>
+			<value>%database.user%</value>
+			<value>%database.pass%</value>
+		</args>
+	</service>
+	<service id="manager.entity">
+		<class>vendor.database.EntityManager</class>
+		<args>
+			<value>@manager.database</value>
+		</args>
+	</service>
+
+	<service id="repo.user">
+		<class>@manager.entity</class>
+		<call method="getRepository">
+			<value>domain.User</value>
+		</call>
+	</service>
+</services>

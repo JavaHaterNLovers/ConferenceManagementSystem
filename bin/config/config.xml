@@ -1,0 +1,8 @@
+<params>
+	<database>
+		<server>localhost</server>
+		<name>ConferenceManagementSystem</name>
+		<user>root</user>
+		<pass></pass>
+	</database>
+</params>
