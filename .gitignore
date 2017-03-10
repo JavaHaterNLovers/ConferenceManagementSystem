@@ -1,1 +1,8 @@
-src/main/resources/config/config.xml
+/src/main/resources/config/config.xml
+
+## Gradle
+/.gradle
+/build
+/eclipse
+/gradlew.bat
+/gradlew
