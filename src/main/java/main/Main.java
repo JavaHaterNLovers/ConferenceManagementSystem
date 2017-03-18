@@ -3,6 +3,8 @@ package main;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import javafx.application.Application;
 import javafx.concurrent.Worker.State;
@@ -10,11 +12,11 @@ import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
-import vendor.Config;
-import vendor.Container;
 
 public class Main extends Application
 {
+    private static ApplicationContext container;
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         WebView browser = new WebView();
@@ -24,12 +26,11 @@ public class Main extends Application
               if (newValue == State.SUCCEEDED) {
                 System.out.println("finished loading");
               }
-            }); // addListener()
+            });
 
         InputStream stream = getClass().getResourceAsStream("/html/index.html");
 
         webEngine.loadContent(IOUtils.toString(stream));
-
 
         Scene scene = new Scene(browser, 300, 250);
 
@@ -44,10 +45,13 @@ public class Main extends Application
      * @throws Exception
      */
 	public static void main(String[] args) throws Exception {
-        Config.initialize("src/main/resources/config/config.xml");
-        Container.initialize("src/main/resources/config/services.xml");
+	    container = new ClassPathXmlApplicationContext("services.xml");
 
-//        UserRepository repo = (UserRepository) Container.getContainer().get("repo.user");
+//        UserRepository repo = (UserRepository) container.getBean("repo.user");
         Application.launch(args);
 	}
+
+    public static ApplicationContext getContainer() {
+        return container;
+    }
 }

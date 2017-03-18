@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<bean id="database.manager" class="vendor.database.DatabaseManager">
+	<constructor-arg value="database.properties"/>
+</bean>
+
+<bean id="entity.manager" class="vendor.database.EntityManager">
+	<constructor-arg ref="database.manager"/>
+</bean>
+
+<bean id="repo.user" factory-method="getRepository" factory-bean="entity.manager">
+	<constructor-arg value="domain.User"/>
+</bean>
+
+</beans>

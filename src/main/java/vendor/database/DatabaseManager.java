@@ -1,12 +1,16 @@
 package vendor.database;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.Set;
 
 import org.reflections.Reflections;
@@ -31,11 +35,19 @@ public class DatabaseManager
      * @param user
      * @param pass
      */
-    public DatabaseManager(String server, String database, String user, String pass) {
-        this.database = database;
-        String connectionUrl = "jdbc:mysql://" + server;
-
+    public DatabaseManager(String file) {
         try {
+            Properties props = new Properties();
+            props.load(new FileInputStream(file));
+
+            String server = props.getProperty("host");
+            String database = props.getProperty("database");
+            String user = props.getProperty("user");
+            String pass = props.getProperty("pass");
+
+            this.database = database;
+            String connectionUrl = "jdbc:mysql://" + server;
+
             con = DriverManager.getConnection(connectionUrl, user, pass);
 
             PreparedStatement ps = con.prepareStatement("select * from INFORMATION_SCHEMA.SCHEMATA where SCHEMA_NAME = ?");
@@ -49,6 +61,8 @@ public class DatabaseManager
             ps.execute();
 
             createTables();
+        } catch (IOException ex) {
+            throw new RuntimeException("Invalid database properties file.");
         } catch (SQLException ex) {
             throw new RuntimeException("An error occured while trying to connect to the database or create the tables.");
         }
@@ -114,6 +128,7 @@ public class DatabaseManager
         boolean hasReference = false;
 
         String create = "create table " + table + "(";
+        String constraints = "";
         for (Field field : cls.getDeclaredFields()) {
             if (field.isAnnotationPresent(Column.class)) {
                 Column col = field.getAnnotation(Column.class);
@@ -125,16 +140,19 @@ public class DatabaseManager
                     + (!col.nullable() ? "not null" : "") + ",";
             } else if (field.isAnnotationPresent(ManyToOne.class)) {
                 ManyToOne col = field.getAnnotation(ManyToOne.class);
-                create += col.value() + " int foreign key references " + col.table() + "(" + col.column() + ") not null,";
+                constraints += "foreign key(" + col.value() + ") references " + col.table() + "(" + col.column() + "),";
+                create += col.value() + " int not null,";
                 hasReference = true;
             }
         }
 
-        create = create.substring(0, create.length() - 1);
-        create += ");";
-
         if (hasReference) {
+            create += constraints.substring(0, constraints.length() - 1);
+            create += ");";
             queries.add(create);
+        } else {
+            create = create.substring(0, create.length() - 1);
+            create += ");";
         }
 
         return create;
@@ -158,6 +176,8 @@ public class DatabaseManager
             type = "double";
         } else if (cls.isAssignableFrom(String.class)) {
             type = "varchar(255)";
+        } else if (cls.isAssignableFrom(Timestamp.class)) {
+            type = "timestamp";
         }
 
         if (type == null) {

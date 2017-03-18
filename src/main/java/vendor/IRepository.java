@@ -64,12 +64,4 @@ public interface IRepository<T extends IHasId>
 	 *   O lista cu toate elementele.
 	 */
 	public List<T> all();
-
-	/**
-	 * Returneaza id-ul maxim al elementelor din repo.
-	 *
-	 * @return
-	 *   Id-ul maxim.
-	 */
-	public int getFreeId();
 }

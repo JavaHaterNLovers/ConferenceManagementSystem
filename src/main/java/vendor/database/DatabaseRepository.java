@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -60,7 +61,7 @@ public class DatabaseRepository<T extends IHasId> extends Observable implements 
 
     @Override
     public boolean add(T elem) {
-        String query = "insert into " + table + " values(";
+        String query = "insert into " + table + " values(default,";
 
         for (int i = 1;i < cols.length;i++) {
             query += "?,";
@@ -110,6 +111,8 @@ public class DatabaseRepository<T extends IHasId> extends Observable implements 
             ps.setDouble(i, (double) result);
         } else if (type.isAssignableFrom(String.class)) {
             ps.setString(i, (String) result);
+        } else if (type.isAssignableFrom(Timestamp.class)) {
+            ps.setTimestamp(i, (Timestamp) result);
         }
     }
 
@@ -180,6 +183,8 @@ public class DatabaseRepository<T extends IHasId> extends Observable implements 
             return results.getDouble(col);
         } else if (type.isAssignableFrom(String.class)) {
             return results.getString(col);
+        } else if (type.isAssignableFrom(Timestamp.class)) {
+            return results.getTimestamp(col);
         }
 
         return null;
@@ -315,21 +320,5 @@ public class DatabaseRepository<T extends IHasId> extends Observable implements 
         }
 
         return null;
-    }
-
-    @Override
-    public int getFreeId() {
-        String query = "select max(" + idCol + ") from  " + table;
-        try {
-            ResultSet set = this.manager.getConnection().prepareStatement(query).executeQuery();
-
-            if (set.next()) {
-                return set.getInt(1) + 1;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return 0;
     }
 }

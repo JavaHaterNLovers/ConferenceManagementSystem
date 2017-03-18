@@ -23,6 +23,14 @@ public class EntityManager
         this.repos = new HashMap<>();
     }
 
+    /**
+     * Returneaza un repository dupa numele clasei la care apartine.
+     * Repository-ul poate sa aiba si alte argumente pe langa cele celui implicit DatabaseRepository.
+     */
+    public <T extends IHasId> DatabaseRepository<T> getRepository(String clsName) {
+        return this.getRepository(clsName, new Object[]{});
+    }
+
     @SuppressWarnings("unchecked")
     /**
      * Returneaza un repository dupa numele clasei la care apartine.

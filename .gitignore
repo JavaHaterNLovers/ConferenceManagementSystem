@@ -1,4 +1,4 @@
-/src/main/resources/config/config.xml
+database.properties
 
 ## Gradle
 /.gradle

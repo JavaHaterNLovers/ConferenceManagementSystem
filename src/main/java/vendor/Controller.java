@@ -1,39 +1,22 @@
 package vendor;
 
-public class Controller implements IHasContainer
-{
-    /**
-     * Instanta containeru-lui.
-     */
-    private static Container container;
+import org.springframework.context.ApplicationContext;
 
-    /**
-     * Instanta configurarii.
-     */
-    private static Config config;
+import main.Main;
+
+public class Controller
+{
+    private static ApplicationContext container;
 
     public Controller() {
-        container = IHasContainer.super.getContainer();
-        config = Config.getConfig();
+        container = Main.getContainer();
     }
 
-    @Override
     public Object get(String id) {
-        return container.get(id);
+        return container.getBean(id);
     }
 
-    @Override
-    public Container getContainer() {
+    public ApplicationContext getContainer() {
         return container;
-    }
-
-    /**
-     * Returneaza un parametru din configurare.
-     *
-     * @param param
-     * @return
-     */
-    public String getParameter(String param) {
-        return config.getParameter(param);
     }
 }
