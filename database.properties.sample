@@ -1,4 +1,4 @@
 host=localhost
-database=firma_transport
+database=ConferenceManagementSystem
 user=root
 pass=
