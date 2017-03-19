@@ -215,6 +215,7 @@ public class DatabaseRepository<T extends IHasId> extends Observable implements 
 
             ps.setInt(i, id);
             ps.execute();
+            newElem.setId(id);
 
             this.setChanged();
             this.notifyObservers(newElem);
