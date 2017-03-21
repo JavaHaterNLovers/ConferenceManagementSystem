@@ -47,7 +47,6 @@ public class Main extends Application
 	public static void main(String[] args) throws Exception {
 	    container = new ClassPathXmlApplicationContext("services.xml");
 
-//        UserRepository repo = (UserRepository) container.getBean("repo.user");
         Application.launch(args);
 	}
 

@@ -1,20 +1,28 @@
 package domain;
 
-import vendor.database.Column;
-import vendor.database.Entity;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-@Entity(table = "users", repository = "repo.UserRepository")
-public class User implements IHasId
+@Entity
+@Table(name="users")
+public class User
 {
-    @Column(value = "id", key = true)
+    @Id
+    @GeneratedValue
+    @Column
     private int id;
-    @Column("nume")
+    @Column
     private String nume;
-    @Column("username")
+    @Column
     private String username;
-    @Column("password")
+    @Column
     private String password;
-    @Column(value = "rol", type = "nvarchar(20)")
+    @Enumerated(EnumType.STRING)
     private UserRole rol;
 
     /**
@@ -42,12 +50,10 @@ public class User implements IHasId
         this.rol = rol;
     }
 
-    @Override
     public int getId() {
         return id;
     }
 
-    @Override
     public void setId(int id) {
         this.id = id;
     }
