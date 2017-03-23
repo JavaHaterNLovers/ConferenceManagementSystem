@@ -26,6 +26,8 @@ dependencies {
     compile group: 'org.springframework', name: 'spring-context', version: '4.3.7.RELEASE'
     compile group: 'org.springframework', name: 'spring-orm', version: '4.3.7.RELEASE'
     compile 'org.hibernate:hibernate-core:5.2.9.Final'
+    compile 'org.hibernate:hibernate-validator:5.4.1.Final'
+    compile 'org.glassfish:javax.el:3.0.1-b08'
 
     // Declare the dependency for your favourite test framework you want to use in your tests.
     // TestNG is also supported by the Gradle Test task. Just change the

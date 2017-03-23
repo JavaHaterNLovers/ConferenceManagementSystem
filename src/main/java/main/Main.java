@@ -14,7 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
-import repo.UserRepository;
+import repo.BaseRepository;
 
 public class Main extends Application
 {
@@ -50,7 +50,7 @@ public class Main extends Application
 	public static void main(String[] args) throws Exception {
 	    container = new ClassPathXmlApplicationContext("services.xml");
 
-	    UserRepository userRepo = (UserRepository) container.getBean("repo.user");
+	    BaseRepository<User> userRepo = (BaseRepository<User>) container.getBean("repo.user");
 	    if (userRepo.all().isEmpty()) {
 	        userRepo.save(new User("nume", "nume", "pass", UserRole.admin));
 	    }

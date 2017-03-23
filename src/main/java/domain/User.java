@@ -11,6 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 @Table(name="users")
@@ -20,14 +23,23 @@ public class User
     @GeneratedValue
     @Column
     private Integer id;
+
     @Column
+    @NotBlank
     private String nume;
+
     @Column
+    @NotBlank
     private String username;
+
     @Column
+    @NotBlank
     private String password;
+
     @Enumerated(EnumType.STRING)
+    @NotNull
     private UserRole rol;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column
     private Calendar created;

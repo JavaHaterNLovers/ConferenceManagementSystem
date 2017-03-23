@@ -47,7 +47,16 @@ http://www.springframework.org/schema/aop/spring-aop.xsd">
         <property name="sessionFactory" ref="hibernate.session" />
     </bean>
 
-    <bean id="repo.user" class="repo.UserRepository">
+	<bean id="validator.factory" 
+    	class="javax.validation.Validation" 
+    	factory-method="buildDefaultValidatorFactory" />
+
+	<bean id="validator" 
+    	factory-bean="validator.factory"
+    	factory-method="getValidator" />
+
+    <bean id="repo.user" class="repo.BaseRepository">
+    	<constructor-arg value="domain.User"></constructor-arg>
     </bean>
 
 </beans>
