@@ -1,5 +1,7 @@
 package domain;
 
+import java.util.Calendar;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -7,6 +9,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name="users")
@@ -15,7 +19,7 @@ public class User
     @Id
     @GeneratedValue
     @Column
-    private int id;
+    private Integer id;
     @Column
     private String nume;
     @Column
@@ -24,12 +28,15 @@ public class User
     private String password;
     @Enumerated(EnumType.STRING)
     private UserRole rol;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column
+    private Calendar created;
 
     /**
      * Creeaza un nou user.
      */
     public User() {
-        this(-1, null, null, null, null);
+        this(null, null, null, null);
     }
 
     /**
@@ -41,13 +48,14 @@ public class User
      * @param password
      * @param rol
      */
-    public User(int id, String nume, String username, String password, UserRole rol) {
+    public User(String nume, String username, String password, UserRole rol) {
         super();
-        this.id = id;
+        this.id = null;
         this.nume = nume;
         this.username = username;
         this.password = password;
         this.rol = rol;
+        this.created = Calendar.getInstance();
     }
 
     public int getId() {
@@ -127,6 +135,20 @@ public class User
      */
     public void setRol(UserRole rol) {
         this.rol = rol;
+    }
+
+    public Calendar getCreated() {
+        return created;
+    }
+
+    public void setCreated(Calendar created) {
+        this.created = created;
+    }
+
+    @Override
+    public String toString() {
+        return "User [id=" + id + ", nume=" + nume + ", username=" + username + ", password=" + password + ", rol="
+                + rol + ", created=" + created + "]";
     }
 
     public static enum UserRole {

@@ -6,12 +6,15 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import domain.User;
+import domain.User.UserRole;
 import javafx.application.Application;
 import javafx.concurrent.Worker.State;
 import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import repo.UserRepository;
 
 public class Main extends Application
 {
@@ -46,6 +49,14 @@ public class Main extends Application
      */
 	public static void main(String[] args) throws Exception {
 	    container = new ClassPathXmlApplicationContext("services.xml");
+
+	    UserRepository userRepo = (UserRepository) container.getBean("repo.user");
+	    if (userRepo.all().isEmpty()) {
+	        userRepo.save(new User("nume", "nume", "pass", UserRole.admin));
+	    }
+	    System.out.println(userRepo.all());
+//	    userRepo.delete(userRepo.all().get(0));
+//	    System.out.println(userRepo.all());
 
         Application.launch(args);
 	}
