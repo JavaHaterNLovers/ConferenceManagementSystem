@@ -11,8 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
@@ -26,18 +26,22 @@ public class User
 
     @Column
     @NotBlank
+    @Email(message="{user.email}")
+    private String email;
+
+    @Column
+    @NotBlank(message="{user.password}")
+    private String password;
+
+    @Column
+    @NotBlank(message="{user.nume}")
     private String nume;
 
     @Column
-    @NotBlank
-    private String username;
-
-    @Column
-    @NotBlank
-    private String password;
+    @NotBlank(message="{user.prenume}")
+    private String prenume;
 
     @Enumerated(EnumType.STRING)
-    @NotNull
     private UserRole rol;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -48,7 +52,7 @@ public class User
      * Creeaza un nou user.
      */
     public User() {
-        this(null, null, null, null);
+        this(null, null, null, null, null);
     }
 
     /**
@@ -60,13 +64,14 @@ public class User
      * @param password
      * @param rol
      */
-    public User(String nume, String username, String password, UserRole rol) {
+    public User(String email, String password, String nume, String prenume, UserRole rol) {
         super();
         this.id = null;
-        this.nume = nume;
-        this.username = username;
+        this.email = email;
         this.password = password;
-        this.rol = rol;
+        this.nume = nume;
+        this.prenume = prenume;
+        this.rol = rol != null ? rol : UserRole.user;
         this.created = Calendar.getInstance();
     }
 
@@ -94,24 +99,6 @@ public class User
      */
     public void setNume(String nume) {
         this.nume = nume;
-    }
-
-    /**
-     * Returneaza username-ul.
-     *
-     * @return
-     */
-    public String getUsername() {
-        return username;
-    }
-
-    /**
-     * Seteaza username-ul.
-     *
-     * @param username
-     */
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     /**
@@ -159,14 +146,15 @@ public class User
 
     @Override
     public String toString() {
-        return "User [id=" + id + ", nume=" + nume + ", username=" + username + ", password=" + password + ", rol="
-                + rol + ", created=" + created + "]";
+        return "User [id=" + id + ", email=" + email + ", password=" + password + ", nume=" + nume + ", prenume="
+                + prenume + ", rol=" + rol + ", created=" + created + "]";
     }
 
     public static enum UserRole {
-        admin("Administrator"),
-        moderator("Moderator"),
-        user("User");
+        chair("Chair"),
+        coChair("CoChair"),
+        user("User"),
+        superAdmin("SuperAdmin");
 
         /**
          * Numele rolului.

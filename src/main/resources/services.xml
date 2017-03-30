@@ -55,8 +55,17 @@ http://www.springframework.org/schema/aop/spring-aop.xsd">
     	factory-bean="validator.factory"
     	factory-method="getValidator" />
 
+<!--
     <bean id="repo.user" class="repo.BaseRepository">
     	<constructor-arg value="domain.User"></constructor-arg>
+    </bean>
+-->
+
+    <bean id="repo.user" class="repo.UserRepository">
+    </bean>
+
+    <bean id="service.user" class="service.UserService">
+    	<constructor-arg ref="repo.user"></constructor-arg>
     </bean>
 
 </beans>

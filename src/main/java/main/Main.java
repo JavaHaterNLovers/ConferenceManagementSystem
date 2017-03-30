@@ -1,20 +1,19 @@
 package main;
 
-import java.io.InputStream;
-
-import org.apache.commons.io.IOUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import controller.LoginCtrl;
 import domain.User;
 import domain.User.UserRole;
 import javafx.application.Application;
-import javafx.concurrent.Worker.State;
-import javafx.scene.Scene;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
+import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
-import repo.BaseRepository;
+import service.UserService;
+import util.UIUtil;
 
 public class Main extends Application
 {
@@ -22,23 +21,28 @@ public class Main extends Application
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        WebView browser = new WebView();
-        WebEngine webEngine = browser.getEngine();
-        webEngine.getLoadWorker().stateProperty()
-            .addListener((obs, oldValue, newValue) -> {
-              if (newValue == State.SUCCEEDED) {
-                System.out.println("finished loading");
-              }
-            });
+//        WebView browser = new WebView();
+//        WebEngine webEngine = browser.getEngine();
+//        webEngine.getLoadWorker().stateProperty()
+//            .addListener((obs, oldValue, newValue) -> {
+//              if (newValue == State.SUCCEEDED) {
+//                System.out.println("finished loading");
+//              }
+//            });
+//
+//        InputStream stream = getClass().getResourceAsStream("/html/index.html");
+//
+//        webEngine.loadContent(IOUtils.toString(stream));
 
-        InputStream stream = getClass().getResourceAsStream("/html/index.html");
+        LoginCtrl ctrl = (LoginCtrl) UIUtil.openWindow("/fxml/LoginForm.fxml", "Login", Modality.NONE);
 
-        webEngine.loadContent(IOUtils.toString(stream));
-
-        Scene scene = new Scene(browser, 300, 250);
-
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        Button loginBtn = ctrl.getLoginBtn();
+        loginBtn.getScene().addEventHandler(KeyEvent.KEY_PRESSED, ev -> {
+            if (ev.getCode() == KeyCode.ENTER) {
+                loginBtn.fire();
+                ev.consume();
+            }
+        });
     }
 
     /**
@@ -50,13 +54,15 @@ public class Main extends Application
 	public static void main(String[] args) throws Exception {
 	    container = new ClassPathXmlApplicationContext("services.xml");
 
-	    BaseRepository<User> userRepo = (BaseRepository<User>) container.getBean("repo.user");
-	    if (userRepo.all().isEmpty()) {
-	        userRepo.save(new User("nume", "nume", "pass", UserRole.admin));
+	    UserService userService = (UserService) container.getBean("service.user");
+	    User user = null;
+	    if (userService.all().isEmpty()) {
+	        user = userService.add("admin@admin.com", "admin", "Super", "Admin", UserRole.superAdmin);
 	    }
-	    System.out.println(userRepo.all());
-//	    userRepo.delete(userRepo.all().get(0));
-//	    System.out.println(userRepo.all());
+	    System.out.println(userService.all());
+	    System.out.println(userService.size());
+//	    userService.delete(user);
+//	    System.out.println(userService.all());
 
         Application.launch(args);
 	}

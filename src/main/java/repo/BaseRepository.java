@@ -5,7 +5,7 @@ import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.validation.Validator;
+import javax.persistence.criteria.Selection;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class BaseRepository<T>
 {
-    private final Class<T> genericType;
+    protected final Class<T> genericType;
 
     @Autowired
     SessionFactory factory;
-    @Autowired
-    Validator validator;
 
     public BaseRepository(Class<T> cls) {
         this.genericType = cls;
@@ -33,7 +31,6 @@ public class BaseRepository<T>
      * @param user
      */
     public void save(T obj) {
-        validator.validate(obj);
         factory.getCurrentSession().saveOrUpdate(obj);
     }
 
@@ -59,5 +56,20 @@ public class BaseRepository<T>
         query.select(root);
 
         return factory.getCurrentSession().createQuery(query).getResultList();
+    }
+
+    /**
+     * Returneaza numarul de elemente.
+     *
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public long size() {
+        CriteriaBuilder builder = factory.getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<T> query = builder.createQuery(genericType);
+
+        query.select((Selection<? extends T>) builder.count(query.from(genericType)));
+
+        return (long) factory.getCurrentSession().createQuery(query).getSingleResult();
     }
 }
