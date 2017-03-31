@@ -153,6 +153,7 @@ public class User
     public static enum UserRole {
         chair("Chair"),
         coChair("CoChair"),
+        staff("Staff"),
         user("User"),
         superAdmin("SuperAdmin");
 

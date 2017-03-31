@@ -19,6 +19,18 @@ public class Main extends Application
 {
     private static ApplicationContext container;
 
+    private void openLogin() {
+        LoginCtrl ctrl = (LoginCtrl) UIUtil.openWindow("/fxml/LoginForm.fxml", "Login", Modality.NONE);
+
+        Button loginBtn = ctrl.getLoginBtn();
+        loginBtn.getScene().addEventHandler(KeyEvent.KEY_PRESSED, ev -> {
+            if (ev.getCode() == KeyCode.ENTER) {
+                loginBtn.fire();
+                ev.consume();
+            }
+        });
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
 //        WebView browser = new WebView();
@@ -34,15 +46,7 @@ public class Main extends Application
 //
 //        webEngine.loadContent(IOUtils.toString(stream));
 
-        LoginCtrl ctrl = (LoginCtrl) UIUtil.openWindow("/fxml/LoginForm.fxml", "Login", Modality.NONE);
-
-        Button loginBtn = ctrl.getLoginBtn();
-        loginBtn.getScene().addEventHandler(KeyEvent.KEY_PRESSED, ev -> {
-            if (ev.getCode() == KeyCode.ENTER) {
-                loginBtn.fire();
-                ev.consume();
-            }
-        });
+        openLogin();
     }
 
     /**
