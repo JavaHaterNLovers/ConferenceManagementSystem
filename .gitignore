@@ -1,0 +1,16 @@
+database.properties
+
+## Gradle
+/.gradle
+/build
+/eclipse
+/gradlew.bat
+/gradlew
+
+## Eclipse
+/.settings
+/.metadata
+/.classpath
+/.project
+/bin
+/.idea
