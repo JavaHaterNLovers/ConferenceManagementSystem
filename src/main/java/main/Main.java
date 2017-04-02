@@ -46,6 +46,8 @@ public class Main extends Application
 //
 //        webEngine.loadContent(IOUtils.toString(stream));
 
+        // Se va creea o functie asemanatoare cu aceasta pentru fiecare fereastra nou adaugata.
+        // Ca sa testati, se pot comenta unele functii si laste aici sa fie executata doar functia voastra.
         openLogin();
     }
 
