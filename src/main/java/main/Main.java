@@ -4,7 +4,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import controller.LoginCtrl;
-import domain.User;
 import domain.User.UserRole;
 import javafx.application.Application;
 import javafx.scene.control.Button;
@@ -61,10 +60,12 @@ public class Main extends Application
 	    container = new ClassPathXmlApplicationContext("services.xml");
 
 	    UserService userService = (UserService) container.getBean("service.user");
-	    User user = null;
 	    if (userService.all().isEmpty()) {
-	        user = userService.add("admin@admin.com", "admin", "Super", "Admin", UserRole.superAdmin);
+	        userService.add("admin@admin.com", "admin", "Super", "Admin", UserRole.superAdmin);
 	    }
+//	    BaseRepository<Conference> repo = (BaseRepository<Conference>) Main.getContainer().getBean("repo.conference");
+//	    repo.save(new Conference("Conferinta 1", userService.all().get(0), Calendar.getInstance(), Calendar.getInstance(), Calendar.getInstance(), Calendar.getInstance()));
+
 	    System.out.println(userService.all());
 	    System.out.println(userService.size());
 //	    userService.delete(user);
