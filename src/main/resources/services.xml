@@ -12,6 +12,7 @@ http://www.springframework.org/schema/tx
 http://www.springframework.org/schema/tx/spring-tx.xsd
 http://www.springframework.org/schema/aop
 http://www.springframework.org/schema/aop/spring-aop.xsd">
+	<!-- BEGIN SPRING & HIBERNATE SETUP -->
 	<context:annotation-config />
 	<tx:annotation-driven transaction-manager="hibernate.manager" />
 
@@ -50,20 +51,22 @@ http://www.springframework.org/schema/aop/spring-aop.xsd">
 	<bean id="validator.factory" 
     	class="javax.validation.Validation" 
     	factory-method="buildDefaultValidatorFactory" />
+	<!-- END SPRING & HIBERNATE SETUP -->
 
+	<!-- Validators -->
 	<bean id="validator" 
     	factory-bean="validator.factory"
     	factory-method="getValidator" />
 
-<!--
-    <bean id="repo.user" class="repo.BaseRepository">
-    	<constructor-arg value="domain.User"></constructor-arg>
-    </bean>
--->
-
+	<!-- Repositories -->
     <bean id="repo.user" class="repo.UserRepository">
     </bean>
+    
+    <bean id="repo.conference" class="repo.BaseRepository">
+    	<constructor-arg value="domain.Conference"></constructor-arg>
+    </bean>
 
+	<!-- Services -->
     <bean id="service.user" class="service.UserService">
     	<constructor-arg ref="repo.user"></constructor-arg>
     </bean>

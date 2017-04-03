@@ -48,22 +48,10 @@ public class User
     @Column
     private Calendar created;
 
-    /**
-     * Creeaza un nou user.
-     */
     public User() {
         this(null, null, null, null, null);
     }
 
-    /**
-     * Creeaza un nou user cu un id, nume, username, parola si rol.
-     *
-     * @param id
-     * @param nume
-     * @param username
-     * @param password
-     * @param rol
-     */
     public User(String email, String password, String nume, String prenume, UserRole rol) {
         super();
         this.id = null;
