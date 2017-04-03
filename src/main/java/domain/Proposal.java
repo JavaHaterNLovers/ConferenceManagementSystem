@@ -43,6 +43,7 @@ public class Proposal
 
 
     @Column
+    @NotBlank(message="{proposal.description}")
     private String description;
 
 
