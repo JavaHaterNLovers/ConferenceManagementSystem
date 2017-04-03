@@ -28,9 +28,6 @@ public class Proposal
 
     @NotBlank(message="{proposal.user}")
     @ManyToOne
-    @JoinColumn(name = "user_id",
-            foreignKey = @ForeignKey(name = "USER_ID_FK")
-    )
     private User user;
 
 
