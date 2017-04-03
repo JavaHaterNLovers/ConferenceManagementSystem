@@ -240,4 +240,5 @@ public class Proposal
     public void setCreated(Calendar created) {
         this.created = created;
     }
+
 }
