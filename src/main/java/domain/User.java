@@ -2,17 +2,11 @@ package domain;
 
 import java.util.Calendar;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
@@ -24,13 +18,14 @@ public class User
     @Column
     private Integer id;
 
-    @Column
+    @Column(unique = true)
     @NotBlank(message="{user.emailBlank}")
     @Email(message="{user.email}")
     private String email;
 
     @Column
     @NotBlank(message="{user.password}")
+    //@Size(min = 5, max = 20, message = "{user.passwordLength}")
     private String password;
 
     @Column
