@@ -57,6 +57,52 @@ public class ProposalStatus
     }
 
 
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     * @return ProposalStatus status
+     */
+    public String getStatus() {
+        return status;
+    }
+
+    /**
+     * @return modified time
+     */
+    public Calendar getModified() {
+        return modified;
+    }
+
+    /**
+     * @return when the ProposalStatus was created
+     */
+    public Calendar getCreated() {
+        return created;
+    }
+
+    /**
+     * @return comment
+     */
+    public String getComment() {
+        return comment;
+    }
+
+    /**
+     * @return user
+     */
+    public User getUser() {
+        return user;
+    }
+
+    /**
+     * @return proposal
+     */
+    public Proposal getProposal() {
+        return proposal;
+    }
+
     /**
      * @param user
      * Set the ProposalStatus to the given user
