@@ -4,6 +4,8 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.persistence.*;
 import java.util.Calendar;
 
+@Entity
+@Table(name="proposalStatus")
 public class ProposalStatus
 {
     @Column
@@ -14,7 +16,6 @@ public class ProposalStatus
     @Column
     @NotBlank(message="proposalStatus.status")
     private String status;
-
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column
@@ -29,32 +30,47 @@ public class ProposalStatus
     @NotBlank(message="proposalStatus.comment")
     private String comment;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id",
+            foreignKey = @ForeignKey(name = "USER_ID_FK")
+    )
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "proposal_id",
+            foreignKey = @ForeignKey(name = "PROPOSAL_ID_FK")
+    )
+    private Proposal proposal;
+
+
+    public ProposalStatus(String status, Calendar modified, String comment, User user, Proposal proposal) {
+        this.status = status;
+        this.modified = modified;
+        this.created = Calendar.getInstance();
+        this.comment = comment;
+        this.user = user;
+        this.proposal = proposal;
+    }
+
     public ProposalStatus(){
-        this(null,null,null,null);
-    }
-
-    public ProposalStatus(String status, Calendar modified, Calendar created, String comment) {
-        super();
-        this.id = null;
-        setStatus(status);
-        setModified(modified);
-        setCreated(created);
-        setComment(comment);
-    }
-
-    /**
-     * @return ProposalStatus identifier
-     */
-    public Integer getId() {
-        return id;
+        this(null,null,null,null,null);
     }
 
 
     /**
-     * @return ProposalStatus status
+     * @param user
+     * Set the ProposalStatus to the given user
      */
-    public String getStatus() {
-        return status;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    /**
+     * @param proposal
+     * Set the ProposalStatus to the given proposal
+     */
+    public void setProposal(Proposal proposal) {
+        this.proposal = proposal;
     }
 
     /**
@@ -66,13 +82,6 @@ public class ProposalStatus
     }
 
     /**
-     * @return ProposalStatus get modified date
-     */
-    public Calendar getModified() {
-        return modified;
-    }
-
-    /**
      * @param modified
      * Set ProposalStatus modified date to the given value
      */
@@ -81,25 +90,11 @@ public class ProposalStatus
     }
 
     /**
-     * @return ProposalStatus created date
-     */
-    public Calendar getCreated() {
-        return created;
-    }
-
-    /**
      * @param created
      * Set ProposalStatus created date to the given value
      */
     public void setCreated(Calendar created) {
         this.created = created;
-    }
-
-    /**
-     * @return ProposalStatus comments
-     */
-    public String getComment() {
-        return comment;
     }
 
     /**
