@@ -28,7 +28,7 @@ public class BaseRepository<T>
     /**
      * Creeaza un nou obiect in DB daca obiectul nu are id si il updateaza daca are id.
      *
-     * @param user
+     * @param obj
      */
     public void save(T obj) {
         factory.getCurrentSession().saveOrUpdate(obj);
@@ -70,6 +70,6 @@ public class BaseRepository<T>
 
         query.select((Selection<? extends T>) builder.count(query.from(genericType)));
 
-        return (long) factory.getCurrentSession().createQuery(query).getSingleResult();
+        return Long.parseLong(factory.getCurrentSession().createQuery(query).getSingleResult().toString());
     }
 }
