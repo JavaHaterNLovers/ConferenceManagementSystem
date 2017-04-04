@@ -31,9 +31,8 @@ public class UserService extends BaseDomainService<User, UserRepository>
     /**
      * Verifica daca exista un user cu datele date.
      *
-     * @param username
-     * @param pass
-     * @return
+     * @param email, pass
+     * @return validUser
      */
     public User validUser(String email, String pass) {
         User user = this.repo.getByEmail(email);
