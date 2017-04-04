@@ -10,6 +10,12 @@ import service.UserService;
 import util.Controller;
 import util.UIUtil;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
+import java.util.HashSet;
+import java.util.Set;
+
 
 /**
  * Created by Mihai on 04.04.2017.
@@ -88,12 +94,26 @@ public class RegisterCtrl extends Controller {
     }
 
     /**
+     * @param constraintViolationException a constraint validation exception
+     * @return a string with all the messages from the exception
+     */
+    private String getErrorMessage(ConstraintViolationException constraintViolationException){
+        String errors = "";
+        Set constraintViolations =  constraintViolationException.getConstraintViolations();
+        for (Object c:constraintViolations){
+            ConstraintViolation cv = (ConstraintViolation) c;
+            errors += cv.getMessage() + "\n";
+        }
+        return errors;
+    }
+
+    /**
      * @param event ActionEvent
      * Register a new user
      */
     @FXML
     void registerAction(ActionEvent event) {
-        if (notEmptyFields() && validatePasswords()){
+        if (validatePasswords()){
             User user = service.validUser(emailTxt.getText(), passwordTxt.getText());
             if (user != null) {
                 UIUtil.errorAlert("An user with this e-mail is already registered.");
@@ -103,8 +123,8 @@ public class RegisterCtrl extends Controller {
                     ((Stage) emailTxt.getScene().getWindow()).close();
                     UIUtil.showMessage("Registration", "Registration successful.\n\nPlease login to continue.");
                     return;
-                }catch(RuntimeException re){
-                    UIUtil.errorAlert("Please provide a valid e-mail address.");
+                }catch(ConstraintViolationException validationException){
+                    UIUtil.errorAlert(getErrorMessage(validationException));
                 }
             }
         }

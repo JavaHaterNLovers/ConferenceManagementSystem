@@ -25,7 +25,7 @@ public class User
     private Integer id;
 
     @Column
-    @NotBlank
+    @NotBlank(message="{user.emailBlank}")
     @Email(message="{user.email}")
     private String email;
 
