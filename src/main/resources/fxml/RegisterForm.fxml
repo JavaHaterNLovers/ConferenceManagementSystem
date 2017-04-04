@@ -32,11 +32,11 @@
             <Label text="E-mail" GridPane.rowIndex="2" />
             <Label text="Password" GridPane.rowIndex="3" />
             <Label text="Repeat password" GridPane.rowIndex="4" />
-            <TextField fx:id="firstNameTxt" GridPane.columnIndex="1" />
-            <TextField fx:id="secondNameTxt" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="emailTxt" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <PasswordField fx:id="passwordTxt" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <PasswordField fx:id="repeatPassTxt" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="firstNameTxt" onAction="#registerAction" GridPane.columnIndex="1" />
+            <TextField fx:id="secondNameTxt" onAction="#registerAction" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="emailTxt" onAction="#registerAction" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <PasswordField fx:id="passwordTxt" onAction="#registerAction" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <PasswordField fx:id="repeatPassTxt" onAction="#registerAction" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          </children>
       </GridPane>
       <HBox alignment="TOP_CENTER" prefHeight="33.0" prefWidth="365.0">
