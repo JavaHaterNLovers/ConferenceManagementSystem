@@ -23,6 +23,18 @@ public class Section
     @NotBlank(message = "{section.room}")
     private String room;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id",
+            foreignKey = @ForeignKey(name = "USER_ID_FK")
+    )
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "conference_id",
+            foreignKey = @ForeignKey(name = "CONFERENCE_ID_FK")
+    )
+    private Conference conference;
+
     public Section() {this(null,null);}
 
     public Section( String name, String room) {
@@ -71,5 +83,37 @@ public class Section
      */
     public void setRoom(String room) {
         this.room = room;
+    }
+
+    /**
+     * Returneaza user-ul
+     * @return
+     */
+    public User getUser() {
+        return user;
+    }
+
+    /**
+     * Seteaza userul
+     * @param user
+     */
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    /**
+     * Returneaza conferinta
+     * @return
+     */
+    public Conference getConference() {
+        return conference;
+    }
+
+    /**
+     * Seteaza conferinta
+     * @param conference
+     */
+    public void setConference(Conference conference) {
+        this.conference = conference;
     }
 }
