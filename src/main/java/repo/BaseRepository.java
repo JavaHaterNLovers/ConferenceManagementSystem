@@ -70,6 +70,6 @@ public class BaseRepository<T>
 
         query.select((Selection<? extends T>) builder.count(query.from(genericType)));
 
-        return (long) factory.getCurrentSession().createQuery(query).getSingleResult();
+        return Long.parseLong(factory.getCurrentSession().createQuery(query).getSingleResult().toString());
     }
 }
