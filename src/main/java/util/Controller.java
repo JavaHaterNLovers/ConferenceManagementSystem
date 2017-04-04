@@ -1,4 +1,4 @@
-package vendor;
+package util;
 
 import org.springframework.context.ApplicationContext;
 
