@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import service.UserService;
 import util.Controller;
@@ -42,6 +43,11 @@ public class LoginCtrl extends Controller
 
         ((Stage) emailTxt.getScene().getWindow()).close();
         UIUtil.showMessage("Success", "Ati fost logat cu success!");
+    }
+
+    @FXML
+    void registerAction(ActionEvent event) {
+        UIUtil.openWindow("/fxml/RegisterForm.fxml", "Register", Modality.NONE);
     }
 
     public Button getLoginBtn() {

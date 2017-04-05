@@ -10,6 +10,7 @@ import javax.validation.ValidationException;
 import domain.User;
 import domain.User.UserRole;
 import repo.UserRepository;
+import util.UIUtil;
 
 public class UserService extends BaseDomainService<User, UserRepository>
 {
@@ -31,9 +32,8 @@ public class UserService extends BaseDomainService<User, UserRepository>
     /**
      * Verifica daca exista un user cu datele date.
      *
-     * @param username
-     * @param pass
-     * @return
+     * @param email, pass
+     * @return validUser
      */
     public User validUser(String email, String pass) {
         User user = this.repo.getByEmail(email);
@@ -75,6 +75,24 @@ public class UserService extends BaseDomainService<User, UserRepository>
         }
 
         return null;
+    }
+
+    /**
+     * @param fieldPass password field
+     * @param fieldRepeatPass field with repeat password
+     * @return String with errors message s || empty string if there is no error
+     * Check if password length is bigger then 5 characters and smaller then 20
+     * Check if password field and repeat password field contain the same value
+     */
+    public String  validatePasswords(String fieldPass, String fieldRepeatPass){
+        String errors = "";
+        if (!fieldPass.equals(fieldRepeatPass)){
+            errors +="Passwords don't match!\n";
+        }
+        if (fieldPass.length()<5 || fieldPass.length()>20){
+            errors +="Password should be between 5 and 20 characters.";
+        }
+        return errors;
     }
 
     /**

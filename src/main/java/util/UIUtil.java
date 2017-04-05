@@ -1,6 +1,7 @@
 package util;
 
 import java.io.IOException;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import javafx.fxml.FXMLLoader;
@@ -11,6 +12,9 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
 public class UIUtil
 {
@@ -66,6 +70,22 @@ public class UIUtil
         alert.setContentText(msg);
         alert.showAndWait();
     }
+
+
+    /**
+     * @param constraintViolationException a constraint validation exception
+     * @return a string with all the messages from the exception
+     */
+    public static String getErrorMessage(ConstraintViolationException constraintViolationException){
+        String errors = "";
+        Set constraintViolations =  constraintViolationException.getConstraintViolations();
+        for (Object c:constraintViolations){
+            ConstraintViolation cv = (ConstraintViolation) c;
+            errors += cv.getMessage() + "\n";
+        }
+        return errors;
+    }
+
 
     /**
      * Deschide o noua fereastra dintr-un fisier fxml cu un titlu dat.

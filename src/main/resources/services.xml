@@ -67,6 +67,10 @@ http://www.springframework.org/schema/aop/spring-aop.xsd">
     </bean>
 
 	<!-- Services -->
+    <bean id="service.conference" class="service.ConferenceService">
+        <constructor-arg ref="repo.conference"></constructor-arg>
+    </bean>
+
     <bean id="service.user" class="service.UserService">
     	<constructor-arg ref="repo.user"></constructor-arg>
     </bean>
