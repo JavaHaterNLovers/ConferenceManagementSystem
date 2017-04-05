@@ -28,7 +28,7 @@ public class BaseRepository<T>
     /**
      * Creeaza un nou obiect in DB daca obiectul nu are id si il updateaza daca are id.
      *
-     * @param user
+     * @param obj
      */
     public void save(T obj) {
         factory.getCurrentSession().saveOrUpdate(obj);
