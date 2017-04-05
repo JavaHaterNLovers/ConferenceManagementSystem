@@ -72,7 +72,7 @@ public class Conference
         this.endSubmissions = endSubmissions;
         this.endBidding = endBidding;
         this.endReview = endReview;
-        this.created = Calendar.getInstance();;
+        this.created = Calendar.getInstance();
     }
 
     public Integer getId() {

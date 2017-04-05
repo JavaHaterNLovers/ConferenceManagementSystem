@@ -6,6 +6,7 @@ import repo.BaseRepository;
 
 
 import javax.validation.ValidationException;
+import java.time.LocalDate;
 import java.util.Calendar;
 
 /**
@@ -24,5 +25,20 @@ public class ConferenceService extends BaseDomainService<Conference, BaseReposit
         this.save(conference);
 
         return conference;
+    }
+
+
+    /**
+     * @param localDate local date
+     * @return calendar || null if localDate is null
+     * Convert localData object to Calendar
+     */
+    public Calendar getCalendarFromLocalDate(LocalDate localDate){
+        if (localDate == null){
+            return null;
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(java.sql.Date.valueOf(localDate));
+        return calendar;
     }
 }

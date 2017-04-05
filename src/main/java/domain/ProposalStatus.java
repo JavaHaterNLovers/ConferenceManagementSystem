@@ -32,13 +32,13 @@ public class ProposalStatus
 
     @ManyToOne
     @JoinColumn(name = "user_id",
-            foreignKey = @ForeignKey(name = "USER_ID_FK")
+            foreignKey = @ForeignKey(name = "PROPOSAL_STATUS_USER_ID_FK")
     )
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "proposal_id",
-            foreignKey = @ForeignKey(name = "PROPOSAL_ID_FK")
+            foreignKey = @ForeignKey(name = "PROPOSAL_STATUS_PROPOSAL_ID_FK")
     )
     private Proposal proposal;
 

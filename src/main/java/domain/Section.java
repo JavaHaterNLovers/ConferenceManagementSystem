@@ -25,22 +25,24 @@ public class Section
 
     @ManyToOne
     @JoinColumn(name = "user_id",
-            foreignKey = @ForeignKey(name = "USER_ID_FK")
+            foreignKey = @ForeignKey(name = "SECTION_USER_ID_FK")
     )
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "conference_id",
-            foreignKey = @ForeignKey(name = "CONFERENCE_ID_FK")
+            foreignKey = @ForeignKey(name = "SECTION_CONFERENCE_ID_FK")
     )
     private Conference conference;
 
-    public Section() {this(null,null);}
+    public Section() {this(null,null,null,null);}
 
-    public Section( String name, String room) {
+    public Section(String name, String room, User user, Conference conference) {
         this.id = null;
         this.name = name;
         this.room = room;
+        this.user = user;
+        this.conference = conference;
     }
     /**
      * Returneaza id-ul.

@@ -26,7 +26,7 @@ public class ConferenceCtrl extends Controller {
 
     private ConferenceCtrl() {
 
-        this.service = (ConferenceService) this.get("service.Conference");
+        this.service = (ConferenceService) this.get("service.conference");
         model = new BaseModel<>(service.all());
 
         initData();

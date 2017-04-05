@@ -28,6 +28,9 @@ public class Main extends Application
                 ev.consume();
             }
         });
+
+        UIUtil.openWindow("/fxml/CreateConfForm.fxml", "Login", Modality.NONE);
+
     }
 
     @Override
