@@ -44,20 +44,6 @@ public class RegisterCtrl extends Controller {
         this.service = (UserService) this.get("service.user");
     }
 
-
-    /**
-     * @return true if password is valid, false otherwise
-     * Check if password length is bigger then 5 characters
-     * Check if password field and repeat password field contain the same value
-     */
-    private Boolean validatePasswords(){
-        if (!passwordTxt.getText().equals(repeatPassTxt.getText())){
-            UIUtil.errorAlert("Passwords don't match!");
-            return false;
-        }
-        return true;
-    }
-
     /**
      * Clear password fields
      */
@@ -72,7 +58,8 @@ public class RegisterCtrl extends Controller {
      */
     @FXML
     void registerAction(ActionEvent event) {
-        if (validatePasswords()){
+        String errors = service.validatePasswords(passwordTxt.getText(),repeatPassTxt.getText());
+        if (errors.equals("")){
             try {
                 service.add(emailTxt.getText(), passwordTxt.getText(), firstNameTxt.getText(), secondNameTxt.getText(), null);
                 ((Stage) emailTxt.getScene().getWindow()).close();
@@ -83,6 +70,8 @@ public class RegisterCtrl extends Controller {
             }catch (DataIntegrityViolationException dataIntegrityViolationException){
                 UIUtil.errorAlert("This email was already used!");
             }
+        }else{
+            UIUtil.errorAlert(errors);
         }
         clearPasswordFields();
 
