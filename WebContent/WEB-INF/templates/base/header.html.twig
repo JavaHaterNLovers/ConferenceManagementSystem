@@ -1,0 +1,13 @@
+<div class="header clearfix">
+    <nav>
+          <ul class="nav nav-pills float-right">
+                <li class="nav-item">
+                  	<a class="nav-link{% if currentPage == '' %} active{% endif %}" href="{{ path('') }}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                  	<a class="nav-link{% if currentPage == 'welcome' %} active{% endif %}" href="{{ path('welcome') }}">Welcome</a>
+                </li>
+          </ul>
+    </nav>
+    <h3 class="text-muted">CMS</h3>
+</div>

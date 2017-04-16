@@ -1,5 +1,6 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
         http://www.springframework.org/schema/beans     
@@ -10,10 +11,11 @@
         http://www.springframework.org/schema/context/spring-context.xsd">
  
 	<context:component-scan base-package="controller" />
- 
-	<bean id="viewResolver"
-		class="org.jtwig.spring.JtwigViewResolver">
-		<property name="prefix" value="/WEB-INF/templates/" />
-		<property name="suffix" value=".html.twig" />
-	</bean>
+	
+	<mvc:resources mapping="/resources/**" location="/resources/" cache-period="0"/>
+    <mvc:annotation-driven />
+    <beans>
+    	<context:annotation-config/>
+    	<bean class="main.Config"/>
+ 	</beans>
 </beans>
