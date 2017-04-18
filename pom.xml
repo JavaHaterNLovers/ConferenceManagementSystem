@@ -38,11 +38,6 @@
 	</dependency>
 	<dependency>
 		<groupId>org.springframework</groupId>
-		<artifactId>spring-aop</artifactId>
-		<version>4.3.7.RELEASE</version>
-	</dependency>
-	<dependency>
-		<groupId>org.springframework</groupId>
 		<artifactId>spring-webmvc</artifactId>
 		<version>4.3.7.RELEASE</version>
 	</dependency>
@@ -56,17 +51,6 @@
 		<artifactId>jstl</artifactId>
 		<version>1.2</version>
 	</dependency>
-	<dependency>
-        <groupId>org.jtwig</groupId>
-        <artifactId>jtwig-spring</artifactId>
-        <version>5.85.3.RELEASE</version>
-    </dependency>
-    <dependency>
-        <groupId>org.jtwig</groupId>
-        <artifactId>jtwig-spring-asset-extension</artifactId>
-        <version>5.85.3.RELEASE</version>
-        <scope>compile</scope>
-    </dependency>
     <dependency>
 		<groupId>org.springframework.security</groupId>
 		<artifactId>spring-security-config</artifactId>

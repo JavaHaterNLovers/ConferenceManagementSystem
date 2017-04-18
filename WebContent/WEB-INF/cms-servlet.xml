@@ -12,6 +12,14 @@
  
 	<context:component-scan base-package="controller" />
 	
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
 	<mvc:resources mapping="/resources/**" location="/resources/" cache-period="0"/>
     <mvc:annotation-driven />
     <beans>

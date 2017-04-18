@@ -1,10 +1,11 @@
-{% extends 'base/layout.html.twig' %}
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-{% block body %}    
+<t:layout>
     <div class="row marketing">
         <div class="col-lg-6">
             <h4>Subheading</h4>
-            <p>{{ message }}</p>
+            <p>${message}</p>
             
             <h4>Subheading</h4>
             <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
@@ -24,4 +25,4 @@
             <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
         </div>
     </div>
-{% endblock %}
+</t:layout>
