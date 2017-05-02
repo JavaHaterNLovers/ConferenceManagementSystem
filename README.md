@@ -13,9 +13,11 @@
 - click on the project then on the top menu on Project - Clean
 - right click on the project, Maven - Update Project and check Force Update of Snapshots/Releases
 - right click on project, Run As - 5 Maven Build... (the option without any shortcuts)
-- in the goals write "compile" and run the configuration (if you get an error, repeat the above 3 steps in the exact order)
+- in the goals write "clean compile" and run the configuration (if you get an error, repeat the above 3 steps in the exact order or leave just "compile" in the goals)
 - on the servers tab you should se the Tomcat server, right click it and Start
 - you can now access the site at http://localhost:8080/CMSWeb
+- after making changes to the code, sometimes Tomcat will restart automatically but to make sure that you see the changes you can manualy restart the Tomcat server from the
+servers tab
 
 
 Set up the config file by copying the src/main/resources/application.properties.sample file to the file src/main/resources/application.properties and change your database information.
