@@ -7,10 +7,13 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 @ControllerAdvice
-public class GlobalController
+public class GlobalCtrl
 {
+    /**
+     * Add parameters to be available in all templates.
+     */
     @ModelAttribute
-    public void addCurrentRoute(Model model, HttpServletRequest request) {
-        model.addAttribute("currentPage", request.getRequestURI().replaceAll("/CMSWeb/", ""));
+    public void addParameters(Model model, HttpServletRequest request) {
+        model.addAttribute("baseUrl", request.getContextPath());
     }
 }
