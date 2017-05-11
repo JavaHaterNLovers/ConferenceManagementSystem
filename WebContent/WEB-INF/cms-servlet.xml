@@ -60,6 +60,7 @@
 	        	<props>
 					<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
 					<prop key="hibernate.hbm2ddl.auto">update</prop>
+                    <prop key="javax.persistence.validation.mode">none</prop>
 				</props>
 	        </property>
 	    </bean>

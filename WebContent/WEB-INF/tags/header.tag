@@ -30,8 +30,8 @@
 								}
 							</script>
 							<p class="nav-link">
-								<c:if test="${pageContext.request.userPrincipal.name != null}">
-									${pageContext.request.userPrincipal.name} | 
+								<c:if test="${pageContext.request.userPrincipal.principal != null}">
+									${pageContext.request.userPrincipal.principal} | 
 								</c:if>
 								<a href="javascript:formSubmit()">Logout</a>
 							</p>
@@ -45,3 +45,12 @@
     </nav>
     <h3 class="text-muted"><a href="${baseUrl}/">CMS</a></h3>
 </div>
+<c:if test="${not empty flashMessage}">
+	<div class="row">
+		<div class="col-6 mx-auto">
+			<div class="alert alert-success" role="alert">
+				${flashMessage}
+			</div>
+		</div>
+	</div>
+</c:if>

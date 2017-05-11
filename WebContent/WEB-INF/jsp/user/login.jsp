@@ -7,16 +7,14 @@
 		<div class="col-6 mx-auto">
 			<h3 class="mb-3 text-center">Login</h3>
 			
-			<c:if test="${not empty errors}">
+			<c:if test="${not empty error}">
 				<div class="alert alert-danger" role="alert">
-					<c:forEach items="${errors}" var="error">
-						${error}
-					</c:forEach>
+					${error}
 				</div>
 			</c:if>
-			<c:if test="${not empty messages}">
+			<c:if test="${not empty message}">
 				<div class="alert alert-success" role="alert">
-					${messages}
+					${message}
 				</div>
 			</c:if>
 
@@ -25,12 +23,20 @@
 					value="${_csrf.token}" />
 					
 				<div class="form-group">
-					<input required class="form-control" type='text' name='username' placeholder="User">
+					<input required class="form-control" type='text' name='username' placeholder="Email">
 				</div>
 				<div class="form-group">
 					<input required class="form-control" type='password' name='password' placeholder="Password">
 				</div>
-				<button type="submit" class="btn btn-primary btn-block">Login</button>
+				
+				<div class="row justify-content-between">
+					<div class="col-6">
+						<button type="submit" class="btn btn-success btn-block">Login</button>
+					</div>
+					<div class="col-4">
+						<a href="<c:url value='/register' />" class="btn btn-primary btn-block">Register</a>
+					</div>
+				</div>
 			</form>
 		</div>
 	</div>

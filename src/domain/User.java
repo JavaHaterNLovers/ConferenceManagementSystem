@@ -1,6 +1,9 @@
 package domain;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,14 +14,20 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+import javax.validation.constraints.AssertTrue;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name="users")
-public class User
+public class User implements UserDetails
 {
     @Id
     @GeneratedValue
@@ -31,9 +40,11 @@ public class User
     private String email;
 
     @Column
-    @NotBlank(message="{user.password}")
-    //@Size(min = 5, max = 20, message = "{user.passwordLength}")
+    @Length(min = 5, message = "{user.password}")
     private String password;
+
+    @Transient
+    private String confirmPassword;
 
     @Column
     @NotBlank(message="{user.nume}")
@@ -111,8 +122,17 @@ public class User
      * Returneaza parola.
      * @return
      */
+    @Override
     public String getPassword() {
         return password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     /**
@@ -155,6 +175,12 @@ public class User
         return this.nume + " " + this.prenume;
     }
 
+    @AssertTrue(message="{user.confPass}")
+    public boolean isPasswordConfirmed() {
+        return this.password != null && this.confirmPassword != null
+            && this.password.equals(this.confirmPassword);
+    }
+
     public static enum UserRole {
         chair("ROLE_CHAIR"),
         coChair("ROLE_CO_CHAIR"),
@@ -179,5 +205,44 @@ public class User
         public String toString() {
             return this.nume;
         }
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> auths = new ArrayList<>();
+
+        auths.add(new SimpleGrantedAuthority(this.getRol().toString()));
+
+        // All users should also have the default user role
+        if (this.getRol() != UserRole.user) {
+            auths.add(new SimpleGrantedAuthority(UserRole.user.toString()));
+        }
+
+        return auths;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

@@ -3,8 +3,6 @@ package controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.LockedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -12,27 +10,23 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import domain.User;
+import service.UserService;
 import util.BaseController;
 
 @Controller
 public class UserCtrl extends BaseController
 {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login(@RequestParam(value = "error", required = false) String error,
-            @RequestParam(value = "logout", required = false) String logout, Model model,
-            HttpServletRequest request, RedirectAttributes redirectAttributes
-    ) {
-        if (error != null) {
-            redirectAttributes.addFlashAttribute("errors", getErrorMessage(request, "SPRING_SECURITY_LAST_EXCEPTION"));
+    public String login(Model model, HttpServletRequest request) {
+        if (request.getParameter("error") != null) {
+            model.addAttribute("error", "Email sau parola gresite.");
         }
 
-        if (logout != null) {
-            redirectAttributes.addFlashAttribute("messages", "Ati fost delogat.");
-//            model.addAttribute("msg", "You've been logged out successfully.");
+        if (request.getParameter("logout") != null) {
+            model.addAttribute("message", "Ati fost delogat cu success.");
         }
 
         return "user/login";
@@ -40,15 +34,18 @@ public class UserCtrl extends BaseController
 
     @RequestMapping(value = "/register/submit", method = RequestMethod.POST)
     public String submit(@Valid @ModelAttribute("user")User user,
-        BindingResult result, ModelMap model) {
-
+        BindingResult result, ModelMap model,
+        RedirectAttributes redirAttr
+    ) {
         if (result.hasErrors()) {
             return "user/register";
         }
 
-        model.addAttribute("user", user);
+        ((UserService) this.get("service.user")).add(user);
 
-        return "user/register";
+        redirAttr.addFlashAttribute("flashMessage", "Ati fost inregistrat cu success");
+
+        return "redirect:/login";
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
@@ -56,22 +53,5 @@ public class UserCtrl extends BaseController
         model.addAttribute("user", new User());
 
         return "user/register";
-    }
-
-    // customize the error message
-    private String getErrorMessage(HttpServletRequest request, String key) {
-
-        Exception exception = (Exception) request.getSession().getAttribute(key);
-
-        String error = "";
-        if (exception instanceof BadCredentialsException) {
-            error = "Invalid username and password!";
-        } else if (exception instanceof LockedException) {
-            error = exception.getMessage();
-        } else {
-            error = "Invalid username and password!";
-        }
-
-        return error;
     }
 }
