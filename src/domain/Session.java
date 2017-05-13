@@ -11,8 +11,8 @@ import javax.persistence.Table;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
-@Table(name="sections")
-public class Section
+@Table(name="sessions")
+public class Session
 {
     @Id
     @Column
@@ -20,11 +20,11 @@ public class Section
     private Integer id;
 
     @Column
-    @NotBlank(message="{section.name}")
+    @NotBlank(message="{session.name}")
     private String name;
 
     @Column
-    @NotBlank(message = "{section.room}")
+    @NotBlank(message = "{session.room}")
     private String room;
 
     @ManyToOne
@@ -33,18 +33,18 @@ public class Section
 
     @ManyToOne
     @JoinColumn(name = "conference_id")
-    private Conference conference;
+    private Edition edition;
 
-    public Section() {
+    public Session() {
         this(null, null, null, null);
     }
 
-    public Section(String name, String room, User user, Conference conference) {
+    public Session(String name, String room, User user, Edition conference) {
         this.id = null;
         this.name = name;
         this.room = room;
         this.user = user;
-        this.conference = conference;
+        this.edition = conference;
     }
     /**
      * Returneaza id-ul.
@@ -103,19 +103,11 @@ public class Section
         this.user = user;
     }
 
-    /**
-     * Returneaza conferinta
-     * @return
-     */
-    public Conference getConference() {
-        return conference;
+    public Edition getEdition() {
+        return edition;
     }
 
-    /**
-     * Seteaza conferinta
-     * @param conference
-     */
-    public void setConference(Conference conference) {
-        this.conference = conference;
+    public void setEdition(Edition conference) {
+        this.edition = conference;
     }
 }

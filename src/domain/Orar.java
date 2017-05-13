@@ -30,7 +30,7 @@ public class Orar
     @ManyToOne
     @JoinColumn(name="section_id")
     @NotNull(message="{orar.section}")
-    private Section section;
+    private Session section;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column
@@ -54,7 +54,7 @@ public class Orar
      * @param beginDate
      * @param endDate
      */
-    private Orar(Proposal proposal, Section section, Calendar beginDate, Calendar endDate)
+    private Orar(Proposal proposal, Session section, Calendar beginDate, Calendar endDate)
     {
         super();
         this.proposal = proposal;
@@ -79,11 +79,11 @@ public class Orar
         this.proposal = proposal;
     }
 
-    public Section getSection() {
+    public Session getSection() {
         return section;
     }
 
-    public void setSection(Section section) {
+    public void setSection(Session section) {
         this.section = section;
     }
 

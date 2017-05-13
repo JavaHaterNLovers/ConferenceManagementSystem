@@ -11,7 +11,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.validator.constraints.NotBlank;
@@ -35,45 +34,13 @@ public class Conference
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column
-    @NotNull(message="{conference.begin-submissions}")
-    private Calendar beginSubmissions;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column
-    @NotNull(message="{conference.end-submissions}")
-    private Calendar endSubmissions;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column
-    @NotNull(message="{conference.end-bidding}")
-    private Calendar endBidding;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column
-    @NotNull(message="{conference.end-review}")
-    private Calendar endReview;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column
     @CreationTimestamp
     private Calendar created;
 
-    public Conference() {
-        this(null, null, null, null, null, null);
-    }
-
-    public Conference(
-        String name, User author, Calendar beginSubmissions, Calendar endSubmissions, Calendar endBidding,
-        Calendar endReview
-    ) {
+    public Conference(User author, String name) {
         super();
-        this.id = null;
         this.author = author;
         this.name = name;
-        this.beginSubmissions = beginSubmissions;
-        this.endSubmissions = endSubmissions;
-        this.endBidding = endBidding;
-        this.endReview = endReview;
     }
 
     public Integer getId() {
@@ -96,43 +63,7 @@ public class Conference
         this.name = name;
     }
 
-    public Calendar getBeginSubmissions() {
-        return beginSubmissions;
-    }
-
-    public void setBeginSubmissions(Calendar beginSubmissions) {
-        this.beginSubmissions = beginSubmissions;
-    }
-
-    public Calendar getEndSubmissions() {
-        return endSubmissions;
-    }
-
-    public void setEndSubmissions(Calendar endSubmissions) {
-        this.endSubmissions = endSubmissions;
-    }
-
-    public Calendar getEndBidding() {
-        return endBidding;
-    }
-
-    public void setEndBidding(Calendar endBidding) {
-        this.endBidding = endBidding;
-    }
-
-    public Calendar getEndReview() {
-        return endReview;
-    }
-
-    public void setEndReview(Calendar endReview) {
-        this.endReview = endReview;
-    }
-
     public Calendar getCreated() {
         return created;
-    }
-
-    public void setCreated(Calendar created) {
-        this.created = created;
     }
 }

@@ -6,7 +6,7 @@
 
 <t:layout>
 	<div class="row">
-		<div class="col-6 mx-auto">
+		<div class="col-5 mx-auto">
 			<h3 class="mb-3 text-center">Register</h3>
 			
 			<c:set var="registerAction"><c:url value='/register/submit' /></c:set>
@@ -18,7 +18,7 @@
 					<form:errors path="email"/>
 				</c:set>
             	<div class="form-group${not empty emailError ? ' has-danger' : ''}">
-                    <form:input type="email" path="email" class="form-control" placeholder="Email"/>
+                    <form:input required="required" type="email" path="email" class="form-control" placeholder="Email"/>
                     <c:if test="${not empty emailError}">
                     	<div class="form-control-feedback">${emailError}</div>
                     </c:if>
@@ -28,7 +28,7 @@
 					<form:errors path="password"/>
 				</c:set>
             	<div class="form-group${not empty passwordError ? ' has-danger' : ''}">
-                    <form:input type="password" path="password" class="form-control" placeholder="Parola"/>
+                    <form:input required="required" type="password" path="password" class="form-control" placeholder="Parola"/>
                     <c:if test="${not empty passwordError}">
                     	<div class="form-control-feedback">${passwordError}</div>
                     </c:if>
@@ -38,7 +38,7 @@
 					<form:errors path="passwordConfirmed" />
 				</c:set>
             	<div class="form-group${not empty passwordConfError ? ' has-danger' : ''}">
-                    <form:input type="password" path="confirmPassword" class="form-control" placeholder="Confirma Parola"/>
+                    <form:input required="required" type="password" path="confirmPassword" class="form-control" placeholder="Confirma Parola"/>
                     <c:if test="${not empty passwordConfError}">
                     	<div class="form-control-feedback">${passwordConfError}</div>
                     </c:if>
@@ -48,7 +48,7 @@
 					<form:errors path="nume"/>
 				</c:set>
             	<div class="form-group${not empty numeError ? ' has-danger' : ''}">
-                    <form:input path="nume" class="form-control" placeholder="Nume"/>
+                    <form:input required="required" path="nume" class="form-control" placeholder="Nume"/>
                     <c:if test="${not empty numeError}">
                     	<div class="form-control-feedback">${numeError}</div>
                     </c:if>
@@ -58,7 +58,7 @@
 					<form:errors path="prenume"/>
 				</c:set>
             	<div class="form-group${not empty prenumeError ? ' has-danger' : ''}">
-                    <form:input path="prenume" class="form-control" placeholder="Prenume"/>
+                    <form:input required="required" path="prenume" class="form-control" placeholder="Prenume"/>
                     <c:if test="${not empty prenumeError}">
                     	<div class="form-control-feedback">${prenumeError}</div>
                     </c:if>

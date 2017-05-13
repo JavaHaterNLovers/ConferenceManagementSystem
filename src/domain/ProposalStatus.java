@@ -51,7 +51,7 @@ public class ProposalStatus
     @CreationTimestamp
     private Calendar created;
 
-    public ProposalStatus(){
+    public ProposalStatus() {
         this(null, null, null, null);
     }
 
@@ -154,16 +154,5 @@ public class ProposalStatus
      */
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    @Override
-    public String toString() {
-        return "ProposalStatus{" +
-                "id=" + id +
-                ", status='" + status + '\'' +
-                ", modified=" + modified +
-                ", created=" + created +
-                ", comment='" + comment + '\'' +
-                '}';
     }
 }

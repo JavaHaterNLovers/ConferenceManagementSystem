@@ -61,6 +61,9 @@
 					<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
 					<prop key="hibernate.hbm2ddl.auto">update</prop>
                     <prop key="javax.persistence.validation.mode">none</prop>
+                    <prop key="hibernate.connection.CharSet">utf8</prop>
+        			<prop key="hibernate.connection.characterEncoding">utf8</prop>
+        			<prop key="hibernate.connection.useUnicode">true</prop>
 				</props>
 	        </property>
 	    </bean>

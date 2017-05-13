@@ -4,7 +4,7 @@
 
 <t:layout>
 	<div class="row">
-		<div class="col-6 mx-auto">
+		<div class="col-5 mx-auto">
 			<h3 class="mb-3 text-center">Login</h3>
 			
 			<c:if test="${not empty error}">
