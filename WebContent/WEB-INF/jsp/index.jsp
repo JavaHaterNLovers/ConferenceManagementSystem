@@ -5,34 +5,35 @@
 
 <t:layout>
 	<div class="jumbotron">
-		<h1 class="display-3">Conferinte</h1>
+		<h1 class="display-3">Editii Conferinte</h1>
 		<table class="table table-responsive table-striped table-hover mx-auto w-75">
 			<thead>
 				<tr>
+					<th>Conferinta</th>
 					<th>Nume</th>
 					<th>Autor</th>
-					<th>Inceput Depuneri</th>
-					<th>Sfarsit Depuneri</th>
-					<th>Creata</th>
+					<th>Data Inceput</th>
+					<th>Data Sfarsit</th>
+					<th></th>
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach items="${conferences}" var="conference">
-				    <tr>      
-				        <td>${conference.name}</td>
-				        <td>${conference.author}</td>
+				<c:forEach items="${editions}" var="edition">
+				    <tr>
+						<td>${edition.conference}</td>
+				        <td>${edition.name}</td>
+				        <td>${edition.author}</td>
 				        <td>
-				        	<fmt:formatDate value="${conference.beginSubmissions.time}"
+				        	<fmt:formatDate value="${edition.beginDate.time}"
 				        	type="both" pattern="d/M/y H:m" />
 			        	</td>
 			        	<td>
-				        	<fmt:formatDate value="${conference.endSubmissions.time}"
+				        	<fmt:formatDate value="${edition.endDate.time}"
 				        	type="both" pattern="d/M/y H:m" />
 			        	</td>
 			        	<td>
-				        	<fmt:formatDate value="${conference.created.time}"
-				        	type="both" pattern="d/M/y H:m" />
-			        	</td> 
+			        		<a href="#" class="btn btn-primary">Inscriere</a>
+			        	</td>
 				    </tr>
 				</c:forEach>
 			</tbody>

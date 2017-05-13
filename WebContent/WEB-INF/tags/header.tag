@@ -11,9 +11,6 @@
                   	<a class="nav-link<c:if test="${currentPage=='/'}"> active</c:if>" href="${baseUrl}/">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                  	<a class="nav-link<c:if test="${currentPage =='/welcome'}"> active</c:if>" href="${baseUrl}/welcome">Welcome</a>
-                </li>
-                <li class="nav-item">
 	                <sec:authorize access="hasRole('ROLE_USER')" var="isLoggedIn" />
 					<c:choose>
 					   <c:when test="${isLoggedIn}">
@@ -31,7 +28,7 @@
 							</script>
 							<p class="nav-link">
 								<c:if test="${pageContext.request.userPrincipal.principal != null}">
-									${pageContext.request.userPrincipal.principal} | 
+									<a <c:if test="${currentPage =='/profile'}">class="profile-active"</c:if> href="${baseUrl}/profile">${pageContext.request.userPrincipal.principal}</a> | 
 								</c:if>
 								<a href="javascript:formSubmit()">Logout</a>
 							</p>

@@ -7,14 +7,14 @@
 	http://www.springframework.org/schema/security/spring-security.xsd">
 
 	<http auto-config="true" use-expressions="true">
-		<intercept-url pattern="/welcome**" access="hasRole('ROLE_USER')" />
+		<intercept-url pattern="/profile**" access="hasRole('ROLE_USER')" />
 		<intercept-url pattern="/**" access="permitAll" />
 		
 		<!-- access denied page -->
 		<access-denied-handler error-page="/403" />
 		<form-login
 		    login-page="/login"
-		    default-target-url="/welcome"
+		    default-target-url="/profile"
 			authentication-failure-url="/login?error"
 			username-parameter="username"
 			password-parameter="password" />

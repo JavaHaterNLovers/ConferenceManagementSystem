@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import service.ConferenceService;
+import repo.EditionRepository;
 import util.BaseController;
 
 @Controller
@@ -18,7 +18,7 @@ public class MainCtrl extends BaseController
 {
     @RequestMapping("/")
     public String index(Model model) {
-        model.addAttribute("conferences", ((ConferenceService) this.get("service.conference")).all());
+        model.addAttribute("editions", ((EditionRepository) this.get("repo.edition")).all());
 
         return "index";
     }

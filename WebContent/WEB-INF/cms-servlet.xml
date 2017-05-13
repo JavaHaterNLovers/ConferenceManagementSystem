@@ -83,12 +83,18 @@
 	    	factory-method="getValidator" />
 	
 		<!-- Repositories -->
-	    <bean id="repo.user" class="repo.UserRepository">
+	    <bean id="repo.conference" class="repo.ConferenceRepository">
 	    </bean>
 	    
-	    <bean id="repo.conference" class="repo.BaseRepository">
-	    	<constructor-arg value="domain.Conference"></constructor-arg>
+	    <bean id="repo.edition" class="repo.EditionRepository">
 	    </bean>
+	    
+	    <bean id="repo.proposal" class="repo.ProposalRepository">
+	    </bean>
+	    
+	    <bean id="repo.user" class="repo.UserRepository">
+	    </bean>
+	   
 	
 		<!-- Services -->
 	    <bean id="service.conference" class="service.ConferenceService">

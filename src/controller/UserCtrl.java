@@ -3,6 +3,8 @@ package controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -13,6 +15,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import domain.User;
+import domain.User.UserRole;
+import repo.ConferenceRepository;
+import repo.EditionRepository;
+import repo.ProposalRepository;
 import service.UserService;
 import util.BaseController;
 
@@ -33,7 +39,7 @@ public class UserCtrl extends BaseController
     }
 
     @RequestMapping(value = "/register/submit", method = RequestMethod.POST)
-    public String submit(@Valid @ModelAttribute("user")User user,
+    public String registerSubmit(@Valid @ModelAttribute("user")User user,
         BindingResult result, ModelMap model,
         RedirectAttributes redirAttr
     ) {
@@ -49,9 +55,28 @@ public class UserCtrl extends BaseController
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
-    public String showRegistrationForm(Model model) {
+    public String register(Model model) {
         model.addAttribute("user", new User());
 
         return "user/register";
+    }
+
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
+    public String profile(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        User user = (User) auth.getPrincipal();
+        model.addAttribute("user", user);
+        model.addAttribute("proposals", ((ProposalRepository) this.get("repo.proposal")).getByUser(user));
+
+        if (user.getRol() == UserRole.chair) {
+            model.addAttribute("conferences", ((ConferenceRepository) this.get("repo.conference")).getByUser(user));
+        }
+
+        if (user.getRol() == UserRole.chair || user.getRol() == UserRole.coChair) {
+            model.addAttribute("editions", ((EditionRepository) this.get("repo.edition")).getByUser(user));
+        }
+
+        return "user/profile";
     }
 }

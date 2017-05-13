@@ -66,4 +66,9 @@ public class Conference
     public Calendar getCreated() {
         return created;
     }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

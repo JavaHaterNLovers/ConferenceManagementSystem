@@ -71,3 +71,12 @@ body {
     border-bottom: 0;
   }
 }
+
+.nav-item .profile-active {
+	color: #fff;
+	cursor: default;
+	background-color: #0275d8;
+	border-radius: .25rem;
+	padding: .5em 1em;
+	margin-left: -1rem;
+}

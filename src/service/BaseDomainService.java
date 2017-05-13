@@ -1,7 +1,5 @@
 package service;
 
-import java.util.List;
-
 import repo.BaseRepository;
 
 public abstract class BaseDomainService<T, R extends BaseRepository<T>>
@@ -23,23 +21,5 @@ public abstract class BaseDomainService<T, R extends BaseRepository<T>>
      */
     public void delete(T obj) {
         repo.delete(obj);
-    }
-
-    /**
-     * Returneaza toate obiectele.
-     *
-     * @return
-     */
-    public List<T> all() {
-        return repo.all();
-    }
-
-    /**
-     * Returneaza numarul de elemente.
-     *
-     * @return
-     */
-    public long size() {
-        return repo.size();
     }
 }

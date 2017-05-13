@@ -1,7 +1,9 @@
+F:\Coding\Java\Facultate\Workspace\CMSWeb\src\repo\ProposalRepository.java
 F:\Coding\Java\Facultate\Workspace\CMSWeb\src\domain\Proposal.java
 F:\Coding\Java\Facultate\Workspace\CMSWeb\src\util\BaseController.java
 F:\Coding\Java\Facultate\Workspace\CMSWeb\src\repo\BaseRepository.java
 F:\Coding\Java\Facultate\Workspace\CMSWeb\src\domain\Orar.java
+F:\Coding\Java\Facultate\Workspace\CMSWeb\src\repo\ConferenceRepository.java
 F:\Coding\Java\Facultate\Workspace\CMSWeb\src\controller\MainCtrl.java
 F:\Coding\Java\Facultate\Workspace\CMSWeb\src\domain\Topic.java
 F:\Coding\Java\Facultate\Workspace\CMSWeb\src\domain\User.java
@@ -9,9 +11,11 @@ F:\Coding\Java\Facultate\Workspace\CMSWeb\src\service\UserService.java
 F:\Coding\Java\Facultate\Workspace\CMSWeb\src\domain\ProposalStatus.java
 F:\Coding\Java\Facultate\Workspace\CMSWeb\src\controller\GlobalCtrl.java
 F:\Coding\Java\Facultate\Workspace\CMSWeb\src\domain\Conference.java
+F:\Coding\Java\Facultate\Workspace\CMSWeb\src\domain\Edition.java
 F:\Coding\Java\Facultate\Workspace\CMSWeb\src\main\Config.java
+F:\Coding\Java\Facultate\Workspace\CMSWeb\src\repo\EditionRepository.java
 F:\Coding\Java\Facultate\Workspace\CMSWeb\src\service\BaseDomainService.java
 F:\Coding\Java\Facultate\Workspace\CMSWeb\src\controller\UserCtrl.java
-F:\Coding\Java\Facultate\Workspace\CMSWeb\src\domain\Section.java
 F:\Coding\Java\Facultate\Workspace\CMSWeb\src\service\ConferenceService.java
+F:\Coding\Java\Facultate\Workspace\CMSWeb\src\domain\Session.java
 F:\Coding\Java\Facultate\Workspace\CMSWeb\src\repo\UserRepository.java
