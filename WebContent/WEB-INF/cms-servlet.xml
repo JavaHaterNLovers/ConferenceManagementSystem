@@ -31,7 +31,6 @@
     <mvc:annotation-driven />
     <beans>
     	<context:annotation-config/>
-    	<bean class="main.Config"/>
     	
     	<!-- BEGIN SPRING & HIBERNATE SETUP -->
 		<tx:annotation-driven transaction-manager="hibernate.manager" />

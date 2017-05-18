@@ -37,6 +37,9 @@ public class Conference
     @CreationTimestamp
     private Calendar created;
 
+    public Conference() {
+    }
+
     public Conference(User author, String name) {
         super();
         this.author = author;
