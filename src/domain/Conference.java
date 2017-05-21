@@ -74,4 +74,5 @@ public class Conference
     public String toString() {
         return this.name;
     }
+    
 }

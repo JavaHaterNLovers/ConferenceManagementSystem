@@ -30,4 +30,19 @@ public class ConferenceRepository extends BaseRepository<Conference>
             return null;
         }
     }
+    
+    public Conference getById(Integer id) {
+        CriteriaBuilder builder = factory.getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<Conference> query = builder.createQuery(genericType);
+        Root<Conference> root = query.from(genericType);
+
+        query.select(root);
+        query.where(builder.equal(root.get("id"), id));
+
+        try {
+            return factory.getCurrentSession().createQuery(query).getSingleResult();
+        } catch (NoResultException ex) {
+            return null;
+        }
+    }
 }
