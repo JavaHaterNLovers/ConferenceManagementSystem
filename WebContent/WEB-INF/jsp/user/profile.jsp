@@ -6,14 +6,6 @@
 
 <t:layout>
 	<div class="row">
-		
-		<div class="offset-3 col-6">
-			<c:if test="${not empty message}">
-				<div class="alert alert-success" role="alert">
-					${message}
-				</div>
-			</c:if>
-		</div>
 		<div class="offset-3 col-6">
 			<h3 class="mb-3 text-center">Detalii Cont</h3>
 			<hr>

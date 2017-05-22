@@ -13,10 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import domain.Edition;
 import domain.User;
-import domain.User.UserRole;
 import repo.ConferenceRepository;
-import repo.EditionRepository;
-import repo.ProposalRepository;
 import service.ConferenceService;
 import util.BaseController;
 
@@ -33,7 +30,7 @@ public class EditionCtrl extends BaseController
         User user = (User) auth.getPrincipal();
         edition.setAuthor(user);
         
-        edition.setConference(((ConferenceRepository) this.get("repo.conference")).getById(Integer.parseInt(edition.getAuxConferenceId())));
+        edition.setConference(((ConferenceRepository) this.get("repo.conference")).get(Integer.parseInt(edition.getAuxConferenceId())));
         
         if (result.hasErrors()) {
             model.addAttribute("conferences", ((ConferenceRepository) this.get("repo.conference")).getByUser(user));
@@ -42,20 +39,10 @@ public class EditionCtrl extends BaseController
            
         
         ((ConferenceService) this.get("service.conference")).add(edition);
-
-        model.addAttribute("message", "Editie adaugata cu success");
-
-        model.addAttribute("user", user);
-        model.addAttribute("proposals", ((ProposalRepository) this.get("repo.proposal")).getByUser(user));
-
-        if (user.getRol() == UserRole.chair) {
-            model.addAttribute("conferences", ((ConferenceRepository) this.get("repo.conference")).getByUser(user));
-        }
-
-        if (user.getRol() == UserRole.chair || user.getRol() == UserRole.coChair) {
-            model.addAttribute("editions", ((EditionRepository) this.get("repo.edition")).getByUser(user));
-        }
-        return "user/profile";
+        
+        redirAttr.addFlashAttribute("flashMessage", "Editie adaugata cu success");
+        
+        return "redirect:/profile";
     }
     
     @RequestMapping(value = "/createEdition", method = RequestMethod.GET)
