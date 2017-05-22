@@ -2,6 +2,7 @@ package repo;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -11,6 +12,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
 
 @Repository
 @Transactional
@@ -71,5 +73,20 @@ public class BaseRepository<T>
         query.select((Selection<? extends T>) builder.count(query.from(genericType)));
 
         return Long.parseLong(factory.getCurrentSession().createQuery(query).getSingleResult().toString());
+    }
+    
+    public T get(Integer id) {
+        CriteriaBuilder builder = factory.getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<T> query = builder.createQuery(genericType);
+        Root<T> root = query.from(genericType);
+
+        query.select(root);
+        query.where(builder.equal(root.get("id"), id));
+
+        try {
+            return factory.getCurrentSession().createQuery(query).getSingleResult();
+        } catch (NoResultException ex) {
+            return null;
+        }
     }
 }

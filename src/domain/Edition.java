@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name="editions")
@@ -40,31 +41,37 @@ public class Edition
     @Temporal(TemporalType.TIMESTAMP)
     @Column
     @NotNull(message="{conference.begin-date}")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Calendar beginDate;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column
     @NotNull(message="{conference.end-date}")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Calendar endDate;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column
     @NotNull(message="{conference.begin-submissions}")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Calendar beginSubmissions;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column
     @NotNull(message="{conference.end-submissions}")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Calendar endSubmissions;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column
     @NotNull(message="{conference.end-bidding}")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Calendar endBidding;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column
     @NotNull(message="{conference.end-review}")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Calendar endReview;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -72,6 +79,8 @@ public class Edition
     @CreationTimestamp
     private Calendar created;
 
+    private String auxConferenceId = null;
+    
     public Edition() {
         this(null, null, null, null, null, null, null, null, null);
     }
@@ -173,6 +182,14 @@ public class Edition
         return created;
     }
 
+    public void setAuxConferenceId(String id){
+        this.auxConferenceId = id;
+    }
+    
+    public String getAuxConferenceId(){
+        return auxConferenceId;
+    }
+    
     @Override
     public String toString() {
         return this.name;

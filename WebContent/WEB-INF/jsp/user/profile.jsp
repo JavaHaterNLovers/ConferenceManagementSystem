@@ -83,7 +83,7 @@
 							<th>Data Inceput</th>
 							<th>Data Sfarsit</th>
 							<th>Data Creeata</th>
-							<th><a href="#" class="btn btn-primary">Creeaza Editie</a></th>
+							<th><a href="<c:url value='/createEdition' />" class="btn btn-primary">Creeaza Editie</a></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -91,11 +91,11 @@
 						    <tr>      
 						        <td>${edition.name}</td>
 						        <td>
-						        	<fmt:formatDate value="${edition.begin-date.time}"
-						        	type="both" pattern="d/M/y H:m" />
+						        	<fmt:formatDate value="${edition.beginDate.time}"
+						        	type="both" pattern="d/M/y H:m" /> 
 					        	</td> 
 					        	<td>
-						        	<fmt:formatDate value="${edition.end-date.time}"
+						        	<fmt:formatDate value="${edition.endDate.time}"
 						        	type="both" pattern="d/M/y H:m" />
 					        	</td> 
 					        	<td>
