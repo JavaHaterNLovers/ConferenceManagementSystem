@@ -27,6 +27,8 @@ public class EditionCtrl extends BaseController
         BindingResult result, ModelMap model,
         RedirectAttributes redirAttr
     ) {
+        edition.setConference(((ConferenceRepository) this.get("repo.conference")).get(Integer.parseInt(edition.getAuxConferenceId())));
+
         if (result.hasErrors()) {
             model.addAttribute("conferences", ((ConferenceRepository) this.get("repo.conference")).all());
             return "edition/createEdition";
@@ -36,8 +38,6 @@ public class EditionCtrl extends BaseController
 
         User user = (User) auth.getPrincipal();
         edition.setAuthor(user);
-
-        edition.setConference(((ConferenceRepository) this.get("repo.conference")).get(Integer.parseInt(edition.getAuxConferenceId())));
 
 
         ((ConferenceService) this.get("service.conference")).add(edition);
