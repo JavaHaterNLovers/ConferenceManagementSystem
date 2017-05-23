@@ -1,5 +1,7 @@
 package service;
 
+import java.util.List;
+
 import repo.BaseRepository;
 
 public abstract class BaseDomainService<T, R extends BaseRepository<T>>
@@ -21,5 +23,9 @@ public abstract class BaseDomainService<T, R extends BaseRepository<T>>
      */
     public void delete(T obj) {
         repo.delete(obj);
+    }
+    
+    public List<T> all(){
+        return repo.all();
     }
 }
