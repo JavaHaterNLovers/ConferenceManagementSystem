@@ -1,7 +1,10 @@
 package controller;
 
+import java.util.Calendar;
+
 import javax.validation.Valid;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -9,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -16,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import domain.Edition;
 import domain.User;
 import repo.ConferenceRepository;
+import repo.EditionRepository;
 import service.ConferenceService;
 import util.BaseController;
 
@@ -56,5 +61,19 @@ public class EditionCtrl extends BaseController
         model.addAttribute("edition", new Edition());
         model.addAttribute("conferences", ((ConferenceRepository) this.get("repo.conference")).all());
         return "edition/createEdition";
+    }
+
+    @RequestMapping(value = "/viewEdition/{id}", method = RequestMethod.GET)
+    public String viewEdition(Model model, @PathVariable int id) {
+        Edition ed = ((EditionRepository) this.get("repo.edition")).get(id);
+
+        if (ed == null) {
+            throw new AccessDeniedException("Editie inexistenta");
+        }
+
+        model.addAttribute("edition", ed);
+        model.addAttribute("valid", Calendar.getInstance().compareTo(ed.getEndSubmissions()) == -1);
+
+        return "edition/view";
     }
 }
