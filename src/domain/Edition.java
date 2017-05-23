@@ -35,7 +35,6 @@ public class Edition
     private String name;
 
     @ManyToOne
-    @NotNull(message="{conference.conference}")
     private Conference conference;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -79,8 +78,9 @@ public class Edition
     @CreationTimestamp
     private Calendar created;
 
+    @NotNull(message="{conference.conference}")
     private String auxConferenceId = null;
-    
+
     public Edition() {
         this(null, null, null, null, null, null, null, null, null);
     }
@@ -185,11 +185,11 @@ public class Edition
     public void setAuxConferenceId(String id){
         this.auxConferenceId = id;
     }
-    
+
     public String getAuxConferenceId(){
         return auxConferenceId;
     }
-    
+
     @Override
     public String toString() {
         return this.name;

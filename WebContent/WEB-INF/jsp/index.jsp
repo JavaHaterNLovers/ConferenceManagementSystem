@@ -21,7 +21,7 @@
 				<c:forEach items="${editions}" var="edition">
 				    <tr>
 						<td>${edition.conference}</td>
-				        <td>${edition.name}</td>
+				        <td><a href="<c:url value="/viewEdition/${edition.id}"/>">${edition.name}</a></td>
 				        <td>${edition.author}</td>
 				        <td>
 				        	<fmt:formatDate value="${edition.beginDate.time}"
