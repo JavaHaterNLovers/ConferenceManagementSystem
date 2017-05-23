@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import domain.Topic;
-import repo.TopicRepository;
+import repo.BaseRepository;
 import util.BaseController;
 
 @Controller
@@ -30,7 +30,7 @@ public class TopicCtrl extends BaseController
             return "topic/createTopic";
         }
 
-        ((TopicRepository) this.get("repo.topic")).save(topic);
+        ((BaseRepository<Topic>) this.get("repo.topic")).save(topic);
 
         redirAttr.addFlashAttribute("flashMessage", "Topic adaugat cu success");
 
