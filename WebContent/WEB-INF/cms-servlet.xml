@@ -93,7 +93,9 @@
 	    
 	    <bean id="repo.user" class="repo.UserRepository">
 	    </bean>
-	   
+	    
+	    <bean id="repo.topic" class="repo.TopicRepository">
+	    </bean>
 	
 		<!-- Services -->
 	    <bean id="service.conference" class="service.ConferenceService">
