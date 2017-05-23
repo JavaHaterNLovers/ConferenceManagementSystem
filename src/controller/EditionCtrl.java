@@ -1,5 +1,7 @@
 package controller;
 
+import javax.validation.Valid;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -21,30 +23,30 @@ import util.BaseController;
 public class EditionCtrl extends BaseController
 {
     @RequestMapping(value = "/createEdition/submit", method = RequestMethod.POST)
-    public String createEditionSubmit(@ModelAttribute("edition")Edition edition,
+    public String createEditionSubmit(@Valid @ModelAttribute("edition")Edition edition,
         BindingResult result, ModelMap model,
         RedirectAttributes redirAttr
     ) {
+        if (result.hasErrors()) {
+            model.addAttribute("conferences", ((ConferenceRepository) this.get("repo.conference")).all());
+            return "edition/createEdition";
+        }
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         User user = (User) auth.getPrincipal();
         edition.setAuthor(user);
-        
+
         edition.setConference(((ConferenceRepository) this.get("repo.conference")).get(Integer.parseInt(edition.getAuxConferenceId())));
-        
-        if (result.hasErrors()) {
-            model.addAttribute("conferences", ((ConferenceRepository) this.get("repo.conference")).getByUser(user));
-            return "edition/createEdition";
-        }
-           
-        
+
+
         ((ConferenceService) this.get("service.conference")).add(edition);
-        
+
         redirAttr.addFlashAttribute("flashMessage", "Editie adaugata cu success");
-        
+
         return "redirect:/profile";
     }
-    
+
     @RequestMapping(value = "/createEdition", method = RequestMethod.GET)
     public String createEdition(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -52,7 +54,7 @@ public class EditionCtrl extends BaseController
         User user = (User) auth.getPrincipal();
         model.addAttribute("user", user);
         model.addAttribute("edition", new Edition());
-        model.addAttribute("conferences", ((ConferenceRepository) this.get("repo.conference")).getByUser(user));
+        model.addAttribute("conferences", ((ConferenceRepository) this.get("repo.conference")).all());
         return "edition/createEdition";
     }
 }
