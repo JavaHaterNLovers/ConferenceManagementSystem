@@ -2,6 +2,7 @@ package controller;
 
 import javax.validation.Valid;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -23,20 +24,21 @@ import util.BaseController;
 public class ConferenceCtrl extends BaseController
 {
 
-    @RequestMapping(value = "/conference", method = RequestMethod.GET)
+    @RequestMapping(value = "/createConference", method = RequestMethod.GET)
     public String conference(Model model) {
         model.addAttribute("conference", new Conference());
 
         return "conference/createConference";
     }
     
+    @Secured({"ROLE_CHAIR"})
     @RequestMapping(value = "/createConference/submit", method = RequestMethod.POST)
     public String registerSubmit(@Valid @ModelAttribute("conference")Conference conference,
         BindingResult result, ModelMap model,
         RedirectAttributes redirAttr
     ) {
         if (result.hasErrors()) {
-            return "redirect:/conference";
+            return "redirect:/createConference";
         }
         
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

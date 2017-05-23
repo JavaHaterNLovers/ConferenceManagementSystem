@@ -52,7 +52,7 @@
 						<tr>
 							<th>Nume</th>
 							<th>Data Creeata</th>
-							<th><a href="<c:url value='/conference' />"  class="btn btn-primary">Creeaza Conferinta</a></th>
+							<th><a href="<c:url value='/createConference' />"  class="btn btn-primary">Creeaza Conferinta</a></th>
 						</tr>
 					</thead>
 					<tbody>
