@@ -108,5 +108,29 @@
 				</table>
 			</div>
 		</c:if>
+		
+		<sec:authorize access="hasRole('ROLE_CHAIR')" var="isChair" />
+		<c:if test="${isChair}">
+			<div class="offset-3 col-6 mt-3">
+				<h3 class="mb-3 text-center">Topic-uri conferinte</h3>
+				<hr>
+				
+				<table class="table table-responsive table-striped table-hover mx-auto w-100">
+					<thead>
+						<tr>
+							<th>Nume</th>
+							<th><a href="<c:url value='/createTopic' />" class="btn btn-primary">Adauga topic</a></th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${topics}" var="topic">
+						    <tr>      
+						        <td>${topic.name}</td>
+						    </tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
+		</c:if>
 	</div>
 </t:layout>

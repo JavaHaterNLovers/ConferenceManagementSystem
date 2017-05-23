@@ -92,8 +92,11 @@
 	    </bean>
 	    
 	    <bean id="repo.user" class="repo.UserRepository">
-	    </bean>
+	    </bean>   
 	   
+	    <bean id="repo.topic" class="repo.BaseRepository">
+	   		<constructor-arg value="domain.Topic"></constructor-arg>
+	    </bean>
 	
 		<!-- Services -->
 	    <bean id="service.conference" class="service.ConferenceService">
@@ -103,5 +106,6 @@
 	    <bean id="service.user" class="service.UserService">
 	    	<constructor-arg ref="repo.user"></constructor-arg>
 	    </bean>
+	   
  	</beans>
 </beans>
