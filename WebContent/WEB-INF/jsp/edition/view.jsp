@@ -52,7 +52,7 @@
 			<sec:authorize access="hasRole('ROLE_USER')" var="isUser" />
 			<c:if test="${isUser and valid}">
 	        	<hr>
-				<h5 class="mt-3 text-center"><a href="#" class="btn btn-success">Inscriere Speaker</a></h5>
+				<h5 class="mt-3 text-center"><a href="<c:url value='/createProposal/${edition.id}' />" class="btn btn-success">Inscriere Speaker</a></h5>
 			</c:if>
 		</div>
 	</div>

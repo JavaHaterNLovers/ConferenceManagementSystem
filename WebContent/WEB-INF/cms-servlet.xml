@@ -29,6 +29,7 @@
 	
 	<mvc:resources mapping="/resources/**" location="/resources/" cache-period="0"/>
     <mvc:annotation-driven />
+    
     <beans>
     	<context:annotation-config/>
     	

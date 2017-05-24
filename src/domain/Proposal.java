@@ -9,6 +9,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -46,10 +47,10 @@ public class Proposal
     /**
      * Daca un topic nu exista el va fi creat automat cand acest obiect va fi salvat.
      */
-    @ManyToMany(cascade = {CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     @NotEmpty(message="{proposal.topics}")
     @Valid
-    private List<Topic> topics;
+    private List<Topic> topics = new ArrayList<>();
 
     @Column
     private String keywords;
@@ -77,7 +78,7 @@ public class Proposal
     }
 
     public Proposal(
-            User user, Edition edition, String name, List<Topic> topics, String keywords, File file, String description
+        User user, Edition edition, String name, List<Topic> topics, String keywords, File file, String description
     ) {
         super();
         this.user = user;
@@ -139,6 +140,10 @@ public class Proposal
         this.name = name;
     }
 
+    public void setTopics(List<Topic> topics) {
+        this.topics = topics;
+    }
+
     /**
      * Adauga un topic.
      *
@@ -162,6 +167,7 @@ public class Proposal
      *
      * @return
      */
+
     public List<Topic> getTopics() {
         return this.topics;
     }
