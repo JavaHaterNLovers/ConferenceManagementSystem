@@ -6,7 +6,7 @@
 <t:layout>
 	<div class="jumbotron">
 		<h1 class="display-3">Editii Conferinte</h1>
-		<table class="table table-responsive table-striped table-hover mx-auto w-75">
+		<table class="table table-striped table-hover mx-auto w-75">
 			<thead>
 				<tr>
 					<th>Conferinta</th>

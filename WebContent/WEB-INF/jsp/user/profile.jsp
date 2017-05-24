@@ -18,7 +18,7 @@
 			<h3 class="mb-3 text-center">Propuneri</h3>
 			<hr>
 			
-			<table class="table table-responsive table-striped table-hover mx-auto w-100">
+			<table class="table table-striped table-hover mx-auto w-100">
 				<thead>
 					<tr>
 						<th>Editie</th>
@@ -44,15 +44,14 @@
 		<sec:authorize access="hasRole('ROLE_CHAIR')" var="isChair" />
 		<c:if test="${isChair}">
 			<div class="offset-3 col-6 mt-3">
-				<h3 class="mb-3 text-center">Conferinte Creeate</h3>
+				<h3 class="mb-3 text-center">Conferinte Creeate <a href="<c:url value='/createConference' />" class="btn btn-primary">Creeaza Conferinta</a></h3>
 				<hr>
 				
-				<table class="table table-responsive table-striped table-hover mx-auto w-100">
+				<table class="table table-striped table-hover mx-auto w-100">
 					<thead>
 						<tr>
 							<th>Nume</th>
 							<th>Data Creeata</th>
-							<th><a href="<c:url value='/createConference' />"  class="btn btn-primary">Creeaza Conferinta</a></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -73,17 +72,16 @@
 		<sec:authorize access="hasRole('ROLE_CO_CHAIR')" var="isCoChair" />
 		<c:if test="${isChair || isCoChair}">
 			<div class="offset-3 col-6 mt-3">
-				<h3 class="mb-3 text-center">Editii Creeate</h3>
+				<h3 class="mb-3 text-center">Editii Creeate <a href="<c:url value='/createEdition' />" class="btn btn-primary">Creeaza Editie</a></h3>
 				<hr>
 				
-				<table class="table table-responsive table-striped table-hover mx-auto w-100">
+				<table class="table table-striped table-hover mx-auto w-100">
 					<thead>
 						<tr>
 							<th>Nume</th>
 							<th>Data Inceput</th>
 							<th>Data Sfarsit</th>
 							<th>Data Creeata</th>
-							<th><a href="<c:url value='/createEdition' />" class="btn btn-primary">Creeaza Editie</a></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -112,14 +110,13 @@
 		<sec:authorize access="hasRole('ROLE_CHAIR')" var="isChair" />
 		<c:if test="${isChair}">
 			<div class="offset-3 col-6 mt-3">
-				<h3 class="mb-3 text-center">Topic-uri conferinte</h3>
+				<h3 class="mb-3 text-center">Topic-uri conferinte <a href="<c:url value='/createTopic' />" class="btn btn-primary">Adauga topic</a></h3>
 				<hr>
 				
-				<table class="table table-responsive table-striped table-hover mx-auto w-100">
+				<table class="table table-striped table-hover mx-auto w-100">
 					<thead>
 						<tr>
 							<th>Nume</th>
-							<th><a href="<c:url value='/createTopic' />" class="btn btn-primary">Adauga topic</a></th>
 						</tr>
 					</thead>
 					<tbody>
