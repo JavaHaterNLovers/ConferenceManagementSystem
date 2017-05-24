@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import domain.Payment;
 import domain.Topic;
 import domain.User;
 import domain.User.UserRole;
@@ -76,6 +77,7 @@ public class UserCtrl extends BaseController
         if (user.getRol() == UserRole.chair) {
             model.addAttribute("conferences", ((ConferenceRepository) this.get("repo.conference")).getByUser(user));
             model.addAttribute("topics", ((BaseRepository<Topic>) this.get("repo.topic")).all());
+            model.addAttribute("payments", ((BaseRepository<Payment>) this.get("repo.payment")).all());
         }
 
         if (user.getRol() == UserRole.chair || user.getRol() == UserRole.coChair) {
