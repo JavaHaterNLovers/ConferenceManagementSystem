@@ -5,6 +5,8 @@ import javax.validation.Valid;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,6 +19,7 @@ import domain.User;
 import repo.PaymentRepository;
 import util.BaseController;
 
+@Controller
 public class PaymentCtrl extends BaseController {
 
 	@Secured({"ROLE_CHAIR"})
@@ -40,5 +43,12 @@ public class PaymentCtrl extends BaseController {
 
         return "redirect:/profile";
     }
+	
+	
+	 @RequestMapping(value = "/createPayment", method = RequestMethod.GET)
+	    public String register(Model model) {
+	        model.addAttribute("payment", new Payment());
+	        return "payment/createPayment";
+	    }
 	
 }

@@ -30,8 +30,9 @@ public class Payment {
     @ManyToOne
     private User listener;
    
-    @Column
+    @ManyToOne
     private Edition editionName;
+    
    
      @Temporal(TemporalType.TIMESTAMP)
      @Column
@@ -87,4 +88,12 @@ public class Payment {
      public void setCreated(Calendar created){
          this.created=created;
      } 
+     
+     public int getCardNumber(){
+    	 return this.cardNumber;
+     }
+     
+     public void setCardNumber(int cardNo){
+    	 this.cardNumber=cardNo;
+     }
 }
