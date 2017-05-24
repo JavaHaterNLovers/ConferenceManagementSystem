@@ -21,6 +21,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -60,6 +61,7 @@ public class User implements UserDetails
     @Temporal(TemporalType.TIMESTAMP)
     @Column
     @CreationTimestamp
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Calendar created;
 
     public User() {

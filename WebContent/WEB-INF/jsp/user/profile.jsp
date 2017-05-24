@@ -132,5 +132,43 @@
 				</table>
 			</div>
 		</c:if>
+		
+		<sec:authorize access="hasRole('ROLE_SUPER_ADMIN')" var="isSuperAdmin" />
+		<c:if test="${isSuperAdmin}">
+			<div class="offset-3 col-6 mt-3">
+				<h3 class="mb-3 text-center">Lista Utilizatori</h3>
+				<hr>
+				
+				<table class="table table-responsive table-striped table-hover mx-auto w-100">
+					<thead>
+						<tr>
+							<th>Nume</th>
+							<th>Prenume</th>
+							<th>Email</th>
+							<th>Password</th>
+							<th>Rol</th>
+							<th></th>							
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${users}" var="user">
+						    <tr>      
+						        <td>${user.nume}</td>
+					        	<td>
+						        	${user.prenume}
+					        	</td>
+					        	<td>${user.email}</td>
+					        	<td>${user.password}</td>
+					        	<td>${user.rol}</td>
+					        	<td><a href="<c:url value='/updateUser?usr=${user.id}' />" class="btn btn-primary">Modifica</a></td>
+						</tr>
+						    </tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
+		</c:if>
+		
+		
 	</div>
 </t:layout>
