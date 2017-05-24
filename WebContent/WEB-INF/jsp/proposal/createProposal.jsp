@@ -5,6 +5,9 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <t:layout>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+		
 	<div class="row">
 		<div class="col-5 mx-auto">
 			<h3 class="mb-3 text-center">Propunere</h3>
@@ -29,7 +32,7 @@
 					<form:errors path="description"/>
 				</c:set>
             	<div class="form-group${not empty descriptionError ? ' has-danger' : ''}">
-                    <form:input required="required" path="description" class="form-control" placeholder="Descrierea"/>
+                    <form:textarea required="required" rows="5" path="description" class="form-control" placeholder="Descrierea"/>
                     <c:if test="${not empty descriptionError}">
                     	<div class="form-control-feedback">${descriptionError}</div>
                     </c:if>
@@ -40,10 +43,8 @@
 				</c:set>
             	<div class="form-group${not empty topicsError ? ' has-danger' : ''}">
             		<label>Subiecte</label>
-                    <form:select multiple = "multiple" path = "topics" class="form-control js-example-basic-multiple">
-                    	<form:options items="${listAllTopics}" itemValue = "id" itemLabel = "name"/>
-                    </form:select>
-                     <c:if test="${not empty topicsError}">
+                    <form:select multiple="true" path="topics" items="${listAllTopics}" itemValue="id" itemLabel="name" class="form-control js-example-basic-multiple" />
+                   	<c:if test="${not empty topicsError}">
                     	<div class="form-control-feedback">${topicsError}</div>
                     </c:if>
                 </div>

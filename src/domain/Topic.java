@@ -15,7 +15,7 @@ public class Topic
     @Id
     @GeneratedValue
     private int id;
-    
+
     @Column(unique = true)
     @NotBlank(message="{topic.name}")
     private String name;
@@ -40,12 +40,12 @@ public class Topic
     public void setName(String name) {
         this.name = name;
     }
-    
+
     public Integer getId() {
         return id;
     }
 
-    public void setName(Integer id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 }
