@@ -21,6 +21,7 @@ import repo.BaseRepository;
 import repo.ConferenceRepository;
 import repo.EditionRepository;
 import repo.ProposalRepository;
+import repo.UserRepository;
 import service.UserService;
 import util.BaseController;
 
@@ -79,6 +80,10 @@ public class UserCtrl extends BaseController
 
         if (user.getRol() == UserRole.chair || user.getRol() == UserRole.coChair) {
             model.addAttribute("editions", ((EditionRepository) this.get("repo.edition")).getByUser(user));
+        }
+
+        if (user.getRol() == UserRole.superAdmin) {
+        	model.addAttribute("users", ((UserRepository) this.get("repo.user")).all());
         }
 
         return "user/profile";
