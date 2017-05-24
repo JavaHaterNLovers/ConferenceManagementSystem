@@ -85,6 +85,7 @@ public class UserCtrl extends BaseController
         if (user.getRol() == UserRole.superAdmin) {
         	model.addAttribute("users", ((UserRepository) this.get("repo.user")).all());
         }
+
         return "user/profile";
     }
 }

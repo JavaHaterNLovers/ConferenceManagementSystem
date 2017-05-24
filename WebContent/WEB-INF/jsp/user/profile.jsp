@@ -139,13 +139,12 @@
 				<h3 class="mb-3 text-center">Lista Utilizatori</h3>
 				<hr>
 				
-				<table class="table table-responsive table-striped table-hover mx-auto w-100">
+				<table class="table table-striped table-hover mx-auto w-100">
 					<thead>
 						<tr>
 							<th>Nume</th>
 							<th>Prenume</th>
 							<th>Email</th>
-							<th>Password</th>
 							<th>Rol</th>
 							<th></th>							
 						</tr>
@@ -158,9 +157,10 @@
 						        	${user.prenume}
 					        	</td>
 					        	<td>${user.email}</td>
-					        	<td>${user.password}</td>
 					        	<td>${user.rol}</td>
-					        	<td><a href="<c:url value='/updateUser?usr=${user.id}' />" class="btn btn-primary">Modifica</a></td>
+					        	<c:if test="${user.id != pageContext.request.userPrincipal.principal.id}">
+					        		<td><a href="<c:url value='/updateUser/${user.id}' />" class="btn btn-warning">Modifica</a></td>
+				        		</c:if>
 						</tr>
 						    </tr>
 						</c:forEach>
