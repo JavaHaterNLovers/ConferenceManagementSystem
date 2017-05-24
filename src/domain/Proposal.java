@@ -1,6 +1,7 @@
 package domain;
 
 
+import java.beans.Transient;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -71,7 +72,7 @@ public class Proposal
     @Column
     @CreationTimestamp
     private Calendar created;
-
+    
     public Proposal() {
         this(null, null, null, new ArrayList<Topic>(), null, null, null);
     }
@@ -162,10 +163,18 @@ public class Proposal
      *
      * @return
      */
+    
     public List<Topic> getTopics() {
         return this.topics;
     }
 
+    /*public List<String> getTopicsName() {
+        return this.topicsName;
+    }
+    
+    public void setTopicsName(List<String> topics) {
+        this.topicsName = topics;
+    }*/
     /**
      * Returneaza .
      * @return

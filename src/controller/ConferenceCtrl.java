@@ -17,7 +17,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import domain.Conference;
 import domain.User;
 import repo.ConferenceRepository;
-import service.UserService;
 import util.BaseController;
 
 @Controller
@@ -52,6 +51,5 @@ public class ConferenceCtrl extends BaseController
 
         return "redirect:/profile";
     }
-    
     
 }

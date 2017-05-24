@@ -9,23 +9,13 @@
 		<div class="col-5 mx-auto">
 			<h3 class="mb-3 text-center">Propunere</h3>
 			
-			<c:set var="createProposalAction"><c:url value='/createProposal/submit' /></c:set>
+			<c:set var="createProposalAction"><c:url value='/createProposal/submit/${id}' /></c:set>
 			<form:form method="POST" action="${createProposalAction}" modelAttribute="proposal">
 				<input type="hidden" name="${_csrf.parameterName}"
 					value="${_csrf.token}" />
 
 				
             	<c:set var="nameError">
-					<form:errors path="name"/>
-				</c:set>
-            	<div class="form-group${not empty nameError ? ' has-danger' : ''}">
-                    <form:input required="required" path="name" class="form-control" placeholder="Numele propuneri"/>
-                    <c:if test="${not empty nameError}">
-                    	<div class="form-control-feedback">${nameError}</div>
-                    </c:if>
-                </div>
-                
-                <c:set var="nameError">
 					<form:errors path="name"/>
 				</c:set>
             	<div class="form-group${not empty nameError ? ' has-danger' : ''}">
@@ -50,16 +40,27 @@
 				</c:set>
             	<div class="form-group${not empty topicsError ? ' has-danger' : ''}">
             		<label>Subiecte</label>
-                    <form:select multiple = "true" path = "auxConferenceId" class="form-control">
-                    	<form:options items="${conferences}" itemValue = "id" itemLabel = "name"/>
+                    <form:select multiple = "multiple" path = "topics" class="form-control js-example-basic-multiple">
+                    	<form:options items="${listAllTopics}" itemValue = "id" itemLabel = "name"/>
                     </form:select>
-                     <c:if test="${not empty conferenceError}">
-                    	<div class="form-control-feedback">${conferenceError}</div>
+                     <c:if test="${not empty topicsError}">
+                    	<div class="form-control-feedback">${topicsError}</div>
                     </c:if>
+                </div>
+                
+                <div class="form-group">
+                    <form:input path="keywords" class="form-control" placeholder="Cuvinte cheie"/>
+                </div>
+                
+                <div class="form-group">
+                    <form:input path="file" class="form-control" placeholder="Incarcare fisier" type="file"/>
                 </div>
          		
                 <button type="submit" class="btn btn-success btn-block">Creeaza</button>
 	        </form:form>
 		</div>
 	</div> 
+	<script>
+   			$(".js-example-basic-multiple").select2();
+  	</script>
 </t:layout>

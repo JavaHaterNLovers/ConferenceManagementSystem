@@ -1,6 +1,7 @@
 package domain;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -10,7 +11,11 @@ import org.hibernate.validator.constraints.NotBlank;
 @Table(name="topics")
 public class Topic
 {
+    @Column
     @Id
+    @GeneratedValue
+    private int id;
+    
     @Column(unique = true)
     @NotBlank(message="{topic.name}")
     private String name;
@@ -34,5 +39,13 @@ public class Topic
 
     public void setName(String name) {
         this.name = name;
+    }
+    
+    public Integer getId() {
+        return id;
+    }
+
+    public void setName(Integer id) {
+        this.id = id;
     }
 }
