@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -48,6 +50,10 @@ public class Proposal
      * Daca un topic nu exista el va fi creat automat cand acest obiect va fi salvat.
      */
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+    @JoinTable(name = "proposals_topics",
+        joinColumns = {@JoinColumn(name = "proposal_id", referencedColumnName = "id")},
+        inverseJoinColumns = {@JoinColumn(name = "topic_id", referencedColumnName = "id")}
+    )
     @NotEmpty(message="{proposal.topics}")
     @Valid
     private List<Topic> topics = new ArrayList<>();
