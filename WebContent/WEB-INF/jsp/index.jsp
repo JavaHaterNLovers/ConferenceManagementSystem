@@ -35,6 +35,7 @@
 			        		<a href="#" class="btn btn-primary">Inscriere</a>
 			        	</td>
 				    </tr>
+				    
 				</c:forEach>
 			</tbody>
 		</table>
