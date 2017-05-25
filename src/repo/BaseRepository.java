@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Repository
 @Transactional
 public class BaseRepository<T>
@@ -74,7 +73,7 @@ public class BaseRepository<T>
 
         return Long.parseLong(factory.getCurrentSession().createQuery(query).getSingleResult().toString());
     }
-    
+
     public T get(Integer id) {
         CriteriaBuilder builder = factory.getCurrentSession().getCriteriaBuilder();
         CriteriaQuery<T> query = builder.createQuery(genericType);

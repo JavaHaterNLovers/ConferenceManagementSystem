@@ -32,7 +32,8 @@
 				        	type="both" pattern="d/M/y H:m" />
 			        	</td>
 			        	<td>
-			        		<a href="#" class="btn btn-primary">Inscriere</a>
+			        		
+			        		<a href="<c:url value='/createPayment/${edition.id}' />" class="btn btn-primary btn-block">Inscriere</a>
 			        	</td>
 				    </tr>
 				    
