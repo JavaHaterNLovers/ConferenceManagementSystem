@@ -33,7 +33,7 @@
 			        	</td>
 			        	<td>
 			        		
-			        		<a href="<c:url value='createPayment' />" class="btn btn-primary btn-block">Inscriere</a>
+			        		<a href="<c:url value='/createPayment/${edition.id}' />" class="btn btn-primary btn-block">Inscriere</a>
 			        	</td>
 				    </tr>
 				    

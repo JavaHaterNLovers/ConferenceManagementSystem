@@ -4,6 +4,7 @@
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:security="http://www.springframework.org/schema/security"
 	xsi:schemaLocation="
         http://www.springframework.org/schema/beans     
         http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -14,7 +15,9 @@
         http://www.springframework.org/schema/tx
 		http://www.springframework.org/schema/tx/spring-tx.xsd
 		http://www.springframework.org/schema/aop
-		http://www.springframework.org/schema/aop/spring-aop.xsd">
+		http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security.xsd">
  
  	<!-- Web setup -->
 	<context:component-scan base-package="controller" />
@@ -30,8 +33,13 @@
 	<mvc:resources mapping="/resources/**" location="/resources/" cache-period="0"/>
     <mvc:annotation-driven />
     
+    <security:global-method-security
+        jsr250-annotations="enabled"
+        pre-post-annotations="enabled"
+        secured-annotations="enabled" />
+    
     <beans>
-    	<context:annotation-config/>
+    	<context:annotation-config />
     	
     	<!-- BEGIN SPRING & HIBERNATE SETUP -->
 		<tx:annotation-driven transaction-manager="hibernate.manager" />
@@ -99,6 +107,9 @@
 	   		<constructor-arg value="domain.Topic"></constructor-arg>
 	    </bean>
 	
+        <bean id="repo.payment" class="repo.PaymentRepository">
+        </bean>   
+    
 		<!-- Services -->
 	    <bean id="service.conference" class="service.ConferenceService">
 	        <constructor-arg ref="repo.conference"></constructor-arg>

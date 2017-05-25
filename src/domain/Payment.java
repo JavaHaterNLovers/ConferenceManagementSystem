@@ -6,94 +6,97 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.AssertTrue;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name="payments")
 public class Payment {
+    public static final float sumaDePlata = 30f;
+
     @Id
     @GeneratedValue
     @Column
     private Integer id;
-   
+
     @ManyToOne
-    private User listener;
-   
+    private User user;
+
     @ManyToOne
-    private Edition editionName;
-    
-   
-     @Temporal(TemporalType.TIMESTAMP)
-     @Column
-     @CreationTimestamp
-     private Calendar created;
-     
-     @Value("4111111111111111")
-     @Size(min = 16, max=16)
-     private int cardNumber;
-   
-     @Column
-     private static final Integer suma = 30;
-     
-     
-     public Payment(User listener,Edition editionName){
-         super();
-         this.id=null;
-         this.listener=listener;
-         this.editionName=editionName;
-     }
-     
-     public Payment(){
-     }
-     
-     public Integer getId(){
-         return this.id;
-     }
-     
-     public User getListener(){
-         return this.listener;
-     }
-     
-     public Edition getEdition(){
-         return this.editionName;
-     }
-     
-     public Calendar getCreated(){
-         return this.created;
-     }
-     
-     public Integer getSuma(){
-         return this.suma;
-     }
-     
-     public void setListener(User listener){
-         this.listener=listener;
-     }
-     
-     public void setEditionName(Edition editionName){
-         this.editionName=editionName;
-     }
-     
-     public void setCreated(Calendar created){
-         this.created=created;
-     } 
-     
-     public int getCardNumber(){
-    	 return this.cardNumber;
-     }
-     
-     public void setCardNumber(int cardNo){
-    	 this.cardNumber=cardNo;
-     }
+    private Edition edition;
+
+    @Column
+    private String cardNumber;
+
+    @Column
+    private float suma;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column
+    @CreationTimestamp
+    private Calendar created;
+
+    public Payment() {}
+
+    public Payment(User user, Edition edition, String cardNumber, float suma) {
+        super();
+        this.user = user;
+        this.edition = edition;
+        this.cardNumber = cardNumber;
+        this.suma = suma;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Edition getEdition() {
+        return edition;
+    }
+
+    public void setEdition(Edition edition) {
+        this.edition = edition;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+    public float getSuma() {
+        return suma;
+    }
+
+    public void setSuma(float suma) {
+        this.suma = suma;
+    }
+
+    public Calendar getCreated() {
+        return created;
+    }
+
+    @AssertTrue(message="{payment.card}")
+    public boolean isCardNumberValid() {
+        return this.cardNumber != null && this.cardNumber.equals("1111222233334444");
+    }
 }
