@@ -108,7 +108,11 @@
 	    </bean>
 	
         <bean id="repo.payment" class="repo.PaymentRepository">
-        </bean>   
+        </bean>  
+        
+        <bean id="repo.proposalStatus" class="repo.BaseRepository">
+	   		<constructor-arg value="domain.ProposalStatus"></constructor-arg>
+	    </bean> 
     
 		<!-- Services -->
 	    <bean id="service.conference" class="service.ConferenceService">

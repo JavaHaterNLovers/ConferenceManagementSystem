@@ -22,7 +22,7 @@
 				<thead>
 					<tr>
 						<th>Editie</th>
-						<th>Nume</th>
+						<th >Nume</th>
 						<th>Data Creeata</th>
 					</tr>
 				</thead>
@@ -30,7 +30,7 @@
 					<c:forEach items="${proposals}" var="proposal">
 					    <tr>      
 					        <td>${proposal.edition}</td>
-					        <td>${proposal.name}</td>
+					        <td><a href="<c:url value='/analyzesProposal/${proposal.id}' />">${proposal.name}</a></td>
 				        	<td>
 					        	<fmt:formatDate value="${proposal.created.time}"
 					        	type="both" pattern="d/M/y H:m" />

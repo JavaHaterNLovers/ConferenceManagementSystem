@@ -4,6 +4,8 @@ import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -25,9 +27,8 @@ public class ProposalStatus
     @GeneratedValue
     private Integer id;
 
-    @Column
-    @NotBlank(message="proposalStatus.status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private proposalStatus status;
 
     @Column
     @NotBlank(message="proposalStatus.comment")
@@ -55,13 +56,37 @@ public class ProposalStatus
         this(null, null, null, null);
     }
 
-    public ProposalStatus(String status, String comment, User user, Proposal proposal) {
+    public ProposalStatus(proposalStatus status, String comment, User user, Proposal proposal) {
         this.status = status;
         this.comment = comment;
         this.user = user;
         this.proposal = proposal;
     }
+    
+    public static enum proposalStatus {
 
+        analyzes("ANALYZES_PROPOSAL"),
+        maybeAnalyzes("MAYBE_ANALYZES_PROPOSAL"),
+        rejectAnalyzes("REJECT_ANALYZES_PROPOSAL");
+    
+        /**
+         * Numele statusului.
+         */
+        private String nume;
+
+        /**
+         * Creeaza un nou status cu un nume.
+         * @param nume
+         */
+        proposalStatus(String nume) {
+            this.nume = nume;
+        }
+
+        @Override
+        public String toString() {
+            return this.nume;
+        }
+    }
     public Integer getId() {
         return id;
     }
@@ -69,7 +94,7 @@ public class ProposalStatus
     /**
      * @return ProposalStatus status
      */
-    public String getStatus() {
+    public proposalStatus getStatus() {
         return status;
     }
 
@@ -128,7 +153,7 @@ public class ProposalStatus
      * @param status
      * Set ProposalStatus status to the given value
      */
-    public void setStatus(String status) {
+    public void setStatus(proposalStatus status) {
         this.status = status;
     }
 
