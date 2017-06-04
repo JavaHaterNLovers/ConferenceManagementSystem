@@ -3,10 +3,8 @@ package controller;
 import java.util.Calendar;
 import java.util.List;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
@@ -29,7 +27,7 @@ import domain.User;
 import repo.BaseRepository;
 import repo.EditionRepository;
 import repo.ProposalRepository;
-import repo.ProposalStatusRepository;
+import service.ProposalStatusService;
 import util.BaseController;
 
 @Controller
@@ -106,9 +104,9 @@ public class ProposalCtrl extends BaseController
         }
         //Hibernate.initialize(pr.getTopics());
         model.addAttribute("proposal", pr);
-        model.addAttribute("status", 0);
+        model.addAttribute("status", ((ProposalStatusService)this.get("service.proposalStatus")).getProposalStatus(pr));
         model.addAttribute("valid", Calendar.getInstance().compareTo(pr.getEdition().getEndSubmissions()) == -1);
-        model.addAttribute("proposalStatus",((ProposalStatusRepository)this.get("repo.proposalStatus")).getByProposal(pr));
+        model.addAttribute("proposalStatus",((ProposalStatusService)this.get("service.proposalStatus")).getByProposalAndReviewed(pr));
         
         return "proposal/viewProposal";
     }

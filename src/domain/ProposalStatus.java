@@ -167,7 +167,15 @@ public class ProposalStatus
 
         analyzes("ANALYZES_PROPOSAL"),
         maybeAnalyzes("MAYBE_ANALYZES_PROPOSAL"),
-        rejectAnalyzes("REJECT_ANALYZES_PROPOSAL");
+        rejectAnalyzes("REJECT_ANALYZES_PROPOSAL"),
+        strongAccept("STRONG_ACCEPT"),
+        accept("ACCEPT"),
+        weekAccept("WEEK_ACCEPT"),
+        borderlinePaper("BORDERLINE_PAPER"),
+        weekReject("WEEK_REJECT"),
+        reject("REJECT"),
+        strongReject("STRONG_REJECT");
+        
 
         /**
          * Numele statusului.
