@@ -1,3 +1,4 @@
 target/
 /WebContent/WEB-INF/application.properties
 .settings/
+.classpath
