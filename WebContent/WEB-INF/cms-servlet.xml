@@ -105,15 +105,15 @@
 	    <bean id="repo.user" class="repo.UserRepository">
 	    </bean>   
 	   
+	   <bean id="repo.proposalStatus" class="repo.ProposalStatusRepository">
+	    </bean>  
+	    
 	    <bean id="repo.topic" class="repo.BaseRepository">
 	   		<constructor-arg value="domain.Topic"></constructor-arg>
 	    </bean>
 	
         <bean id="repo.payment" class="repo.PaymentRepository">
         </bean>  
-        
-        <bean id="repo.proposalStatus" class="repo.ProposalStatusRepository">
-	    </bean> 
     
 		<!-- Services -->
 	    <bean id="service.conference" class="service.ConferenceService">
@@ -124,5 +124,8 @@
 	    	<constructor-arg ref="repo.user"></constructor-arg>
 	    </bean>
 	   
+	   <bean id="service.proposalStatus" class="service.ProposalStatusService">
+	    	<constructor-arg ref="repo.proposalStatus"></constructor-arg>
+	    </bean>
  	</beans>
 </beans>

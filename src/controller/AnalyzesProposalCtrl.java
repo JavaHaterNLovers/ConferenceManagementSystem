@@ -75,6 +75,7 @@ public class AnalyzesProposalCtrl extends BaseController
         } else {
             proposalStatus.setId(null);
         }
+
         proposalStatus.setUser(user);
         proposalStatus.setProposal(proposal);
 
