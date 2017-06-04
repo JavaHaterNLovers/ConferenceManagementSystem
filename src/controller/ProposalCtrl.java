@@ -24,14 +24,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import domain.Conference;
 import domain.Edition;
 import domain.Proposal;
+import domain.ProposalStatus;
+import domain.Reviewers;
 import domain.Topic;
 import domain.User;
 import repo.BaseRepository;
+import repo.ConferenceRepository;
 import repo.EditionRepository;
 import repo.PaymentRepository;
 import repo.ProposalRepository;
+import repo.ProposalStatusRepository;
 import service.ProposalStatusService;
 import util.BaseController;
 
@@ -179,5 +184,79 @@ public class ProposalCtrl extends BaseController
         model.addAttribute("service", this.get("service.proposalStatus"));
 
         return "proposal/viewEditionProposals";
+    }
+    
+    @Secured({"ROLE_CHAIR","ROLE_CO_CHAIR"})
+    @RequestMapping(value = "/viewEditionProposals/viewCommentsProposal/{id}", method = RequestMethod.GET)
+    public String viewCommentsProposals(Model model, @PathVariable int id) {
+        Proposal pr = ((ProposalRepository) this.get("repo.proposal")).get(id);
+        Boolean isEditionCreator = false;
+        Boolean reviewersAlereadyChoosen = false;
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+        
+        if (user.getId() == pr.getEdition().getAuthor().getId()){
+            isEditionCreator = true;
+        }
+        
+        List<ProposalStatus> reviewers = ((ProposalStatusService)this.get("service.proposalStatus")).getByProposalReviwers(pr);
+        if (reviewers.size() != 0){
+            reviewersAlereadyChoosen = true;
+        }
+               
+        model.addAttribute("proposal", pr);
+        model.addAttribute("status", ((ProposalStatusService)this.get("service.proposalStatus")).getProposalStatus(pr));
+        model.addAttribute("proposalStatus",((ProposalStatusService)this.get("service.proposalStatus")).getByProposalAndReviewed(pr));
+        model.addAttribute("isEditionCreator", isEditionCreator);
+        model.addAttribute("proposalStatusWithoutRevieweri", ((ProposalStatusService)this.get("service.proposalStatus")).getByProposalWithoutReviews(pr));
+        model.addAttribute("endBidding", Calendar.getInstance().compareTo(pr.getEdition().getEndBidding()) == -1);
+        model.addAttribute("reviewers", reviewers);
+        model.addAttribute("reviewersAlereadyChoosen", reviewersAlereadyChoosen);
+        return "proposal/viewProposalComments";
+    }
+    
+    @Secured({"ROLE_CHAIR","ROLE_CO_CHAIR"})
+    @RequestMapping(value = "/chooseReviewers/{id}", method = RequestMethod.GET)
+    public String chooseReviewers(Model model, @PathVariable int id) {
+        Proposal pr = ((ProposalRepository) this.get("repo.proposal")).get(id);
+        Boolean valid = true;
+        
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+        
+        if (user.getId() != pr.getEdition().getAuthor().getId() || Calendar.getInstance().compareTo(pr.getEdition().getEndBidding()) != -1){
+            valid = false;
+        }
+        
+        model.addAttribute("valid",valid);
+        model.addAttribute("proposal", pr);
+        model.addAttribute("proposalStatus",((ProposalStatusService)this.get("service.proposalStatus")).getByProposalAndReviewed(pr));
+        model.addAttribute("proposalStatusWithoutRevieweri", ((ProposalStatusService)this.get("service.proposalStatus")).getByProposalWithAnalyzes(pr));
+        model.addAttribute("reviewers", new Reviewers());
+        return "proposal/chooseReviewers";
+    }
+    
+    @Secured({"ROLE_CHAIR","ROLE_CO_CHAIR"})
+    @RequestMapping(value = "/chooseReviewers/submit/{id}", method = RequestMethod.POST)
+    public String chooseReviewersSubmit(@ModelAttribute("reviewers")Reviewers reviewers,
+        @PathVariable int id,
+        BindingResult result, ModelMap model,
+        RedirectAttributes redirAttr
+    ) {            
+        
+        if (reviewers.getIdProposalsStatus().size() != 2){
+            redirAttr.addFlashAttribute("flashMessage", "Trebuie sa alegi 2 evaluatori!");
+            return "redirect:/chooseReviewers/" + id;
+        }
+        ProposalStatusRepository repo = ((ProposalStatusRepository)this.get("repo.proposalStatus"));
+        for (String idStr : reviewers.getIdProposalsStatus()){
+            Integer idProposalStatus = Integer.parseInt(idStr);
+            ProposalStatus ps = repo.get(idProposalStatus);
+            ps.setStatus(ProposalStatus.proposalStatus.toReview);
+            repo.save(ps);
+        }
+        redirAttr.addFlashAttribute("flashMessage", "Evaluatori adaugati!");
+        
+        return "redirect:/viewEditionProposals/viewCommentsProposal/" + id;
     }
 }
