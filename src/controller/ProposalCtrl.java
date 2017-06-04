@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -57,7 +58,7 @@ public class ProposalCtrl extends BaseController
 
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "/createProposal/{id}", method = RequestMethod.GET)
-    public String createEdition(@PathVariable("id") Integer id,Model model) {
+    public String createEdition(@PathVariable("id") Integer id, Model model) {
 
         model.addAttribute("id", id);
         model.addAttribute("proposal", new Proposal());
@@ -88,5 +89,18 @@ public class ProposalCtrl extends BaseController
                 return id != null ? ((BaseRepository<Topic>) get("repo.topic")).get(id) : null;
             }
         });
+    }
+
+    @Secured({"ROLE_CHAIR","ROLE_CO_CHAIR"})
+    @RequestMapping(value = "/viewProposals", method = RequestMethod.GET)
+    public String viewProposals(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+
+        List<Proposal> proposals = ((ProposalRepository) this.get("repo.proposal")).getNewProposals(user);
+
+        model.addAttribute("proposals", proposals);
+
+        return "proposal/viewProposals";
     }
 }

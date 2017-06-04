@@ -72,6 +72,8 @@ public class AnalyzesProposalCtrl extends BaseController
 
         if (status != null) {
             proposalStatus.setId(status.getId());
+        } else {
+            proposalStatus.setId(null);
         }
         proposalStatus.setUser(user);
         proposalStatus.setProposal(proposal);
@@ -79,6 +81,6 @@ public class AnalyzesProposalCtrl extends BaseController
         ((ProposalStatusRepository) this.get("repo.proposalStatus")).save(proposalStatus);
         redirAttr.addFlashAttribute("flashMessage", "Analiza adaugata cu success");
 
-        return "redirect:/profile";
+        return "redirect:/viewProposals";
     }
 }
