@@ -102,7 +102,6 @@ public class ProposalCtrl extends BaseController
         if (pr == null) {
             throw new AccessDeniedException("Propunere inexistenta");
         }
-        //Hibernate.initialize(pr.getTopics());
         model.addAttribute("proposal", pr);
         model.addAttribute("status", ((ProposalStatusService)this.get("service.proposalStatus")).getProposalStatus(pr));
         model.addAttribute("valid", Calendar.getInstance().compareTo(pr.getEdition().getEndSubmissions()) == -1);
