@@ -103,6 +103,9 @@
 	    <bean id="repo.user" class="repo.UserRepository">
 	    </bean>   
 	   
+	   <bean id="repo.proposalStatus" class="repo.ProposalStatusRepository">
+	    </bean>  
+	    
 	    <bean id="repo.topic" class="repo.BaseRepository">
 	   		<constructor-arg value="domain.Topic"></constructor-arg>
 	    </bean>

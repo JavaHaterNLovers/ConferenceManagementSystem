@@ -1,10 +1,14 @@
 package controller;
 
+import java.util.Calendar;
 import java.util.List;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -25,11 +29,13 @@ import domain.User;
 import repo.BaseRepository;
 import repo.EditionRepository;
 import repo.ProposalRepository;
+import repo.ProposalStatusRepository;
 import util.BaseController;
 
 @Controller
 public class ProposalCtrl extends BaseController
 {
+    @SuppressWarnings("unchecked")
     @RequestMapping(value = "/createProposal/submit/{id}", method = RequestMethod.POST)
     public String createEditionSubmit(@PathVariable("id") Integer id, @Valid @ModelAttribute("proposal") Proposal proposal,
         BindingResult result, ModelMap model,
@@ -69,6 +75,7 @@ public class ProposalCtrl extends BaseController
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(List.class, "topics", new CustomCollectionEditor(List.class) {
+            @SuppressWarnings("unchecked")
             @Override
             protected Object convertElement(Object element) {
                 Integer id = null;
@@ -88,5 +95,21 @@ public class ProposalCtrl extends BaseController
                 return id != null ? ((BaseRepository<Topic>) get("repo.topic")).get(id) : null;
             }
         });
+    }
+    
+    @RequestMapping(value = "/viewProposal/{id}", method = RequestMethod.GET)
+    public String viewEdition(Model model, @PathVariable int id) {
+        Proposal pr = ((ProposalRepository) this.get("repo.proposal")).get(id);
+
+        if (pr == null) {
+            throw new AccessDeniedException("Propunere inexistenta");
+        }
+        //Hibernate.initialize(pr.getTopics());
+        model.addAttribute("proposal", pr);
+        model.addAttribute("status", 0);
+        model.addAttribute("valid", Calendar.getInstance().compareTo(pr.getEdition().getEndSubmissions()) == -1);
+        model.addAttribute("proposalStatus",((ProposalStatusRepository)this.get("repo.proposalStatus")).getByProposal(pr));
+        
+        return "proposal/viewProposal";
     }
 }
