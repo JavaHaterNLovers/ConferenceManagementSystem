@@ -72,6 +72,7 @@
                     <prop key="hibernate.connection.CharSet">utf8</prop>
         			<prop key="hibernate.connection.characterEncoding">utf8</prop>
         			<prop key="hibernate.connection.useUnicode">true</prop>
+                    <prop key="hibernate.enable_lazy_load_no_trans">true</prop>
 				</props>
 	        </property>
 	    </bean>
@@ -110,8 +111,7 @@
         <bean id="repo.payment" class="repo.PaymentRepository">
         </bean>  
         
-        <bean id="repo.proposalStatus" class="repo.BaseRepository">
-	   		<constructor-arg value="domain.ProposalStatus"></constructor-arg>
+        <bean id="repo.proposalStatus" class="repo.ProposalStatusRepository">
 	    </bean> 
     
 		<!-- Services -->

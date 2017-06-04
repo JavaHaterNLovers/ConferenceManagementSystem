@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -28,6 +29,7 @@ public class ProposalStatus
     private Integer id;
 
     @Enumerated(EnumType.STRING)
+    @NotNull(message="proposalStatus.status")
     private proposalStatus status;
 
     @Column
@@ -62,31 +64,11 @@ public class ProposalStatus
         this.user = user;
         this.proposal = proposal;
     }
-    
-    public static enum proposalStatus {
 
-        analyzes("ANALYZES_PROPOSAL"),
-        maybeAnalyzes("MAYBE_ANALYZES_PROPOSAL"),
-        rejectAnalyzes("REJECT_ANALYZES_PROPOSAL");
-    
-        /**
-         * Numele statusului.
-         */
-        private String nume;
-
-        /**
-         * Creeaza un nou status cu un nume.
-         * @param nume
-         */
-        proposalStatus(String nume) {
-            this.nume = nume;
-        }
-
-        @Override
-        public String toString() {
-            return this.nume;
-        }
+    public void setId(int id) {
+        this.id = id;
     }
+
     public Integer getId() {
         return id;
     }
@@ -179,5 +161,30 @@ public class ProposalStatus
      */
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public static enum proposalStatus {
+
+        analyzes("ANALYZES_PROPOSAL"),
+        maybeAnalyzes("MAYBE_ANALYZES_PROPOSAL"),
+        rejectAnalyzes("REJECT_ANALYZES_PROPOSAL");
+
+        /**
+         * Numele statusului.
+         */
+        private String nume;
+
+        /**
+         * Creeaza un nou status cu un nume.
+         * @param nume
+         */
+        proposalStatus(String nume) {
+            this.nume = nume;
+        }
+
+        @Override
+        public String toString() {
+            return this.nume;
+        }
     }
 }

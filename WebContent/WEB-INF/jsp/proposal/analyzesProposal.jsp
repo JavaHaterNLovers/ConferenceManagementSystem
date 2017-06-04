@@ -8,8 +8,37 @@
 	<div class="row">
 		<div class="col-5 mx-auto">
 			<h3 class="mb-3 text-center">Analiza propunere</h3>
-			<c:set var="analyzesProposalAction"><c:url value='/analyzesProposal/submit/${id}' /></c:set>
-			<a href="">Descarcare fisier</a>
+			<c:set var="analyzesProposalAction"><c:url value='/analyzesProposal/submit/${proposal.id}' /></c:set>
+			
+			
+			<h4 class="mb-3 text-center">Detalii Propunere</h4>
+			<hr>
+			
+			<p><strong>Autor:</strong> ${proposal.user}</p>
+			<p><strong>Editie:</strong> ${proposal.edition}</p>
+			<p><strong>Topicuri:</strong> ${proposal.getFormattedTopics()}</p>
+			<p><strong>Keywords:</strong> ${proposal.keywords}</p>
+			
+			<c:if test="${not empty proposal.file}">
+				<p><a href="">Descarcare fisier</a></p>
+			</c:if>
+			
+			<p>
+				<strong>Descriere:</strong><br>
+				${proposal.description}
+			</p>
+			
+        	<p>
+				<strong>Data Modificata:</strong>
+	        	<fmt:formatDate value="${proposal.modified.time}"
+	        	type="both" pattern="d/M/y H:m" />
+        	</p>
+        	<p>
+				<strong>Data Creeata:</strong>
+	        	<fmt:formatDate value="${proposal.created.time}"
+	        	type="both" pattern="d/M/y H:m" />
+        	</p>
+			
 			<form:form method="POST" action="${analyzesProposalAction}" modelAttribute="proposalStatus">
 				<input type="hidden" name="${_csrf.parameterName}"
 					value="${_csrf.token}" />
