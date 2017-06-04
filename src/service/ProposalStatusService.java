@@ -13,6 +13,10 @@ import repo.ProposalStatusRepository;
  */
 public class ProposalStatusService extends BaseDomainService<ProposalStatus, ProposalStatusRepository>
 {
+    public static final int STATUS_ACCEPTED = 1;
+    public static final int STATUS_PENDING = 0;
+    public static final int STATUS_REJECTED = -1;
+
     public ProposalStatusService(ProposalStatusRepository repo) {
         super(repo);
     }
@@ -27,22 +31,22 @@ public class ProposalStatusService extends BaseDomainService<ProposalStatus, Pro
                             ProposalStatus.proposalStatus.reject,
                             ProposalStatus.proposalStatus.strongReject,
                             ProposalStatus.proposalStatus.weekAccept,
-                            ProposalStatus.proposalStatus.weekReject                            
+                            ProposalStatus.proposalStatus.weekReject
                             ).contains(x.getStatus()))
                     .sorted((x,y)->x.getStatus().compareTo(y.getStatus()))
                     .forEach(x->res.add(x));
         return res;
     }
-    
+
     public Integer getProposalStatus(Proposal proposal){
         List<ProposalStatus> res = getByProposalAndReviewed(proposal);
         Integer nrAccept = 0;
         Integer nrReject = 0;
-        
-        if (res.size() < 3){
-            return 0;
+
+        if (res.size() < 2) {
+            return STATUS_PENDING;
         }
-        
+
         for (ProposalStatus ps:res){
             if (Arrays.asList(ProposalStatus.proposalStatus.strongAccept,
                             ProposalStatus.proposalStatus.accept,
@@ -50,17 +54,20 @@ public class ProposalStatusService extends BaseDomainService<ProposalStatus, Pro
                 nrAccept++;
             }else if (ProposalStatus.proposalStatus.borderlinePaper != ps.getStatus()){
                 nrReject++;
-            }            
+            }
         }
-        if (nrAccept == 0 && nrReject == 0){
-            return 0;
+        if (nrAccept == 0 && nrReject == 0) {
+            return STATUS_PENDING;
         }
-        if (nrReject == 0){
-            return 1;
+
+        if (nrReject == 0) {
+            return STATUS_ACCEPTED;
         }
+
         if (nrAccept == 0){
-            return -1;
+            return STATUS_REJECTED;
         }
-        return 0;
+
+        return STATUS_PENDING;
     }
 }

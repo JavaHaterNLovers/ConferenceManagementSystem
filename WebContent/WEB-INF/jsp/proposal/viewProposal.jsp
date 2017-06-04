@@ -35,11 +35,9 @@
 			<p><strong>Conferinta:</strong> ${proposal.edition.conference}</p>
 			<p><strong>Editie:</strong> ${proposal.edition}</p>
 			<br />
-			<%-- <p><strong>Topic-uri:</strong>
-				<c:forEach var="listValue" items="${proposal.topics}">
-					${listValue}
-				</c:forEach>
-			</p> --%>
+			<p><strong>Topic-uri:</strong>
+				${proposal.getFormattedTopics()}
+			</p>
 			<p><strong>Cuvinte cheie:</strong> ${proposal.keywords}</p>
 			<p><strong>Descriere:</strong> ${proposal.description}</p>
 			<p>
@@ -63,8 +61,10 @@
 						    </div>
 						    <p class="mb-1">${listValue.comment}</p>
 						    <small class="text-muted">
-							    Creata:<fmt:formatDate value="${listValue.created.time}"
-		        				type="both" pattern="d/M/y H:m" /> Modificata:<fmt:formatDate value="${listValue.modified.time}"
+							    Creata:
+							    <fmt:formatDate value="${listValue.created.time}"
+		        				type="both" pattern="d/M/y H:m" /> Modificata:
+		        				<fmt:formatDate value="${listValue.modified.time}"
 		        				type="both" pattern="d/M/y H:m" />
 	        				</small>
 						  </div>

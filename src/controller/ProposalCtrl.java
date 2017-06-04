@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -127,12 +128,16 @@ public class ProposalCtrl extends BaseController
         });
     }
 
+    @Secured("ROLE_USER")
     @RequestMapping(value = "/viewProposal/{id}", method = RequestMethod.GET)
-    public String viewEdition(Model model, @PathVariable int id) {
+    public String viewProposal(Model model, @PathVariable int id) {
         Proposal pr = ((ProposalRepository) this.get("repo.proposal")).get(id);
 
-        if (pr == null) {
-            throw new AccessDeniedException("Propunere inexistenta");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+
+        if (pr == null || pr.getUser().getId() != user.getId()) {
+            throw new NotFoundException("Propunere inexistenta");
         }
 
         model.addAttribute("proposal", pr);

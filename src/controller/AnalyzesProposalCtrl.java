@@ -72,7 +72,10 @@ public class AnalyzesProposalCtrl extends BaseController
 
         if (status != null) {
             proposalStatus.setId(status.getId());
+        } else {
+            proposalStatus.setId(null);
         }
+
         proposalStatus.setUser(user);
         proposalStatus.setProposal(proposal);
 
