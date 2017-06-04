@@ -9,7 +9,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -49,7 +48,7 @@ public class Proposal
     /**
      * Daca un topic nu exista el va fi creat automat cand acest obiect va fi salvat.
      */
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+    @ManyToMany(cascade = {CascadeType.PERSIST})
     @JoinTable(name = "proposals_topics",
         joinColumns = {@JoinColumn(name = "proposal_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "topic_id", referencedColumnName = "id")}
@@ -173,9 +172,24 @@ public class Proposal
      *
      * @return
      */
-
     public List<Topic> getTopics() {
         return this.topics;
+    }
+
+    public String getFormattedTopics() {
+        String topics = "";
+
+        if (this.topics != null) {
+            for (Topic topic : this.topics) {
+                topics += topic.getName() + ", ";
+            }
+        }
+
+        if (!topics.isEmpty()) {
+            topics = topics.substring(0, topics.length() - 2);
+        }
+
+        return topics;
     }
 
     /**

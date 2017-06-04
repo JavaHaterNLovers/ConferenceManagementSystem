@@ -4,6 +4,8 @@ import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -11,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -25,9 +28,9 @@ public class ProposalStatus
     @GeneratedValue
     private Integer id;
 
-    @Column
-    @NotBlank(message="proposalStatus.status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @NotNull(message="proposalStatus.status")
+    private proposalStatus status;
 
     @Column
     @NotBlank(message="proposalStatus.comment")
@@ -55,11 +58,15 @@ public class ProposalStatus
         this(null, null, null, null);
     }
 
-    public ProposalStatus(String status, String comment, User user, Proposal proposal) {
+    public ProposalStatus(proposalStatus status, String comment, User user, Proposal proposal) {
         this.status = status;
         this.comment = comment;
         this.user = user;
         this.proposal = proposal;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Integer getId() {
@@ -69,7 +76,7 @@ public class ProposalStatus
     /**
      * @return ProposalStatus status
      */
-    public String getStatus() {
+    public proposalStatus getStatus() {
         return status;
     }
 
@@ -128,7 +135,7 @@ public class ProposalStatus
      * @param status
      * Set ProposalStatus status to the given value
      */
-    public void setStatus(String status) {
+    public void setStatus(proposalStatus status) {
         this.status = status;
     }
 
@@ -154,5 +161,30 @@ public class ProposalStatus
      */
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public static enum proposalStatus {
+
+        analyzes("ANALYZES_PROPOSAL"),
+        maybeAnalyzes("MAYBE_ANALYZES_PROPOSAL"),
+        rejectAnalyzes("REJECT_ANALYZES_PROPOSAL");
+
+        /**
+         * Numele statusului.
+         */
+        private String nume;
+
+        /**
+         * Creeaza un nou status cu un nume.
+         * @param nume
+         */
+        proposalStatus(String nume) {
+            this.nume = nume;
+        }
+
+        @Override
+        public String toString() {
+            return this.nume;
+        }
     }
 }
