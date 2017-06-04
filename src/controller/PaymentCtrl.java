@@ -1,5 +1,6 @@
 package controller;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.security.access.AccessDeniedException;
@@ -24,13 +25,16 @@ import repo.PaymentRepository;
 import util.BaseController;
 
 @Controller
-public class PaymentCtrl extends BaseController {
+public class PaymentCtrl extends BaseController
+{
+    public static final String PAYMENT_SPEAKER = "payment_speaker";
+
     @RequestMapping(value = "/createPayment/submit/{editie}", method = RequestMethod.POST)
     @Secured({"ROLE_USER"})
     public String createPaymentSubmit(@Valid @ModelAttribute("payment") Payment payment,
         BindingResult result, ModelMap model,
         RedirectAttributes redirAttr,
-        @PathVariable int editie
+        @PathVariable int editie, HttpSession session
     ) {
 	    EditionRepository repo = (EditionRepository) this.get("repo.edition");
 
@@ -39,14 +43,20 @@ public class PaymentCtrl extends BaseController {
             throw new AccessDeniedException("Editie inexistenta");
         }
 
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+
+        PaymentRepository paymentRepo = (PaymentRepository) this.get("repo.payment");
+
+        if (paymentRepo.getForUserEdition(user, ed) != null) {
+            throw new AccessDeniedException("Ati platit deja pentru aceasta editie");
+        }
+
         if (result.hasErrors()) {
             model.addAttribute("edition", editie);
 
             return "payment/createPayment";
         }
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) auth.getPrincipal();
 
         payment.setEdition(ed);
         payment.setUser(user);
@@ -56,12 +66,19 @@ public class PaymentCtrl extends BaseController {
 
         redirAttr.addFlashAttribute("flashMessage", "Plata a fost creata cu succes!");
 
-        return "redirect:/profile";
+        if (session.getAttribute(PAYMENT_SPEAKER) != null) {
+            session.setAttribute(PAYMENT_SPEAKER, null);
+
+            return "redirect:/createProposal/" + ed.getId();
+        } else {
+            // for listeners
+            return "redirect:/profile";
+        }
     }
 
 	 @RequestMapping(value = "/createPayment/{edition}", method = RequestMethod.GET)
 	 @Secured({"ROLE_USER"})
-	 public String createPayment(Model model, @PathVariable int edition) {
+	 public String createPayment(Model model, @PathVariable int edition, RedirectAttributes redirAttr) {
          EditionRepository repo = (EditionRepository) this.get("repo.edition");
 
          Edition ed = repo.get(edition);
@@ -75,7 +92,9 @@ public class PaymentCtrl extends BaseController {
          User user = (User) auth.getPrincipal();
 
          if (paymentRepo.getForUserEdition(user, ed) != null) {
-             throw new AccessDeniedException("Ati platit deja pentru aceasta editie");
+             redirAttr.addFlashAttribute("flashMessage", "Ati platit deja pentru aceasta editie");
+
+             return "redirect:/";
          }
 
 	     model.addAttribute("payment", new Payment());

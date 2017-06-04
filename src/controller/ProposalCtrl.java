@@ -3,10 +3,12 @@ package controller;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -21,11 +23,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import domain.Edition;
 import domain.Proposal;
 import domain.Topic;
 import domain.User;
 import repo.BaseRepository;
 import repo.EditionRepository;
+import repo.PaymentRepository;
 import repo.ProposalRepository;
 import service.ProposalStatusService;
 import util.BaseController;
@@ -35,10 +39,25 @@ public class ProposalCtrl extends BaseController
 {
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "/createProposal/submit/{id}", method = RequestMethod.POST)
-    public String createEditionSubmit(@PathVariable("id") Integer id, @Valid @ModelAttribute("proposal") Proposal proposal,
+    public String createProposalSubmit(@PathVariable("id") Integer id, @Valid @ModelAttribute("proposal") Proposal proposal,
         BindingResult result, ModelMap model,
         RedirectAttributes redirAttr
     ) {
+        Edition ed = ((EditionRepository) this.get("repo.edition")).get(id);
+
+        if (ed == null) {
+            throw new NotFoundException("Editia nu exista");
+        }
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+
+        PaymentRepository paymentRepo = (PaymentRepository) this.get("repo.payment");
+
+        if (paymentRepo.getForUserEdition(user, ed) == null) {
+            throw new AccessDeniedException("Trebuie sa platiti pentru aceasta editie");
+        }
+
         if (result.hasErrors()) {
             model.addAttribute("id", id);
             model.addAttribute("listAllTopics", ((BaseRepository<Topic>) this.get("repo.topic")).all());
@@ -46,22 +65,35 @@ public class ProposalCtrl extends BaseController
             return "proposal/createProposal";
         }
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        User user = (User) auth.getPrincipal();
         proposal.setUser(user);
         proposal.setEdition(((EditionRepository) this.get("repo.edition")).get(id));
 
         ((ProposalRepository) this.get("repo.proposal")).save(proposal);
         redirAttr.addFlashAttribute("flashMessage", "Propunere adaugata cu success");
 
-        return "redirect:/profile";
+        return "redirect:/";
     }
 
 
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "/createProposal/{id}", method = RequestMethod.GET)
-    public String createEdition(@PathVariable("id") Integer id,Model model) {
+    public String createProposal(@PathVariable("id") Integer id,Model model, HttpSession session) {
+        Edition ed = ((EditionRepository) this.get("repo.edition")).get(id);
+
+        if (ed == null) {
+            throw new NotFoundException("Editia nu exista");
+        }
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+
+        PaymentRepository paymentRepo = (PaymentRepository) this.get("repo.payment");
+
+        if (paymentRepo.getForUserEdition(user, ed) == null) {
+            session.setAttribute(PaymentCtrl.PAYMENT_SPEAKER, true);
+
+            return "redirect:/createPayment/" + ed.getId();
+        }
 
         model.addAttribute("id", id);
         model.addAttribute("proposal", new Proposal());
@@ -94,7 +126,7 @@ public class ProposalCtrl extends BaseController
             }
         });
     }
-    
+
     @RequestMapping(value = "/viewProposal/{id}", method = RequestMethod.GET)
     public String viewEdition(Model model, @PathVariable int id) {
         Proposal pr = ((ProposalRepository) this.get("repo.proposal")).get(id);
@@ -102,12 +134,12 @@ public class ProposalCtrl extends BaseController
         if (pr == null) {
             throw new AccessDeniedException("Propunere inexistenta");
         }
-        //Hibernate.initialize(pr.getTopics());
+
         model.addAttribute("proposal", pr);
         model.addAttribute("status", ((ProposalStatusService)this.get("service.proposalStatus")).getProposalStatus(pr));
         model.addAttribute("valid", Calendar.getInstance().compareTo(pr.getEdition().getEndSubmissions()) == -1);
         model.addAttribute("proposalStatus",((ProposalStatusService)this.get("service.proposalStatus")).getByProposalAndReviewed(pr));
-        
+
         return "proposal/viewProposal";
     }
 }
