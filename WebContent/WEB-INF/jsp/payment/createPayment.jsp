@@ -23,8 +23,24 @@
                     </c:if>
                 </div>
                 
+                <div class="form-group">
+                    <input required type="text" class="form-control" placeholder="Nume Detinator"/>
+                </div>
+                
+                <div class="form-group row p-0 m-0 mb-3">
+                	<input type="date" required class="col form-control mr-3" placeholder="Data Expirare"/>
+                	<input required type="number" min="100" max="999" class="col-4 form-control" placeholder="CVV">
+                </div>
+                
                 <button type="submit" class="btn btn-success btn-block">Plateste</button>
 	        </form:form>
 		</div>
 	</div>
+	
+	<script>
+   		$(document).ready(function(){
+   			$('input[type=date]').val(new Date().toJSON().slice(0,10));
+
+   		});         			
+  	</script>
 </t:layout>
