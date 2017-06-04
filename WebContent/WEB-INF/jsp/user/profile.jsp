@@ -15,7 +15,12 @@
 			<p><strong>Prenume:</strong> ${user.prenume}</p>
 		</div>
 		<div class="offset-3 col-6 mt-3">
-			<h3 class="mb-3 text-center">Propuneri</h3>
+			<h3 class="mb-3 text-center">Propuneri
+				<sec:authorize access="hasAnyRole('ROLE_CHAIR', 'ROLE_CO_CHAIR')" var="isReviewer" />
+				<c:if test="${isReviewer}">
+					<a href="<c:url value='/viewProposals' />" class="btn btn-primary">Review</a>
+				</c:if>
+			</h3>
 			<hr>
 			
 			<table class="table table-striped table-hover mx-auto w-100">

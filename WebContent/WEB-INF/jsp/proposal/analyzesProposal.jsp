@@ -3,6 +3,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <t:layout>
 	<div class="row">
@@ -34,7 +35,7 @@
 	        	type="both" pattern="d/M/y H:m" />
         	</p>
         	<p>
-				<strong>Data Creeata:</strong>
+				<strong>Data Creata:</strong>
 	        	<fmt:formatDate value="${proposal.created.time}"
 	        	type="both" pattern="d/M/y H:m" />
         	</p>

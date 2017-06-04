@@ -82,6 +82,6 @@ public class AnalyzesProposalCtrl extends BaseController
         ((ProposalStatusRepository) this.get("repo.proposalStatus")).save(proposalStatus);
         redirAttr.addFlashAttribute("flashMessage", "Analiza adaugata cu success");
 
-        return "redirect:/profile";
+        return "redirect:/viewProposals";
     }
 }

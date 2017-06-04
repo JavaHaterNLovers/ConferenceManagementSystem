@@ -128,6 +128,19 @@ public class ProposalCtrl extends BaseController
         });
     }
 
+    @Secured({"ROLE_CHAIR","ROLE_CO_CHAIR"})
+    @RequestMapping(value = "/viewProposals", method = RequestMethod.GET)
+    public String viewProposals(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+
+        List<Proposal> proposals = ((ProposalRepository) this.get("repo.proposal")).getNewProposals(user);
+
+        model.addAttribute("proposals", proposals);
+
+        return "proposal/viewProposals";
+    }
+
     @Secured("ROLE_USER")
     @RequestMapping(value = "/viewProposal/{id}", method = RequestMethod.GET)
     public String viewProposal(Model model, @PathVariable int id) {

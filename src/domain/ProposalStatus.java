@@ -59,6 +59,7 @@ public class ProposalStatus
     }
 
     public ProposalStatus(proposalStatus status, String comment, User user, Proposal proposal) {
+        this.id = null;
         this.status = status;
         this.comment = comment;
         this.user = user;
