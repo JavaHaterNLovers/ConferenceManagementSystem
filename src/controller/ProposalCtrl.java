@@ -160,4 +160,25 @@ public class ProposalCtrl extends BaseController
 
         return "proposal/viewProposal";
     }
+
+    @Secured({"ROLE_CHAIR","ROLE_CO_CHAIR"})
+    @RequestMapping(value = "/viewEditionProposals/{id}", method = RequestMethod.GET)
+    public String viewEditionProposals(Model model, @PathVariable int id) {
+        Edition ed = ((EditionRepository) this.get("repo.edition")).get(id);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+
+        if (ed == null || ed.getAuthor().getId() != user.getId()) {
+            throw new NotFoundException("Editia nu exista");
+        }
+
+        List<Proposal> proposals = ((ProposalRepository) this.get("repo.proposal")).getByEdition(ed);
+
+        model.addAttribute("proposals", proposals);
+        model.addAttribute("edition", ed.getName());
+        model.addAttribute("service", this.get("service.proposalStatus"));
+
+        return "proposal/viewEditionProposals";
+    }
 }

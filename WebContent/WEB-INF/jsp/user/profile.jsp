@@ -92,7 +92,7 @@
 					<tbody>
 						<c:forEach items="${editions}" var="edition">
 						    <tr>      
-						        <td>${edition.name}</td>
+						        <td><a href="<c:url value="/viewEditionProposals/${edition.id}"/>">${edition.name}</a></td>
 						        <td>
 						        	<fmt:formatDate value="${edition.beginDate.time}"
 						        	type="both" pattern="d/M/y H:m" /> 

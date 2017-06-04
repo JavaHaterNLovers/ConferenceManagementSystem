@@ -9,6 +9,7 @@ import javax.persistence.criteria.Root;
 
 import org.hibernate.query.Query;
 
+import domain.Edition;
 import domain.Proposal;
 import domain.User;
 
@@ -43,6 +44,21 @@ public class ProposalRepository extends BaseRepository<Proposal>
 
         try {
             return proposals.getResultList();
+        } catch (NoResultException ex) {
+            return null;
+        }
+    }
+
+    public List<Proposal> getByEdition(Edition edition) {
+        CriteriaBuilder builder = factory.getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<Proposal> query = builder.createQuery(genericType);
+        Root<Proposal> root = query.from(genericType);
+
+        query.select(root);
+        query.where(builder.equal(root.get("edition"), edition));
+
+        try {
+            return factory.getCurrentSession().createQuery(query).getResultList();
         } catch (NoResultException ex) {
             return null;
         }

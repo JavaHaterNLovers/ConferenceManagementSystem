@@ -14,13 +14,13 @@
 			<h3 class="mb-3 text-center">Detalii propunere</h3>
 			<hr>
 				<c:if test="${status == 1}">
-					<h5 class="mb-2 text-center text-primary">Status: acceptata</h5>
+					<h5 class="mb-2 text-center text-success">Status: Acceptata</h5>
 				</c:if>
 				<c:if test="${status == -1}">
-					<h5 class="mb-2 text-center text-danger">Status: respinsa</h5>
+					<h5 class="mb-2 text-center text-danger">Status: Respinsa</h5>
 				</c:if>
 				<c:if test="${status == 0}">
-					<h5 class="mb-2 text-center text-info">Status: in asteptare</h5>
+					<h5 class="mb-2 text-center text-info">Status: In asteptare</h5>
 				</c:if>
 			
 			<hr>
