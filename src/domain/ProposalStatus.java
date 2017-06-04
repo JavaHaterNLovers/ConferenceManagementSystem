@@ -59,13 +59,14 @@ public class ProposalStatus
     }
 
     public ProposalStatus(proposalStatus status, String comment, User user, Proposal proposal) {
+        this.id = null;
         this.status = status;
         this.comment = comment;
         this.user = user;
         this.proposal = proposal;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -175,7 +176,7 @@ public class ProposalStatus
         weekReject("WEEK_REJECT"),
         reject("REJECT"),
         strongReject("STRONG_REJECT");
-        
+
 
         /**
          * Numele statusului.
