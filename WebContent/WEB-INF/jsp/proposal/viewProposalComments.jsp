@@ -46,12 +46,12 @@
 	        	<fmt:formatDate value="${proposal.modified.time}"
 	        	type="both" pattern="d/M/y H:m" />
         	</p>
-        	<c:if test="${isEditionCreator and  endBidding and not reviewersAlereadyChoosen}">
+        	<c:if test="${submissionsEnded and not reviewersAlereadyChoosen}">
         	<hr>
         	<h5 class="mb-2 text-center"><a href="<c:url value='/chooseReviewers/${proposal.id}' />" >Alegere evaluatori</a></h5>
         		<div class="list-group">
 					<c:forEach var="listValue" items="${proposalStatusWithoutRevieweri}">
-						 <div class="list-group-item list-group-item-action flex-column align-items-start">
+						 <div class="list-group-item list-group-item-action flex-column align-items-start mb-3">
 						    <div class="d-flex w-100 justify-content-between">
 						      <h5 class="mb-1">${listValue.user}</h5>
 						      <small class="text-muted">${listValue.status}</small>
@@ -69,11 +69,11 @@
 				</div>
 			</c:if>
 			<hr>
-			<c:if test="${reviewersAlereadyChoosen}">
+			<c:if test="${reviewersAlereadyChoosen and proposalStatus.isEmpty()}">
         	<h5 class="mb-2 text-center">Evaluatori:</h5>
         		<div class="list-group">
 					<c:forEach var="listValue" items="${reviewers}">
-						 <div class="list-group-item list-group-item-action flex-column align-items-start">
+						 <div class="list-group-item list-group-item-action flex-column align-items-start mb-3">
 						    <div class="d-flex w-100 justify-content-between">
 						      <h5 class="mb-1">${listValue.user}</h5>
 						      <small class="text-muted">${listValue.status}</small>

@@ -13,6 +13,7 @@ import domain.Edition;
 import domain.Proposal;
 import domain.User;
 
+@SuppressWarnings("unchecked")
 public class ProposalRepository extends BaseRepository<Proposal>
 {
     public ProposalRepository() {
@@ -36,11 +37,13 @@ public class ProposalRepository extends BaseRepository<Proposal>
 
     public List<Proposal> getNewProposals(User user) {
         Query<Proposal> proposals = factory.getCurrentSession()
-                .createQuery("select p from Proposal p"
+                .createQuery("select distinct p from Proposal p"
                 + " left join ProposalStatus ps on ps.proposal = p"
-                + " where ((ps.user = ? and ps.status in ('analyzes', 'maybeAnalyzes', 'rejectAnalyzes')) or ps.user is null)");
+                + " where ((ps.user = ? and ps.status in ('analyzes', 'maybeAnalyzes', 'rejectAnalyzes')) or ps.user is null or"
+                + "(ps.user != ? and ps.status != 'toReview'))");
 
         proposals.setParameter(0, user);
+        proposals.setParameter(1, user);
 
         try {
             return proposals.getResultList();
@@ -59,6 +62,21 @@ public class ProposalRepository extends BaseRepository<Proposal>
 
         try {
             return factory.getCurrentSession().createQuery(query).getResultList();
+        } catch (NoResultException ex) {
+            return null;
+        }
+    }
+
+    public List<Proposal> getToReview(User user) {
+        Query<Proposal> proposals = factory.getCurrentSession()
+                .createQuery("select distinct p from Proposal p"
+                + " left join ProposalStatus ps on ps.proposal = p"
+                + " where ps.user = ? and ps.status = 'toReview'");
+
+        proposals.setParameter(0, user);
+
+        try {
+            return proposals.getResultList();
         } catch (NoResultException ex) {
             return null;
         }
