@@ -21,26 +21,61 @@
 				</thead>
 				<tbody>
 					<c:forEach items="${proposals}" var="proposal">
-					    <tr>      
-					        <td><a href="<c:url value="/viewEditionProposals/viewCommentsProposal//${proposal.id}"/>">${proposal.name}</a></td>
-					        <td>${proposal.user}</td>
-				        	<td>
-					        	<fmt:formatDate value="${proposal.created.time}"
-					        	type="both" pattern="d/M/y H:m" />
-				        	</td>
-				        	<td>
-				        		<c:set var="status" value="${service.getProposalStatus(proposal)}"/>
-				        		<c:if test="${status == 1}">
-									<strong class="text-success">Acceptata</strong>
-								</c:if>
-								<c:if test="${status == -1}">
+		        		<c:set var="status" value="${service.getProposalStatus(proposal)}"/>
+						<c:if test="${status != -1}">
+						    <tr>      
+						        <td><a href="<c:url value="/viewEditionProposals/viewCommentsProposal//${proposal.id}"/>">${proposal.name}</a></td>
+						        <td>${proposal.user}</td>
+					        	<td>
+						        	<fmt:formatDate value="${proposal.created.time}"
+						        	type="both" pattern="d/M/y H:m" />
+					        	</td>
+					        	<td>
+					        		<c:if test="${status == 1}">
+										<strong class="text-success">Acceptata</strong>
+									</c:if>
+									<c:if test="${status == 0}">
+										<strong class="text-info">In asteptare</strong>
+									</c:if>
+					        	</td>
+						    </tr>
+					    </c:if>
+					</c:forEach>
+				</tbody>
+			</table>
+			
+			<h4 class="mb-3 text-center">Propunerile Neacceptate
+				<c:if test="${reviewEnded}">
+					<a href="<c:url value="/rejectedProposals/${edition.id}"/>" class="btn btn-primary">Trimite Mesaj</a>
+				</c:if>
+			</h4>
+			<hr>
+			
+			<table class="table table-striped table-hover mx-auto w-100">
+				<thead>
+					<tr>
+						<th>Nume</th>
+						<th>User</th>
+						<th>Data Creeata</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach items="${proposals}" var="proposal">
+		        		<c:set var="status" value="${service.getProposalStatus(proposal)}"/>
+						<c:if test="${status == -1}">
+						    <tr>      
+						        <td><a href="<c:url value="/viewEditionProposals/viewCommentsProposal//${proposal.id}"/>">${proposal.name}</a></td>
+						        <td>${proposal.user}</td>
+					        	<td>
+						        	<fmt:formatDate value="${proposal.created.time}"
+						        	type="both" pattern="d/M/y H:m" />
+					        	</td>
+					        	<td>
 									<strong class="text-danger">Respinsa</strong>
-								</c:if>
-								<c:if test="${status == 0}">
-									<strong class="text-info">In asteptare</strong>
-								</c:if>
-				        	</td>
-					    </tr>
+					        	</td>
+						    </tr>
+					    </c:if>
 					</c:forEach>
 				</tbody>
 			</table>

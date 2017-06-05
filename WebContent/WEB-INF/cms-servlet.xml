@@ -119,6 +119,14 @@
 	    <bean id="service.conference" class="service.ConferenceService">
 	        <constructor-arg ref="repo.conference"></constructor-arg>
 	    </bean>
+        
+        <bean id="service.email" class="service.EmailService">
+            <constructor-arg value="${email.host}"></constructor-arg>
+            <constructor-arg value="${email.port}"></constructor-arg>
+            <constructor-arg value="${email.user}"></constructor-arg>
+            <constructor-arg value="${email.pass}"></constructor-arg>
+            <constructor-arg value="${email.debug}"></constructor-arg>
+        </bean>
 	
 	    <bean id="service.user" class="service.UserService">
 	    	<constructor-arg ref="repo.user"></constructor-arg>
