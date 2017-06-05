@@ -56,7 +56,7 @@
         	<h5 class="mb-2 text-center">Rezultate evaluare:</h5>
         		<div class="list-group">
 					<c:forEach var="listValue" items="${proposalStatus}">
-						 <div class="list-group-item list-group-item-action flex-column align-items-start">
+						 <div class="list-group-item list-group-item-action flex-column align-items-start mb-3">
 						    <div class="d-flex w-100 justify-content-between">
 						      <h5 class="mb-1">${listValue.user}</h5>
 						      <small class="text-muted">${listValue.status}</small>
