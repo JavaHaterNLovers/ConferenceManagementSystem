@@ -99,6 +99,9 @@
 	    <bean id="repo.edition" class="repo.EditionRepository">
 	    </bean>
 	    
+	    <bean id="repo.orar" class="repo.OrarRepository">
+	    </bean>
+	    
 	    <bean id="repo.proposal" class="repo.ProposalRepository">
 	    </bean>
 	    

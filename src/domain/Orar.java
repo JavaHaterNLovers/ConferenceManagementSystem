@@ -13,6 +13,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Entity
 @Table(name = "orare")
 public class Orar
@@ -20,11 +22,10 @@ public class Orar
     @Column
     @Id
     @GeneratedValue
-    private int id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name="proposal_id")
-    @NotNull(message="{orar.proposal}")
     private Proposal proposal;
 
     @ManyToOne
@@ -35,17 +36,19 @@ public class Orar
     @Temporal(TemporalType.TIMESTAMP)
     @Column
     @NotNull(message="{orar.begin-date}")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Calendar beginDate;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column
     @NotNull(message="{orar.end-date}")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Calendar endDate;
 
     /**
      * Creeaza un orar default.
      */
-    private Orar() {
+    public Orar() {
         this(null, null, null, null);
     }
 
@@ -54,20 +57,25 @@ public class Orar
      * @param beginDate
      * @param endDate
      */
-    private Orar(Proposal proposal, Session section, Calendar beginDate, Calendar endDate)
+    public Orar(Proposal proposal, Session section, Calendar beginDate, Calendar endDate)
     {
         super();
+        this.id = null;
         this.proposal = proposal;
         this.section = section;
         this.beginDate = beginDate;
         this.endDate = endDate;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     /**
      * Returneaza id.
      * @return
      */
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -120,5 +128,6 @@ public class Orar
     public void setEndDate(Calendar endDate) {
         this.endDate = endDate;
     }
+
 
 }

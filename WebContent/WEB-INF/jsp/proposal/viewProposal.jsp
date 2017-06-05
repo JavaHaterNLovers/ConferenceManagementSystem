@@ -36,7 +36,6 @@
 			<p><strong>Autor:</strong> ${proposal.user}</p>
 			<p><strong>Conferinta:</strong> ${proposal.edition.conference}</p>
 			<p><strong>Editie:</strong> ${proposal.edition}</p>
-			<br />
 			<p><strong>Topic-uri:</strong>
 				${proposal.getFormattedTopics()}
 			</p>

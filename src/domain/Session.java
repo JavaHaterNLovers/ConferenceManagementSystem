@@ -112,4 +112,13 @@ public class Session
     public void setEdition(Edition conference) {
         this.edition = conference;
     }
+
+    @Override
+    public String toString() {
+        if (this.id == null) {
+            return "";
+        }
+
+        return this.id.toString();
+    }
 }

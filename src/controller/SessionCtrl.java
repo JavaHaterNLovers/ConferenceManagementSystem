@@ -23,8 +23,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import domain.Edition;
 import domain.Session;
 import domain.User;
-import repo.BaseRepository;
 import repo.EditionRepository;
+import repo.SessionRepository;
 import repo.UserRepository;
 import util.BaseController;
 
@@ -56,7 +56,7 @@ public class SessionCtrl extends BaseController
 
         session.setEdition(ed);
 
-        ((BaseRepository<Session>) this.get("repo.session")).save(session);
+        ((SessionRepository) this.get("repo.session")).save(session);
 
         redirAttr.addFlashAttribute("flashMessage", "Sesiune adaugata");
 
