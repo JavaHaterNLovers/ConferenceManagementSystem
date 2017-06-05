@@ -19,7 +19,6 @@ import util.BaseController;
 @Controller
 public class TopicCtrl extends BaseController
 {
-
     @Secured({"ROLE_CHAIR"})
     @RequestMapping(value = "/createTopic/submit", method = RequestMethod.POST)
     public String createTopicSubmit(@Valid @ModelAttribute("topic")Topic topic,

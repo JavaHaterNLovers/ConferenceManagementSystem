@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -29,6 +30,7 @@ public class Session
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @NotNull(message = "{session.user}")
     private User user;
 
     @ManyToOne

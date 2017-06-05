@@ -9,8 +9,6 @@
 	<div class="row">
 		<div class="col-5 mx-auto">
 			<h3 class="mb-3 text-center">Review propunere</h3>
-			<c:set var="reviewProposalAction"><c:url value='/reviewProposal/submit/${proposal.id}' /></c:set>
-			
 			
 			<h4 class="mb-3 text-center">Detalii Propunere</h4>
 			<hr>
@@ -62,6 +60,8 @@
 			
 			<c:if test="${not reviewEnd}">
 				<h5 class="mb-2 text-center mt-3">Evaluarea mea:</h5>
+				
+				<c:set var="reviewProposalAction"><c:url value='/reviewProposal/submit/${proposal.id}' /></c:set>
 				<form:form method="POST" action="${reviewProposalAction}" modelAttribute="proposalStatus">
 					<input type="hidden" name="${_csrf.parameterName}"
 						value="${_csrf.token}" />

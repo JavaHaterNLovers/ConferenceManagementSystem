@@ -31,9 +31,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import domain.Edition;
 import domain.Proposal;
 import domain.ProposalStatus;
-import domain.Reviewers;
 import domain.Topic;
 import domain.User;
+import model.Reviewers;
 import repo.BaseRepository;
 import repo.EditionRepository;
 import repo.PaymentRepository;
@@ -197,6 +197,7 @@ public class ProposalCtrl extends BaseController
         model.addAttribute("edition", ed);
         model.addAttribute("service", this.get("service.proposalStatus"));
         model.addAttribute("reviewEnded", Calendar.getInstance().compareTo(ed.getEndReview()) == 1);
+        model.addAttribute("createOrar", Calendar.getInstance().compareTo(ed.getEndReview()) == 1 && !((ProposalStatusService)this.get("service.proposalStatus")).hasPendingProposals(ed));
 
         return "proposal/viewEditionProposals";
     }

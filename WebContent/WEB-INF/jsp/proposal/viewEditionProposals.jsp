@@ -7,7 +7,11 @@
 <t:layout>
 	<div class="row">
 		<div class="offset-3 col-6 mt-3">
-			<h3 class="mb-3 text-center">Propunerile Editiei ${edition}</h3>
+			<h3 class="mb-3 text-center">Propunerile Editiei ${edition}
+				<c:if test="${createOrar}">
+					<a class="btn btn-primary" href="<c:url value="/viewOrar/${edition.id}"/>">Creeare Orar</a>
+				</c:if>
+			</h3>
 			<hr>
 			
 			<table class="table table-striped table-hover mx-auto w-100">

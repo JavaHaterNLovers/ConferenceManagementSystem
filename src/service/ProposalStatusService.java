@@ -5,9 +5,11 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import domain.Edition;
 import domain.Proposal;
 import domain.ProposalStatus;
 import domain.User;
+import repo.ProposalRepository;
 import repo.ProposalStatusRepository;
 
 /**
@@ -19,8 +21,12 @@ public class ProposalStatusService extends BaseDomainService<ProposalStatus, Pro
     public static final int STATUS_PENDING = 0;
     public static final int STATUS_REJECTED = -1;
 
-    public ProposalStatusService(ProposalStatusRepository repo) {
+    private ProposalRepository proposalRepo;
+
+    public ProposalStatusService(ProposalStatusRepository repo, ProposalRepository proposalRepo) {
         super(repo);
+
+        this.proposalRepo = proposalRepo;
     }
 
     public List<ProposalStatus> getByProposalAndReviewed(Proposal proposal) {
@@ -95,6 +101,14 @@ public class ProposalStatusService extends BaseDomainService<ProposalStatus, Pro
                     .sorted((x,y)->x.getStatus().compareTo(y.getStatus()))
                     .forEach(x->res.add(x));
         return res;
+    }
+
+    public boolean hasPendingProposals(Edition ed) {
+        List<Proposal> res = new ArrayList<>();
+
+        proposalRepo.getByEdition(ed).stream().filter((p) -> getProposalStatus(p) == STATUS_PENDING);
+
+        return !res.isEmpty();
     }
 
     public Integer getProposalStatus(Proposal proposal){

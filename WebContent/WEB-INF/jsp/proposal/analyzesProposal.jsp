@@ -9,8 +9,6 @@
 	<div class="row">
 		<div class="col-5 mx-auto">
 			<h3 class="mb-3 text-center">Analiza propunere</h3>
-			<c:set var="analyzesProposalAction"><c:url value='/analyzesProposal/submit/${proposal.id}' /></c:set>
-			
 			
 			<h4 class="mb-3 text-center">Detalii Propunere</h4>
 			<hr>
@@ -40,6 +38,7 @@
 	        	type="both" pattern="d/M/y H:m" />
         	</p>
 			
+			<c:set var="analyzesProposalAction"><c:url value='/analyzesProposal/submit/${proposal.id}' /></c:set>
 			<form:form method="POST" action="${analyzesProposalAction}" modelAttribute="proposalStatus">
 				<input type="hidden" name="${_csrf.parameterName}"
 					value="${_csrf.token}" />
