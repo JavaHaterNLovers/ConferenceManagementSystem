@@ -92,24 +92,24 @@
 			</c:if>
         	<hr>
         	<h5 class="mb-2 text-center">Rezultate evaluare:</h5>
-        		<div class="list-group">
-					<c:forEach var="listValue" items="${proposalStatus}">
-						 <div class="list-group-item list-group-item-action flex-column align-items-start">
-						    <div class="d-flex w-100 justify-content-between">
-						      <h5 class="mb-1">${listValue.user}</h5>
-						      <small class="text-muted">${listValue.status}</small>
-						    </div>
-						    <p class="mb-1">${listValue.comment}</p>
-						    <small class="text-muted">
-							    Creata:
-							    <fmt:formatDate value="${listValue.created.time}"
-		        				type="both" pattern="d/M/y H:m" /> Modificata:
-		        				<fmt:formatDate value="${listValue.modified.time}"
-		        				type="both" pattern="d/M/y H:m" />
-	        				</small>
-						  </div>
-					</c:forEach>
-				</div>
+       		<div class="list-group">
+				<c:forEach var="listValue" items="${proposalStatus}">
+					 <div class="list-group-item list-group-item-action flex-column align-items-start mb-3">
+					    <div class="d-flex w-100 justify-content-between">
+					      <h5 class="mb-1">${listValue.user}</h5>
+					      <small class="text-muted">${listValue.status}</small>
+					    </div>
+					    <p class="mb-1">${listValue.comment}</p>
+					    <small class="text-muted">
+						    Creata:
+						    <fmt:formatDate value="${listValue.created.time}"
+	        				type="both" pattern="d/M/y H:m" /> Modificata:
+	        				<fmt:formatDate value="${listValue.modified.time}"
+	        				type="both" pattern="d/M/y H:m" />
+        				</small>
+					  </div>
+				</c:forEach>
+			</div>
 		</div>
 	</div> 
 </t:layout>

@@ -16,7 +16,7 @@
 		</div>
 		<div class="offset-3 col-6 mt-3">
 			<h3 class="mb-3 text-center">Propuneri
-				<sec:authorize access="hasAnyRole('ROLE_CHAIR', 'ROLE_CO_CHAIR')" var="isReviewer" />
+				<sec:authorize access="hasAnyRole('ROLE_CHAIR', 'ROLE_CO_CHAIR', 'ROLE_STAFF')" var="isReviewer" />
 				<c:if test="${isReviewer}">
 					<a href="<c:url value='/viewProposals' />" class="btn btn-primary">Review</a>
 				</c:if>

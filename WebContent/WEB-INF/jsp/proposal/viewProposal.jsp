@@ -25,7 +25,9 @@
 			
 			<hr>
 			<div class="text-center">
-				<a href="<c:url value='#' />" class="btn btn-primary">Descarca</a>
+				<c:if test="${not empty proposal.file}">
+					<p><a href="<c:url value='#' />" class="btn btn-primary">Descarcare fisier</a></p>
+				</c:if>
 				<c:if test="${valid}">
 					<a href="<c:url value='#' />" class="btn btn-success">Update</a>
 				</c:if>		

@@ -50,7 +50,7 @@
 					<c:forEach items="${proposalsReview}" var="proposal">
 					    <tr>      
 					        <td>${proposal.edition}</td>
-					        <td><a href="<c:url value="/analyzesProposal/${proposal.id}"/>">${proposal.name}</a></td>
+					        <td><a href="<c:url value="/reviewProposal/${proposal.id}"/>">${proposal.name}</a></td>
 					        <td>${proposal.user}</td>
 				        	<td>
 					        	<fmt:formatDate value="${proposal.created.time}"

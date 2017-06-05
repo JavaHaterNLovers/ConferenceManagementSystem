@@ -139,7 +139,7 @@ public class ProposalCtrl extends BaseController
         });
     }
 
-    @Secured({"ROLE_CHAIR","ROLE_CO_CHAIR"})
+    @Secured({"ROLE_CHAIR","ROLE_CO_CHAIR", "ROLE_STAFF"})
     @RequestMapping(value = "/viewProposals", method = RequestMethod.GET)
     public String viewProposals(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

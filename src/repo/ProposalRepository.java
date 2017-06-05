@@ -40,7 +40,7 @@ public class ProposalRepository extends BaseRepository<Proposal>
                 .createQuery("select distinct p from Proposal p"
                 + " left join ProposalStatus ps on ps.proposal = p"
                 + " where ((ps.user = ? and ps.status in ('analyzes', 'maybeAnalyzes', 'rejectAnalyzes')) or ps.user is null or"
-                + "(ps.user != ? and ps.status != 'toReview'))");
+                + "(ps.user != ? and ps.status in ('analyzes', 'maybeAnalyzes', 'rejectAnalyzes')))");
 
         proposals.setParameter(0, user);
         proposals.setParameter(1, user);
@@ -71,7 +71,7 @@ public class ProposalRepository extends BaseRepository<Proposal>
         Query<Proposal> proposals = factory.getCurrentSession()
                 .createQuery("select distinct p from Proposal p"
                 + " left join ProposalStatus ps on ps.proposal = p"
-                + " where ps.user = ? and ps.status = 'toReview'");
+                + " where ps.user = ? and ps.status not in ('analyzes', 'maybeAnalyzes', 'rejectAnalyzes')");
 
         proposals.setParameter(0, user);
 

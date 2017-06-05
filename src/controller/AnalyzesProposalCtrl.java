@@ -1,5 +1,8 @@
 package controller;
 
+import java.util.Calendar;
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.security.access.annotation.Secured;
@@ -18,20 +21,22 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import domain.Proposal;
 import domain.ProposalStatus;
+import domain.ProposalStatus.proposalStatus;
 import domain.User;
 import repo.ProposalRepository;
 import repo.ProposalStatusRepository;
+import service.ProposalStatusService;
 import util.BaseController;
 
 @Controller
 public class AnalyzesProposalCtrl extends BaseController
 {
-    @Secured({"ROLE_CHAIR","ROLE_CO_CHAIR"})
+    @Secured({"ROLE_CHAIR","ROLE_CO_CHAIR", "ROLE_STAFF"})
     @RequestMapping(value = "/analyzesProposal/{id}", method = RequestMethod.GET)
     public String analyzesProposal(Model model, @PathVariable("id") Integer id) {
         Proposal proposal = ((ProposalRepository) this.get("repo.proposal")).get(id);
 
-        if (proposal == null) {
+        if (proposal == null || Calendar.getInstance().compareTo(proposal.getEdition().getEndSubmissions()) == 1) {
             throw new NotFoundException("Propunerea nu a fost gasita");
         }
 
@@ -46,9 +51,9 @@ public class AnalyzesProposalCtrl extends BaseController
         return "proposal/analyzesProposal";
     }
 
-    @Secured({"ROLE_CHAIR","ROLE_CO_CHAIR"})
+    @Secured({"ROLE_CHAIR","ROLE_CO_CHAIR", "ROLE_STAFF"})
     @RequestMapping(value = "/analyzesProposal/submit/{id}", method = RequestMethod.POST)
-    public String createEditionSubmit(@PathVariable("id") Integer id,
+    public String analyzesProposalSubmit(@PathVariable("id") Integer id,
         @Valid @ModelAttribute("proposalStatus") ProposalStatus proposalStatus,
         BindingResult result, ModelMap model,
         RedirectAttributes redirAttr
@@ -56,7 +61,7 @@ public class AnalyzesProposalCtrl extends BaseController
 
         Proposal proposal = ((ProposalRepository) this.get("repo.proposal")).get(id);
 
-        if (proposal == null) {
+        if (proposal == null || Calendar.getInstance().compareTo(proposal.getEdition().getEndSubmissions()) == 1) {
             throw new NotFoundException("Propunerea nu a fost gasita");
         }
 
@@ -72,6 +77,7 @@ public class AnalyzesProposalCtrl extends BaseController
 
         if (status != null) {
             proposalStatus.setId(status.getId());
+            proposalStatus.setCreated(status.getCreated());
         } else {
             proposalStatus.setId(null);
         }
@@ -81,6 +87,81 @@ public class AnalyzesProposalCtrl extends BaseController
 
         ((ProposalStatusRepository) this.get("repo.proposalStatus")).save(proposalStatus);
         redirAttr.addFlashAttribute("flashMessage", "Analiza adaugata cu success");
+
+        return "redirect:/viewProposals";
+    }
+
+    @Secured({"ROLE_CHAIR","ROLE_CO_CHAIR", "ROLE_STAFF"})
+    @RequestMapping(value = "/reviewProposal/{id}", method = RequestMethod.GET)
+    public String reviewProposal(Model model, @PathVariable("id") Integer id) {
+        Proposal proposal = ((ProposalRepository) this.get("repo.proposal")).get(id);
+
+        if (proposal == null || Calendar.getInstance().compareTo(proposal.getEdition().getEndReview()) == 1) {
+            throw new NotFoundException("Propunerea nu a fost gasita");
+        }
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+
+        ProposalStatus status = ((ProposalStatusRepository) this.get("repo.proposalStatus")).getForUserProposal(user, proposal);
+
+        if (status == null
+            || status.getStatus() == proposalStatus.analyzes
+            || status.getStatus() == proposalStatus.maybeAnalyzes
+            || status.getStatus() == proposalStatus.rejectAnalyzes
+        ) {
+            throw new NotFoundException("Nu puteti face review.");
+        }
+
+        model.addAttribute("proposalStatus", status);
+        model.addAttribute("proposal", proposal);
+
+        List<ProposalStatus> allReviews = ((ProposalStatusService) this.get("service.proposalStatus")).getByProposalAndReviewedIgnore(proposal, user);
+        model.addAttribute("allReviews", allReviews);
+
+        return "proposal/reviewProposal";
+    }
+
+    @Secured({"ROLE_CHAIR","ROLE_CO_CHAIR", "ROLE_STAFF"})
+    @RequestMapping(value = "/reviewProposal/submit/{id}", method = RequestMethod.POST)
+    public String reviewProposalSubmit(@PathVariable("id") Integer id,
+        @Valid @ModelAttribute("proposalStatus") ProposalStatus proposalStatus,
+        BindingResult result, ModelMap model,
+        RedirectAttributes redirAttr
+    ) {
+
+        Proposal proposal = ((ProposalRepository) this.get("repo.proposal")).get(id);
+
+        if (proposal == null || Calendar.getInstance().compareTo(proposal.getEdition().getEndReview()) == 1) {
+            throw new NotFoundException("Propunerea nu a fost gasita");
+        }
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+
+        ProposalStatus status = ((ProposalStatusRepository) this.get("repo.proposalStatus")).getForUserProposal(user, proposal);
+
+        if (status == null
+            || status.getStatus() == ProposalStatus.proposalStatus.analyzes
+            || status.getStatus() == ProposalStatus.proposalStatus.maybeAnalyzes
+            || status.getStatus() == ProposalStatus.proposalStatus.rejectAnalyzes
+        ) {
+            throw new NotFoundException("Nu puteti face review.");
+        }
+
+        if (result.hasErrors()) {
+            model.addAttribute("proposalStatus", status);
+            model.addAttribute("proposal", proposal);
+            return "proposal/reviewProposal";
+        }
+
+        proposalStatus.setId(status.getId());
+        proposalStatus.setUser(user);
+        proposalStatus.setProposal(proposal);
+        proposalStatus.setCreated(status.getCreated());
+
+        ((ProposalStatusRepository) this.get("repo.proposalStatus")).save(proposalStatus);
+        redirAttr.addFlashAttribute("flashMessage", "Review adaugat cu success");
 
         return "redirect:/viewProposals";
     }
