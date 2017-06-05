@@ -40,7 +40,7 @@ public class ProposalRepository extends BaseRepository<Proposal>
                 .createQuery("select distinct p from Proposal p"
                 + " left join ProposalStatus ps on ps.proposal = p"
                 + " where ((ps.user = ? and ps.status in ('analyzes', 'maybeAnalyzes', 'rejectAnalyzes')) or ps.user is null or"
-                + "(ps.user != ? and ps.status in ('analyzes', 'maybeAnalyzes', 'rejectAnalyzes')))");
+                + "(ps.user != ? and ps.status in ('analyzes', 'maybeAnalyzes', 'rejectAnalyzes'))) and p.edition.endBidding >= CURRENT_TIMESTAMP");
 
         proposals.setParameter(0, user);
         proposals.setParameter(1, user);

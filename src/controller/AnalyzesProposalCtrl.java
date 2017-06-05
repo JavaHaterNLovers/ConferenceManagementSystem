@@ -105,17 +105,18 @@ public class AnalyzesProposalCtrl extends BaseController
 
         ProposalStatus status = ((ProposalStatusRepository) this.get("repo.proposalStatus")).getForUserProposal(user, proposal);
 
-        if (status == null
+        if ((status == null
             || status.getStatus() == proposalStatus.analyzes
             || status.getStatus() == proposalStatus.maybeAnalyzes
-            || status.getStatus() == proposalStatus.rejectAnalyzes
+            || status.getStatus() == proposalStatus.rejectAnalyzes)
+            && status.getProposal().getEdition().getAuthor().getId() != user.getId()
         ) {
             throw new NotFoundException("Nu puteti face review.");
         }
 
         model.addAttribute("proposalStatus", status);
         model.addAttribute("proposal", proposal);
-        model.addAttribute("reviewEnd", Calendar.getInstance().compareTo(proposal.getEdition().getEndReview()) == 1);
+        model.addAttribute("reviewEnd", Calendar.getInstance().compareTo(proposal.getEdition().getEndReview()) == 1 && status.getProposal().getEdition().getAuthor().getId() != user.getId());
 
         List<ProposalStatus> allReviews = ((ProposalStatusService) this.get("service.proposalStatus")).getByProposalAndReviewedIgnore(proposal, user);
         model.addAttribute("allReviews", allReviews);
@@ -133,7 +134,7 @@ public class AnalyzesProposalCtrl extends BaseController
 
         Proposal proposal = ((ProposalRepository) this.get("repo.proposal")).get(id);
 
-        if (proposal == null || Calendar.getInstance().compareTo(proposal.getEdition().getEndReview()) == 1) {
+        if (proposal == null) {
             throw new NotFoundException("Propunerea nu a fost gasita");
         }
 
@@ -142,10 +143,11 @@ public class AnalyzesProposalCtrl extends BaseController
 
         ProposalStatus status = ((ProposalStatusRepository) this.get("repo.proposalStatus")).getForUserProposal(user, proposal);
 
-        if (status == null
+        if ((status == null
             || status.getStatus() == ProposalStatus.proposalStatus.analyzes
             || status.getStatus() == ProposalStatus.proposalStatus.maybeAnalyzes
-            || status.getStatus() == ProposalStatus.proposalStatus.rejectAnalyzes
+            || status.getStatus() == ProposalStatus.proposalStatus.rejectAnalyzes)
+            && status.getProposal().getEdition().getAuthor().getId() != user.getId() && Calendar.getInstance().compareTo(proposal.getEdition().getEndReview()) == 1
         ) {
             throw new NotFoundException("Nu puteti face review.");
         }

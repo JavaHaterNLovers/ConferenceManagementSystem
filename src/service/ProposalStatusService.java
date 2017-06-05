@@ -119,9 +119,6 @@ public class ProposalStatusService extends BaseDomainService<ProposalStatus, Pro
             }
         }
         if (nrAccept == 0 && nrReject == 0) {
-            if (reviewesEnd){
-                return STATUS_REJECTED;
-            }
             return STATUS_PENDING;
         }
 
@@ -133,9 +130,6 @@ public class ProposalStatusService extends BaseDomainService<ProposalStatus, Pro
             return STATUS_REJECTED;
         }
 
-        if (reviewesEnd){
-            return STATUS_REJECTED;
-        }
         return STATUS_PENDING;
     }
 }

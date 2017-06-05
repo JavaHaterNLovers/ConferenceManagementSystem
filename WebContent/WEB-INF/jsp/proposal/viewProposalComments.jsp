@@ -20,7 +20,11 @@
 					<h5 class="mb-2 text-center text-danger">Status: Respinsa</h5>
 				</c:if>
 				<c:if test="${status == 0}">
-					<h5 class="mb-2 text-center text-info">Status: In asteptare</h5>
+					<h5 class="mb-2 text-center text-info">Status: In asteptare
+						<c:if test="${reviewEnded}">
+							<a class="btn btn-info" href="<c:url value="/reviewProposal/${proposal.id}"/>">Review</a>
+						</c:if>
+					</h5>
 				</c:if>
 			
 			<hr>
@@ -46,7 +50,7 @@
 	        	<fmt:formatDate value="${proposal.modified.time}"
 	        	type="both" pattern="d/M/y H:m" />
         	</p>
-        	<c:if test="${submissionsEnded and not reviewersAlereadyChoosen}">
+        	<c:if test="${biddingEnded and not reviewersAlereadyChoosen}">
         	<hr>
         	<h5 class="mb-2 text-center"><a href="<c:url value='/chooseReviewers/${proposal.id}' />" >Alegere evaluatori</a></h5>
         		<div class="list-group">

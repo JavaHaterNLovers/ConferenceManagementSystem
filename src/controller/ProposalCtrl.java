@@ -224,9 +224,11 @@ public class ProposalCtrl extends BaseController
         model.addAttribute("status", ((ProposalStatusService)this.get("service.proposalStatus")).getProposalStatus(pr));
         model.addAttribute("proposalStatus", proposalStatus);
         model.addAttribute("proposalStatusWithoutRevieweri", ((ProposalStatusService)this.get("service.proposalStatus")).getByProposalWithoutReviews(pr));
-        model.addAttribute("submissionsEnded", Calendar.getInstance().compareTo(pr.getEdition().getEndSubmissions()) == 1);
+        model.addAttribute("biddingEnded", Calendar.getInstance().compareTo(pr.getEdition().getEndBidding()) == 1);
+        model.addAttribute("reviewEnded", Calendar.getInstance().compareTo(pr.getEdition().getEndReview()) == 1);
         model.addAttribute("reviewers", reviewers);
         model.addAttribute("reviewersAlereadyChoosen", reviewersAlereadyChoosen || !proposalStatus.isEmpty());
+
         return "proposal/viewProposalComments";
     }
 
