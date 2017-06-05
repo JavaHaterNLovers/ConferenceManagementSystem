@@ -1,6 +1,7 @@
 package controller;
 
 import java.beans.PropertyEditorSupport;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -21,9 +22,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import domain.Edition;
+import domain.Orar;
 import domain.Session;
 import domain.User;
 import repo.EditionRepository;
+import repo.OrarRepository;
 import repo.SessionRepository;
 import repo.UserRepository;
 import util.BaseController;
@@ -101,5 +104,21 @@ public class SessionCtrl extends BaseController
                 setValue(id != null ? ((UserRepository) get("repo.user")).get(id) : null);
             }
         });
+    }
+
+    @RequestMapping(value = "/viewSession/{id}")
+    public String viewOrar(Model model, @PathVariable int id) {
+        Session s = ((SessionRepository) this.get("repo.session")).get(id);
+
+        if (s == null) {
+            throw new NotFoundException("Sesiunea nu exista");
+        }
+
+        List<Orar> orare = ((OrarRepository) this.get("repo.orar")).getBySession(s);
+
+        model.addAttribute("session", s);
+        model.addAttribute("orare", orare);
+
+        return "session/view";
     }
 }

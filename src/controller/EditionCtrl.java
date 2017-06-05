@@ -21,6 +21,7 @@ import domain.Edition;
 import domain.User;
 import repo.ConferenceRepository;
 import repo.EditionRepository;
+import repo.SessionRepository;
 import service.ConferenceService;
 import util.BaseController;
 
@@ -73,6 +74,7 @@ public class EditionCtrl extends BaseController
 
         model.addAttribute("edition", ed);
         model.addAttribute("valid", Calendar.getInstance().compareTo(ed.getEndSubmissions()) == -1);
+        model.addAttribute("sessions", ((SessionRepository) this.get("repo.session")).getForEdition(ed));
 
         return "edition/view";
     }

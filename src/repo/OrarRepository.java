@@ -9,6 +9,7 @@ import javax.persistence.criteria.Root;
 
 import domain.Orar;
 import domain.Proposal;
+import domain.Session;
 
 public class OrarRepository extends BaseRepository<Orar>
 {
@@ -51,6 +52,22 @@ public class OrarRepository extends BaseRepository<Orar>
             return list.isEmpty();
         } catch (NoResultException ex) {
             return true;
+        }
+    }
+
+    public List<Orar> getBySession(Session s) {
+        CriteriaBuilder builder = factory.getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<Orar> query = builder.createQuery(genericType);
+        Root<Orar> root = query.from(genericType);
+
+        query.select(root);
+        query.where(builder.equal(root.get("section"), s));
+        query.orderBy(builder.asc(root.get("beginDate")));
+
+        try {
+            return factory.getCurrentSession().createQuery(query).getResultList();
+        } catch (NoResultException ex) {
+            return null;
         }
     }
 }

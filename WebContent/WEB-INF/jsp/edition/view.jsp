@@ -54,6 +54,28 @@
 	        	<hr>
 				<h5 class="mt-3 text-center"><a href="<c:url value='/createProposal/${edition.id}' />" class="btn btn-success">Inscriere Speaker</a></h5>
 			</c:if>
+			
+			<h3 class="mb-3 text-center">Sesiunile Editiei</h3>
+			<hr>
+			
+			<table class="table table-striped table-hover mx-auto w-100">
+				<thead>
+					<tr>
+						<th>Nume</th>
+						<th>Camera</th>
+						<th>Responsabil</th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach items="${sessions}" var="session">
+					    <tr>      
+					        <td><a href="<c:url value="/viewSession/${session.id}"/>">${session.name}</a></td>
+					        <td>${session.room}</td>
+					        <td>${session.user}</td>
+					    </tr>
+					</c:forEach>
+				</tbody>
+			</table>
 		</div>
 	</div>
 </t:layout>
