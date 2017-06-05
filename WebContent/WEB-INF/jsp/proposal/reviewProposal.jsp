@@ -60,40 +60,42 @@
 				</c:forEach>
 			</div>
 			
-			<h5 class="mb-2 text-center mt-3">Evaluarea mea:</h5>
-			<form:form method="POST" action="${reviewProposalAction}" modelAttribute="proposalStatus">
-				<input type="hidden" name="${_csrf.parameterName}"
-					value="${_csrf.token}" />
-				
-            	<c:set var="commentError">
-					<form:errors path="comment"/>
-				</c:set>
-            	<div class="form-group${not empty commentError ? ' has-danger' : ''}">
-            		<label>Comment</label>
-                    <form:textarea rows="5" required="required" type="comment" path="comment" class="form-control"/></textarea>
-                    <c:if test="${not empty commentError}">
-                    	<div class="form-control-feedback">${commentError}</div>
-                    </c:if>
-                </div>
-                
-                <c:set var="proposalStatusError">
-					<form:errors path="status"/>
-				</c:set>
-            	<div class="form-check${not empty proposalStatusError ? ' has-danger' : ''}">
-            		 <form:radiobutton path="status" value="strongAccept" label="Accept Mult" />
-            		 <br><form:radiobutton path="status" value="accept" label="Accept"/>
-            		 <br><form:radiobutton path="status" value="weekAccept" label="Accept Oarecum"/>
-            		 <br><form:radiobutton path="status" value="borderlinePaper" label="Lucrare Mediocra"/>
-            		 <br><form:radiobutton path="status" value="weekReject" label="Repind Oarecum"/>
-            		 <br><form:radiobutton path="status" value="reject" label="Respind"/>
-            		 <br><form:radiobutton path="status" value="strongReject" label="Respind Mult"/>
-                    <c:if test="${not empty proposalStatusError}">
-                    	<div class="form-control-feedback">${proposalStatusError}</div>
-                    </c:if>
-                </div>
-                          
-                <button type="submit" class="btn btn-success btn-block">Trimite review</button>
-	        </form:form>
+			<c:if test="${not reviewEnd}">
+				<h5 class="mb-2 text-center mt-3">Evaluarea mea:</h5>
+				<form:form method="POST" action="${reviewProposalAction}" modelAttribute="proposalStatus">
+					<input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" />
+					
+	            	<c:set var="commentError">
+						<form:errors path="comment"/>
+					</c:set>
+	            	<div class="form-group${not empty commentError ? ' has-danger' : ''}">
+	            		<label>Comment</label>
+	                    <form:textarea rows="5" required="required" type="comment" path="comment" class="form-control"/></textarea>
+	                    <c:if test="${not empty commentError}">
+	                    	<div class="form-control-feedback">${commentError}</div>
+	                    </c:if>
+	                </div>
+	                
+	                <c:set var="proposalStatusError">
+						<form:errors path="status"/>
+					</c:set>
+	            	<div class="form-check${not empty proposalStatusError ? ' has-danger' : ''}">
+	            		 <form:radiobutton path="status" value="strongAccept" label="Accept Mult" />
+	            		 <br><form:radiobutton path="status" value="accept" label="Accept"/>
+	            		 <br><form:radiobutton path="status" value="weekAccept" label="Accept Oarecum"/>
+	            		 <br><form:radiobutton path="status" value="borderlinePaper" label="Lucrare Mediocra"/>
+	            		 <br><form:radiobutton path="status" value="weekReject" label="Repind Oarecum"/>
+	            		 <br><form:radiobutton path="status" value="reject" label="Respind"/>
+	            		 <br><form:radiobutton path="status" value="strongReject" label="Respind Mult"/>
+	                    <c:if test="${not empty proposalStatusError}">
+	                    	<div class="form-control-feedback">${proposalStatusError}</div>
+	                    </c:if>
+	                </div>
+	                          
+	                <button type="submit" class="btn btn-success btn-block">Trimite review</button>
+		        </form:form>
+	        </c:if>
 		</div>
 	</div>
 

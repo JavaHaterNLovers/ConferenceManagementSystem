@@ -51,7 +51,11 @@ public class ProposalStatusService extends BaseDomainService<ProposalStatus, Pro
                             ProposalStatus.proposalStatus.strongReject,
                             ProposalStatus.proposalStatus.weekAccept,
                             ProposalStatus.proposalStatus.weekReject
-                            ).contains(x.getStatus()) && x.getProposal().getUser().getId() != user.getId())
+                            ).contains(x.getStatus())
+                            && (x.getProposal().getUser().getId() != user.getId()
+                                || x.getUser().getId() == user.getId()
+                            )
+                        )
                     .sorted((x,y)->x.getStatus().compareTo(y.getStatus()))
                     .forEach(x->res.add(x));
         return res;

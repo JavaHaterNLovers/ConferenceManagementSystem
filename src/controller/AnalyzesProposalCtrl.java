@@ -96,7 +96,7 @@ public class AnalyzesProposalCtrl extends BaseController
     public String reviewProposal(Model model, @PathVariable("id") Integer id) {
         Proposal proposal = ((ProposalRepository) this.get("repo.proposal")).get(id);
 
-        if (proposal == null || Calendar.getInstance().compareTo(proposal.getEdition().getEndReview()) == 1) {
+        if (proposal == null) {
             throw new NotFoundException("Propunerea nu a fost gasita");
         }
 
@@ -115,6 +115,7 @@ public class AnalyzesProposalCtrl extends BaseController
 
         model.addAttribute("proposalStatus", status);
         model.addAttribute("proposal", proposal);
+        model.addAttribute("reviewEnd", Calendar.getInstance().compareTo(proposal.getEdition().getEndReview()) == 1);
 
         List<ProposalStatus> allReviews = ((ProposalStatusService) this.get("service.proposalStatus")).getByProposalAndReviewedIgnore(proposal, user);
         model.addAttribute("allReviews", allReviews);
