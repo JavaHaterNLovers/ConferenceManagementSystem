@@ -36,7 +36,7 @@ public class AnalyzesProposalCtrl extends BaseController
     public String analyzesProposal(Model model, @PathVariable("id") Integer id) {
         Proposal proposal = ((ProposalRepository) this.get("repo.proposal")).get(id);
 
-        if (proposal == null || Calendar.getInstance().compareTo(proposal.getEdition().getEndSubmissions()) == 1) {
+        if (proposal == null || Calendar.getInstance().compareTo(proposal.getEdition().getEndBidding()) == 1) {
             throw new NotFoundException("Propunerea nu a fost gasita");
         }
 
@@ -61,7 +61,7 @@ public class AnalyzesProposalCtrl extends BaseController
 
         Proposal proposal = ((ProposalRepository) this.get("repo.proposal")).get(id);
 
-        if (proposal == null || Calendar.getInstance().compareTo(proposal.getEdition().getEndSubmissions()) == 1) {
+        if (proposal == null || Calendar.getInstance().compareTo(proposal.getEdition().getEndBidding()) == 1) {
             throw new NotFoundException("Propunerea nu a fost gasita");
         }
 

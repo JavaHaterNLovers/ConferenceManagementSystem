@@ -1,0 +1,9 @@
+database.name=conference_management_system
+database.user=root
+database.password=
+
+email.host=mail.liberlaeducatie.ro
+email.port=26
+email.user=test@liberlaeducatie.ro
+email.pass=kWBxs!IW*qAk
+email.debug=nicofecioru@gmail.com

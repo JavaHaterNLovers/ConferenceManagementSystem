@@ -1,8 +1,11 @@
 package controller;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import domain.Edition;
@@ -35,6 +39,7 @@ import repo.EditionRepository;
 import repo.PaymentRepository;
 import repo.ProposalRepository;
 import repo.ProposalStatusRepository;
+import service.EmailService;
 import service.ProposalStatusService;
 import util.BaseController;
 
@@ -189,8 +194,9 @@ public class ProposalCtrl extends BaseController
         List<Proposal> proposals = ((ProposalRepository) this.get("repo.proposal")).getByEdition(ed);
 
         model.addAttribute("proposals", proposals);
-        model.addAttribute("edition", ed.getName());
+        model.addAttribute("edition", ed);
         model.addAttribute("service", this.get("service.proposalStatus"));
+        model.addAttribute("reviewEnded", Calendar.getInstance().compareTo(ed.getEndReview()) == 1);
 
         return "proposal/viewEditionProposals";
     }
@@ -281,5 +287,73 @@ public class ProposalCtrl extends BaseController
         redirAttr.addFlashAttribute("flashMessage", "Evaluatori adaugati!");
 
         return "redirect:/viewEditionProposals/viewCommentsProposal/" + id;
+    }
+
+    @Secured({"ROLE_CHAIR","ROLE_CO_CHAIR"})
+    @RequestMapping(value = "/rejectedProposals/{id}", method = RequestMethod.GET)
+    public String rejectedProposals(@PathVariable("id") Integer id, Model model) {
+        Edition ed = ((EditionRepository) this.get("repo.edition")).get(id);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+
+        if (ed == null || ed.getAuthor().getId() != user.getId()) {
+            throw new NotFoundException("Editia nu exista");
+        }
+
+        if (Calendar.getInstance().compareTo(ed.getEndSubmissions()) != 1) {
+            throw new NotFoundException("Perioada de submissions nu este terminata");
+        }
+
+        model.addAttribute("edition", ed);
+
+        return "proposal/rejectedProposals";
+    }
+
+    @Secured({"ROLE_CHAIR","ROLE_CO_CHAIR"})
+    @RequestMapping(value = "/rejectedProposals/submit/{id}", method = RequestMethod.POST)
+    public String rejectedProposalsSubmit(@PathVariable("id") Integer id,
+        @RequestParam String message, Model model, RedirectAttributes redir
+    ) {
+        Edition ed = ((EditionRepository) this.get("repo.edition")).get(id);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+
+        if (ed == null || ed.getAuthor().getId() != user.getId()) {
+            throw new NotFoundException("Editia nu exista");
+        }
+
+        if (Calendar.getInstance().compareTo(ed.getEndSubmissions()) != 1) {
+            throw new NotFoundException("Perioada de submissions nu este terminata");
+        }
+
+        if (message.isEmpty()) {
+            redir.addFlashAttribute("flashMessage", "Mesajul nu poate fi gol.");
+
+            return "redirect:/rejectedProposals/" + id;
+        }
+
+        ProposalStatusService statusService = (ProposalStatusService) this.get("service.proposalStatus");
+
+        List<String> emails = new ArrayList<>();
+
+        ((ProposalRepository) this.get("repo.proposal")).getByEdition(ed).stream()
+            .filter((p) -> statusService.getProposalStatus(p) == ProposalStatusService.STATUS_REJECTED)
+            .forEach((p) -> emails.add(p.getUser().getEmail()));
+
+        EmailService service = (EmailService) this.get("service.email");
+
+        try {
+            service.sendMail(message, emails);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
+        redir.addFlashAttribute("flashMessage", "Mesajul a fost trimis!");
+
+        return "redirect:/viewEditionProposals/" + id;
     }
 }
