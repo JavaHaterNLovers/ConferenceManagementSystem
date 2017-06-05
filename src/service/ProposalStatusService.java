@@ -2,6 +2,7 @@ package service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import domain.Proposal;
@@ -37,16 +38,55 @@ public class ProposalStatusService extends BaseDomainService<ProposalStatus, Pro
                     .forEach(x->res.add(x));
         return res;
     }
+    
+    public List<ProposalStatus> getByProposalWithoutReviews(Proposal proposal) {
+        List<ProposalStatus> res = new ArrayList<>();
+        repo.getByProposal(proposal)
+                    .stream()
+                    .filter(x->Arrays.asList(ProposalStatus.proposalStatus.analyzes,
+                            ProposalStatus.proposalStatus.maybeAnalyzes,
+                            ProposalStatus.proposalStatus.rejectAnalyzes
+                            ).contains(x.getStatus()))
+                    .sorted((x,y)->x.getStatus().compareTo(y.getStatus()))
+                    .forEach(x->res.add(x));
+        return res;
+    }
+    
+    public List<ProposalStatus> getByProposalWithAnalyzes(Proposal proposal) {
+        List<ProposalStatus> res = new ArrayList<>();
+        repo.getByProposal(proposal)
+                    .stream()
+                    .filter(x->Arrays.asList(ProposalStatus.proposalStatus.analyzes,
+                            ProposalStatus.proposalStatus.maybeAnalyzes
+                            ).contains(x.getStatus()))
+                    .sorted((x,y)->x.getStatus().compareTo(y.getStatus()))
+                    .forEach(x->res.add(x));
+        return res;
+    }
+    
+    public List<ProposalStatus> getByProposalReviwers(Proposal proposal) {
+        List<ProposalStatus> res = new ArrayList<>();
+        repo.getByProposal(proposal)
+                    .stream()
+                    .filter(x->Arrays.asList(ProposalStatus.proposalStatus.toReview
+                            ).contains(x.getStatus()))
+                    .sorted((x,y)->x.getStatus().compareTo(y.getStatus()))
+                    .forEach(x->res.add(x));
+        return res;
+    }
 
     public Integer getProposalStatus(Proposal proposal){
         List<ProposalStatus> res = getByProposalAndReviewed(proposal);
         Integer nrAccept = 0;
         Integer nrReject = 0;
-
+        Boolean reviewesEnd = Calendar.getInstance().compareTo(proposal.getEdition().getEndReview()) == -1;
         if (res.size() < 2) {
+            if (reviewesEnd){
+                return STATUS_REJECTED;
+            }
             return STATUS_PENDING;
-        }
-
+        }       
+        
         for (ProposalStatus ps:res){
             if (Arrays.asList(ProposalStatus.proposalStatus.strongAccept,
                             ProposalStatus.proposalStatus.accept,
@@ -57,6 +97,9 @@ public class ProposalStatusService extends BaseDomainService<ProposalStatus, Pro
             }
         }
         if (nrAccept == 0 && nrReject == 0) {
+            if (reviewesEnd){
+                return STATUS_REJECTED;
+            }
             return STATUS_PENDING;
         }
 
@@ -68,6 +111,9 @@ public class ProposalStatusService extends BaseDomainService<ProposalStatus, Pro
             return STATUS_REJECTED;
         }
 
+        if (reviewesEnd){
+            return STATUS_REJECTED;
+        }
         return STATUS_PENDING;
     }
 }

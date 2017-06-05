@@ -21,7 +21,7 @@
 			<p><strong>Keywords:</strong> ${proposal.keywords}</p>
 			
 			<c:if test="${not empty proposal.file}">
-				<p><a href="">Descarcare fisier</a></p>
+				<p><a href="<c:url value='#' />" class="btn btn-primary">Descarcare fisier</a></p>
 			</c:if>
 			
 			<p>

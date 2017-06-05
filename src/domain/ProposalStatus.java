@@ -175,8 +175,8 @@ public class ProposalStatus
         borderlinePaper("BORDERLINE_PAPER"),
         weekReject("WEEK_REJECT"),
         reject("REJECT"),
-        strongReject("STRONG_REJECT");
-
+        strongReject("STRONG_REJECT"),
+        toReview("TO_REVIEW");
 
         /**
          * Numele statusului.

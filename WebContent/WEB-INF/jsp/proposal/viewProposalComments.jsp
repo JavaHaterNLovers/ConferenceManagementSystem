@@ -11,7 +11,7 @@
 		
 	<div class="row">
 		<div class="col-5 mx-auto">
-			<h3 class="mb-3 text-center">Detalii propunere</h3>
+			<h3 class="mb-3 text-center">Propunere: ${proposal.name}</h3>
 			<hr>
 				<c:if test="${status == 1}">
 					<h5 class="mb-2 text-center text-success">Status: Acceptata</h5>
@@ -25,12 +25,8 @@
 			
 			<hr>
 			<div class="text-center">
-				<a href="<c:url value='#' />" class="btn btn-primary">Descarca</a>
-				<c:if test="${valid}">
-					<a href="<c:url value='#' />" class="btn btn-success">Update</a>
-				</c:if>		
+				<a href="<c:url value='#' />" class="btn btn-primary">Descarca</a>	
 			</div>	
-			<p><strong>Nume:</strong> ${proposal.name}</p>
 			<p><strong>Autor:</strong> ${proposal.user}</p>
 			<p><strong>Conferinta:</strong> ${proposal.edition.conference}</p>
 			<p><strong>Editie:</strong> ${proposal.edition}</p>
@@ -50,6 +46,50 @@
 	        	<fmt:formatDate value="${proposal.modified.time}"
 	        	type="both" pattern="d/M/y H:m" />
         	</p>
+        	<c:if test="${submissionsEnded and not reviewersAlereadyChoosen}">
+        	<hr>
+        	<h5 class="mb-2 text-center"><a href="<c:url value='/chooseReviewers/${proposal.id}' />" >Alegere evaluatori</a></h5>
+        		<div class="list-group">
+					<c:forEach var="listValue" items="${proposalStatusWithoutRevieweri}">
+						 <div class="list-group-item list-group-item-action flex-column align-items-start mb-3">
+						    <div class="d-flex w-100 justify-content-between">
+						      <h5 class="mb-1">${listValue.user}</h5>
+						      <small class="text-muted">${listValue.status}</small>
+						    </div>
+						    <p class="mb-1">${listValue.comment}</p>
+						    <small class="text-muted">
+							    Creata:
+							    <fmt:formatDate value="${listValue.created.time}"
+		        				type="both" pattern="d/M/y H:m" /> Modificata:
+		        				<fmt:formatDate value="${listValue.modified.time}"
+		        				type="both" pattern="d/M/y H:m" />
+	        				</small>
+						  </div>
+					</c:forEach>
+				</div>
+			</c:if>
+			<hr>
+			<c:if test="${reviewersAlereadyChoosen and proposalStatus.isEmpty()}">
+        	<h5 class="mb-2 text-center">Evaluatori:</h5>
+        		<div class="list-group">
+					<c:forEach var="listValue" items="${reviewers}">
+						 <div class="list-group-item list-group-item-action flex-column align-items-start mb-3">
+						    <div class="d-flex w-100 justify-content-between">
+						      <h5 class="mb-1">${listValue.user}</h5>
+						      <small class="text-muted">${listValue.status}</small>
+						    </div>
+						    <p class="mb-1">${listValue.comment}</p>
+						    <small class="text-muted">
+							    Creata:
+							    <fmt:formatDate value="${listValue.created.time}"
+		        				type="both" pattern="d/M/y H:m" /> Modificata:
+		        				<fmt:formatDate value="${listValue.modified.time}"
+		        				type="both" pattern="d/M/y H:m" />
+	        				</small>
+						  </div>
+					</c:forEach>
+				</div>
+			</c:if>
         	<hr>
         	<h5 class="mb-2 text-center">Rezultate evaluare:</h5>
         		<div class="list-group">

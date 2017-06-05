@@ -22,7 +22,7 @@
 				<tbody>
 					<c:forEach items="${proposals}" var="proposal">
 					    <tr>      
-					        <td><a href="<c:url value="#"/>">${proposal.name}</a></td>
+					        <td><a href="<c:url value="/viewEditionProposals/viewCommentsProposal//${proposal.id}"/>">${proposal.name}</a></td>
 					        <td>${proposal.user}</td>
 				        	<td>
 					        	<fmt:formatDate value="${proposal.created.time}"

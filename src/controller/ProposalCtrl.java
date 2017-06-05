@@ -26,12 +26,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import domain.Edition;
 import domain.Proposal;
+import domain.ProposalStatus;
+import domain.Reviewers;
 import domain.Topic;
 import domain.User;
 import repo.BaseRepository;
 import repo.EditionRepository;
 import repo.PaymentRepository;
 import repo.ProposalRepository;
+import repo.ProposalStatusRepository;
 import service.ProposalStatusService;
 import util.BaseController;
 
@@ -48,6 +51,10 @@ public class ProposalCtrl extends BaseController
 
         if (ed == null) {
             throw new NotFoundException("Editia nu exista");
+        }
+
+        if (Calendar.getInstance().compareTo(ed.getEndSubmissions()) == 1) {
+            throw new NotFoundException("Perioada de submissions terminata");
         }
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -83,6 +90,10 @@ public class ProposalCtrl extends BaseController
 
         if (ed == null) {
             throw new NotFoundException("Editia nu exista");
+        }
+
+        if (Calendar.getInstance().compareTo(ed.getEndSubmissions()) == 1) {
+            throw new NotFoundException("Perioada de submissions terminata");
         }
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -135,8 +146,10 @@ public class ProposalCtrl extends BaseController
         User user = (User) auth.getPrincipal();
 
         List<Proposal> proposals = ((ProposalRepository) this.get("repo.proposal")).getNewProposals(user);
+        List<Proposal> proposalsReview = ((ProposalRepository) this.get("repo.proposal")).getToReview(user);
 
         model.addAttribute("proposals", proposals);
+        model.addAttribute("proposalsReview", proposalsReview);
 
         return "proposal/viewProposals";
     }
@@ -152,7 +165,6 @@ public class ProposalCtrl extends BaseController
         if (pr == null || pr.getUser().getId() != user.getId()) {
             throw new NotFoundException("Propunere inexistenta");
         }
-
         model.addAttribute("proposal", pr);
         model.addAttribute("status", ((ProposalStatusService)this.get("service.proposalStatus")).getProposalStatus(pr));
         model.addAttribute("valid", Calendar.getInstance().compareTo(pr.getEdition().getEndSubmissions()) == -1);
@@ -180,5 +192,93 @@ public class ProposalCtrl extends BaseController
         model.addAttribute("service", this.get("service.proposalStatus"));
 
         return "proposal/viewEditionProposals";
+    }
+
+    @Secured({"ROLE_CHAIR","ROLE_CO_CHAIR"})
+    @RequestMapping(value = "/viewEditionProposals/viewCommentsProposal/{id}", method = RequestMethod.GET)
+    public String viewCommentsProposals(Model model, @PathVariable int id) {
+        Proposal pr = ((ProposalRepository) this.get("repo.proposal")).get(id);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+
+        if (pr == null || user.getId() != pr.getEdition().getAuthor().getId()){
+            throw new NotFoundException("Nu sunteti autorul editiei");
+        }
+
+        Boolean reviewersAlereadyChoosen = false;
+        List<ProposalStatus> reviewers = ((ProposalStatusService)this.get("service.proposalStatus")).getByProposalReviwers(pr);
+        if (reviewers.size() != 0) {
+            reviewersAlereadyChoosen = true;
+        }
+
+        List<ProposalStatus> proposalStatus = ((ProposalStatusService)this.get("service.proposalStatus")).getByProposalAndReviewed(pr);
+
+        model.addAttribute("proposal", pr);
+        model.addAttribute("status", ((ProposalStatusService)this.get("service.proposalStatus")).getProposalStatus(pr));
+        model.addAttribute("proposalStatus", proposalStatus);
+        model.addAttribute("proposalStatusWithoutRevieweri", ((ProposalStatusService)this.get("service.proposalStatus")).getByProposalWithoutReviews(pr));
+        model.addAttribute("submissionsEnded", Calendar.getInstance().compareTo(pr.getEdition().getEndSubmissions()) == 1);
+        model.addAttribute("reviewers", reviewers);
+        model.addAttribute("reviewersAlereadyChoosen", reviewersAlereadyChoosen || !proposalStatus.isEmpty());
+        return "proposal/viewProposalComments";
+    }
+
+    @Secured({"ROLE_CHAIR","ROLE_CO_CHAIR"})
+    @RequestMapping(value = "/chooseReviewers/{id}", method = RequestMethod.GET)
+    public String chooseReviewers(Model model, @PathVariable int id) {
+        Proposal pr = ((ProposalRepository) this.get("repo.proposal")).get(id);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+
+        List<ProposalStatus> reviewers = ((ProposalStatusService)this.get("service.proposalStatus")).getByProposalReviwers(pr);
+        if (user.getId() != pr.getEdition().getAuthor().getId()
+            || Calendar.getInstance().compareTo(pr.getEdition().getEndSubmissions()) == -1
+            || reviewers.size() != 0
+        ) {
+            throw new NotFoundException("Nu sunteti autorul editiei.");
+        }
+
+        model.addAttribute("proposal", pr);
+        model.addAttribute("proposalStatusWithoutRevieweri", ((ProposalStatusService)this.get("service.proposalStatus")).getByProposalWithAnalyzes(pr));
+        model.addAttribute("reviewers", new Reviewers());
+        return "proposal/chooseReviewers";
+    }
+
+    @Secured({"ROLE_CHAIR","ROLE_CO_CHAIR"})
+    @RequestMapping(value = "/chooseReviewers/submit/{id}", method = RequestMethod.POST)
+    public String chooseReviewersSubmit(@ModelAttribute("reviewers")Reviewers reviewers,
+        @PathVariable int id,
+        BindingResult result, ModelMap model,
+        RedirectAttributes redirAttr
+    ) {
+        Proposal pr = ((ProposalRepository) this.get("repo.proposal")).get(id);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+
+        List<ProposalStatus> reviewersOthers = ((ProposalStatusService)this.get("service.proposalStatus")).getByProposalReviwers(pr);
+        if (user.getId() != pr.getEdition().getAuthor().getId()
+            || Calendar.getInstance().compareTo(pr.getEdition().getEndSubmissions()) == -1
+            || reviewersOthers.size() != 0
+        ) {
+            throw new NotFoundException("Nu sunteti autorul editiei.");
+        }
+
+        if (reviewers.getIdProposalsStatus().size() != 2) {
+            redirAttr.addFlashAttribute("flashMessage", "Trebuie sa alegi 2 evaluatori!");
+            return "redirect:/chooseReviewers/" + id;
+        }
+
+        ProposalStatusRepository repo = ((ProposalStatusRepository)this.get("repo.proposalStatus"));
+        for (String idStr : reviewers.getIdProposalsStatus()){
+            Integer idProposalStatus = Integer.parseInt(idStr);
+            ProposalStatus ps = repo.get(idProposalStatus);
+            ps.setStatus(ProposalStatus.proposalStatus.toReview);
+            repo.save(ps);
+        }
+        redirAttr.addFlashAttribute("flashMessage", "Evaluatori adaugati!");
+
+        return "redirect:/viewEditionProposals/viewCommentsProposal/" + id;
     }
 }
