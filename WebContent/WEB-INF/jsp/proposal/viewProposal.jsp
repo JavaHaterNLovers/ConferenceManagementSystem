@@ -29,7 +29,7 @@
 					<p><a href="<c:url value='#' />" class="btn btn-primary">Descarcare fisier</a></p>
 				</c:if>
 				<c:if test="${valid}">
-					<a href="<c:url value='#' />" class="btn btn-success">Update</a>
+					<a href="<c:url value='/updateProposal/${proposal.id}' />" class="btn btn-success">Update</a>
 				</c:if>		
 			</div>	
 			<p><strong>Nume:</strong> ${proposal.name}</p>

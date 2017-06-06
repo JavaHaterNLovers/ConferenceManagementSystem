@@ -48,4 +48,8 @@ public class Topic
     public void setId(Integer id) {
         this.id = id;
     }
+    
+    public String toString(){
+        return name;
+    }
 }

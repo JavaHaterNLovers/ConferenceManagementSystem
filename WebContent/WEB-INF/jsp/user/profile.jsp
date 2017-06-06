@@ -48,7 +48,7 @@
 		
 		<sec:authorize access="hasRole('ROLE_CHAIR')" var="isChair" />
 		<c:if test="${isChair}">
-			<div class="offset-3 col-6 mt-3">
+ 			<div class="offset-3 col-6 mt-3">
 				<h3 class="mb-3 text-center">Conferinte Creeate <a href="<c:url value='/createConference' />" class="btn btn-primary">Creeaza Conferinta</a></h3>
 				<hr>
 				
@@ -163,8 +163,7 @@
 					        	<c:if test="${user.id != pageContext.request.userPrincipal.principal.id}">
 					        		<td><a href="<c:url value='/updateUser/${user.id}' />" class="btn btn-warning">Modifica</a></td>
 				        		</c:if>
-						</tr>
-						    </tr>
+						</tr>						    
 						</c:forEach>
 					</tbody>
 				</table>
