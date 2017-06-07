@@ -67,7 +67,6 @@ public class EditionCtrl extends BaseController
         return "edition/createEdition";
     }
 
-    @Secured({"ROLE_CHAIR", "ROLE_CO_CHAIR"})
     @RequestMapping(value = "/viewEdition/{id}", method = RequestMethod.GET)
     public String viewEdition(Model model, @PathVariable int id) {
         Edition ed = ((EditionRepository) this.get("repo.edition")).get(id);

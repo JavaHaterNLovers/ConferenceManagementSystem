@@ -171,9 +171,13 @@ public class ProposalCtrl extends BaseController
             throw new NotFoundException("Propunere inexistenta");
         }
 
+        int status = ((ProposalStatusService)this.get("service.proposalStatus")).getProposalStatus(pr);
+
         model.addAttribute("proposal", pr);
-        model.addAttribute("status", ((ProposalStatusService)this.get("service.proposalStatus")).getProposalStatus(pr));
-        model.addAttribute("valid", Calendar.getInstance().compareTo(pr.getEdition().getEndSubmissions()) == -1);
+        model.addAttribute("status", status);
+        model.addAttribute("valid", Calendar.getInstance().compareTo(pr.getEdition().getEndSubmissions()) == -1
+            || (status == ProposalStatusService.STATUS_ACCEPTED && Calendar.getInstance().compareTo(pr.getEdition().getEndReview()) == 1)
+        );
         model.addAttribute("proposalStatus",((ProposalStatusService)this.get("service.proposalStatus")).getByProposalAndReviewedIgnore(pr, user));
 
         return "proposal/viewProposal";

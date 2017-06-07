@@ -8,7 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.acls.model.NotFoundException;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -23,47 +23,66 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import domain.Edition;
 import domain.Proposal;
 import domain.Topic;
 import domain.User;
 import repo.BaseRepository;
-import repo.EditionRepository;
-import repo.PaymentRepository;
 import repo.ProposalRepository;
+import service.ProposalStatusService;
 import util.BaseController;
 
 @Controller
 public class UpdateProposalCtrl extends BaseController
 {
-    @SuppressWarnings("unchecked")
+    @Secured("ROLE_USER")
     @RequestMapping(value = "/updateProposal/submit/{id}", method = RequestMethod.POST)
-    public String createProposalSubmit(@PathVariable("id") Integer id, @Valid @ModelAttribute("proposal") Proposal proposal,
+    public String updateProposalSubmit(@PathVariable("id") Integer id, @Valid @ModelAttribute("proposal") Proposal proposal,
         BindingResult result, ModelMap model,
         RedirectAttributes redirAttr
     ) {
-        ProposalRepository repository =(ProposalRepository) this.get("repo.proposal");
-        Proposal old =repository.get(id);
+        ProposalRepository repository = (ProposalRepository) this.get("repo.proposal");
+        Proposal old = repository.get(id);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+
+        if (old == null || old.getUser().getId() != user.getId()) {
+            throw new AccessDeniedException("Nu puteti edita aceasta propunere");
+        }
+
         old.setDescription(proposal.getDescription());
         old.setFile(proposal.getFile());
         old.setName(proposal.getName());
         old.setKeywords(proposal.getKeywords());
         old.setTopics(proposal.getTopics());
         repository.save(old);
-        
+
         redirAttr.addFlashAttribute("flashMessage", "Propunerea a fost updatata");
 
         return "redirect:/profile";
     }
 
-
-    @SuppressWarnings("unchecked")
+    @Secured("ROLE_USER")
     @RequestMapping(value = "/updateProposal/{idProposal}", method = RequestMethod.GET)
-    public String createProposal(@PathVariable("idProposal") Integer idProposal,Model model, HttpSession session) {
-        
-        Proposal proposal = new Proposal();
-        
-        proposal =((ProposalRepository) this.get("repo.proposal")).get(idProposal);
+    public String updateProposal(@PathVariable("idProposal") Integer idProposal,Model model, HttpSession session, RedirectAttributes redirAttr) {
+        Proposal proposal = ((ProposalRepository) this.get("repo.proposal")).get(idProposal);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+
+        if (proposal == null || proposal.getUser().getId() != user.getId()) {
+            throw new AccessDeniedException("Nu puteti edita aceasta propunere");
+        }
+
+        int status = ((ProposalStatusService)this.get("service.proposalStatus")).getProposalStatus(proposal);
+
+        if (Calendar.getInstance().compareTo(proposal.getEdition().getEndSubmissions()) == 1
+            && (status != ProposalStatusService.STATUS_ACCEPTED || Calendar.getInstance().compareTo(proposal.getEdition().getEndReview()) == -1)) {
+            redirAttr.addFlashAttribute("flashMessage", "Propunerea nu poate fi momentat updatata");
+
+            return "redirect:/viewProposal/" + idProposal;
+        }
+
         model.addAttribute("proposal", proposal);
         model.addAttribute("id",idProposal);
         model.addAttribute("listAllTopics", ((BaseRepository<Topic>) this.get("repo.topic")).all());

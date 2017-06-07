@@ -7,7 +7,7 @@
 <t:layout>
 	<div class="row">
 		<div class="offset-3 col-6 mt-3">			
-			<h3 class="mb-3 text-center">Detalii Editie <a href="<c:url value='//updateEdition/${edition.id}' />" class="btn btn-success">Modificare Editie</a></h3>
+			<h3 class="mb-3 text-center">Detalii Editie <a href="<c:url value='/updateEdition/${edition.id}' />" class="btn btn-success">Modificare Editie</a></h3>
 			<hr>
 			
 			<p><strong>Autor:</strong> ${edition.author}</p>
