@@ -78,4 +78,41 @@ public class EditionCtrl extends BaseController
 
         return "edition/view";
     }
+    
+    @RequestMapping(value = "/updateEdition/submit/{id}", method = RequestMethod.POST)
+    public String updateEditionSubmit(@Valid @ModelAttribute("edition")Edition edition,
+        @PathVariable int id,
+        BindingResult result, ModelMap model,
+        RedirectAttributes redirAttr
+    ) {
+        EditionRepository repo = ((EditionRepository) this.get("repo.edition"));
+        Edition old = repo.get(id);
+        
+        old.setConference(((ConferenceRepository) this.get("repo.conference")).get(Integer.parseInt(edition.getAuxConferenceId())));
+
+        if (result.hasErrors()) {
+            model.addAttribute("conferences", ((ConferenceRepository) this.get("repo.conference")).all());
+            return "edition/createEdition";
+        }
+        old.setBeginDate(edition.getBeginDate());
+        old.setBeginSubmissions(edition.getBeginSubmissions());
+        old.setEndBidding(edition.getEndBidding());
+        old.setEndDate(edition.getEndDate());
+        old.setEndReview(edition.getEndReview());
+        old.setEndSubmissions(edition.getEndSubmissions());
+        old.setName(edition.getName());
+        
+        repo.save(old);
+
+        redirAttr.addFlashAttribute("flashMessage", "Editie modificata cu success");
+
+        return "redirect://viewEditionProposals/" + id;
+    }
+
+    @RequestMapping(value = "/updateEdition/{id}", method = RequestMethod.GET)
+    public String updateEdition(Model model, @PathVariable int id) {
+        model.addAttribute("edition", ((EditionRepository) this.get("repo.edition")).get(id));
+        model.addAttribute("conferences", ((ConferenceRepository) this.get("repo.conference")).all());
+        return "edition/updateEdition";
+    }
 }
