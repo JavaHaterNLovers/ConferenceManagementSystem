@@ -6,13 +6,56 @@
 
 <t:layout>
 	<div class="row">
-		<div class="offset-3 col-6 mt-3">
+		<div class="offset-3 col-6 mt-3">			
+			<h3 class="mb-3 text-center">Detalii Editie <a href="<c:url value='//updateEdition/${edition.id}' />" class="btn btn-success">Modificare Editie</a></h3>
+			<hr>
+			
+			<p><strong>Autor:</strong> ${edition.author}</p>
+			<p><strong>Conferinta:</strong> ${edition.conference}</p>
+			<p><strong>Nume:</strong> ${edition.name}</p>
+			<p>
+				<strong>Data Inceput:</strong>
+	        	<fmt:formatDate value="${edition.beginDate.time}"
+	        	type="both" pattern="d/M/y H:m" />
+        	</p>
+        	<p>
+				<strong>Data Sfarsit:</strong>
+	        	<fmt:formatDate value="${edition.endDate.time}"
+	        	type="both" pattern="d/M/y H:m" />
+        	</p>
+        	<p>
+				<strong>Inceput Submiteri:</strong>
+	        	<fmt:formatDate value="${edition.beginSubmissions.time}"
+	        	type="both" pattern="d/M/y H:m" />
+        	</p>
+        	<p>
+				<strong>Sfarsit Submiteri:</strong>
+	        	<fmt:formatDate value="${edition.endSubmissions.time}"
+	        	type="both" pattern="d/M/y H:m" />
+        	</p>
+        	<p>
+				<strong>Sfarsit Bidding:</strong>
+	        	<fmt:formatDate value="${edition.endBidding.time}"
+	        	type="both" pattern="d/M/y H:m" />
+        	</p>
+        	<p>
+				<strong>Sfarsit Review:</strong>
+	        	<fmt:formatDate value="${edition.endReview.time}"
+	        	type="both" pattern="d/M/y H:m" />
+        	</p>
+        	<p>
+				<strong>Creata:</strong>
+	        	<fmt:formatDate value="${edition.created.time}"
+	        	type="both" pattern="d/M/y H:m" />
+        	</p>   		
+			
+			<hr>
+
 			<h3 class="mb-3 text-center">Propunerile Editiei ${edition}
 				<c:if test="${createOrar}">
 					<a class="btn btn-primary" href="<c:url value="/viewOrar/${edition.id}"/>">Creeare Orar</a>
 				</c:if>
 			</h3>
-			<hr>
 			
 			<table class="table table-striped table-hover mx-auto w-100">
 				<thead>
@@ -48,13 +91,14 @@
 				</tbody>
 			</table>
 			
+			<br />
+			
 			<h4 class="mb-3 text-center">Propunerile Neacceptate
 				<c:if test="${reviewEnded}">
 					<a href="<c:url value="/rejectedProposals/${edition.id}"/>" class="btn btn-primary">Trimite Mesaj</a>
 				</c:if>
 			</h4>
-			<hr>
-			
+						
 			<table class="table table-striped table-hover mx-auto w-100">
 				<thead>
 					<tr>
