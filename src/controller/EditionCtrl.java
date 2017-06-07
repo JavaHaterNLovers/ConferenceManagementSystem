@@ -5,6 +5,7 @@ import java.util.Calendar;
 import javax.validation.Valid;
 
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -28,6 +29,7 @@ import util.BaseController;
 @Controller
 public class EditionCtrl extends BaseController
 {
+    @Secured({"ROLE_CHAIR", "ROLE_CO_CHAIR"})
     @RequestMapping(value = "/createEdition/submit", method = RequestMethod.POST)
     public String createEditionSubmit(@Valid @ModelAttribute("edition")Edition edition,
         BindingResult result, ModelMap model,
@@ -53,6 +55,7 @@ public class EditionCtrl extends BaseController
         return "redirect:/profile";
     }
 
+    @Secured({"ROLE_CHAIR", "ROLE_CO_CHAIR"})
     @RequestMapping(value = "/createEdition", method = RequestMethod.GET)
     public String createEdition(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -64,6 +67,7 @@ public class EditionCtrl extends BaseController
         return "edition/createEdition";
     }
 
+    @Secured({"ROLE_CHAIR", "ROLE_CO_CHAIR"})
     @RequestMapping(value = "/viewEdition/{id}", method = RequestMethod.GET)
     public String viewEdition(Model model, @PathVariable int id) {
         Edition ed = ((EditionRepository) this.get("repo.edition")).get(id);
@@ -78,7 +82,8 @@ public class EditionCtrl extends BaseController
 
         return "edition/view";
     }
-    
+
+    @Secured({"ROLE_CHAIR", "ROLE_CO_CHAIR"})
     @RequestMapping(value = "/updateEdition/submit/{id}", method = RequestMethod.POST)
     public String updateEditionSubmit(@Valid @ModelAttribute("edition")Edition edition,
         @PathVariable int id,
@@ -87,13 +92,21 @@ public class EditionCtrl extends BaseController
     ) {
         EditionRepository repo = ((EditionRepository) this.get("repo.edition"));
         Edition old = repo.get(id);
-        
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+
+        if (old == null || old.getAuthor().getId() != user.getId()) {
+            throw new AccessDeniedException("Nu puteti edita aceasta editie.");
+        }
+
         old.setConference(((ConferenceRepository) this.get("repo.conference")).get(Integer.parseInt(edition.getAuxConferenceId())));
 
         if (result.hasErrors()) {
             model.addAttribute("conferences", ((ConferenceRepository) this.get("repo.conference")).all());
-            return "edition/createEdition";
+            return "edition/updateEdition";
         }
+
         old.setBeginDate(edition.getBeginDate());
         old.setBeginSubmissions(edition.getBeginSubmissions());
         old.setEndBidding(edition.getEndBidding());
@@ -101,7 +114,7 @@ public class EditionCtrl extends BaseController
         old.setEndReview(edition.getEndReview());
         old.setEndSubmissions(edition.getEndSubmissions());
         old.setName(edition.getName());
-        
+
         repo.save(old);
 
         redirAttr.addFlashAttribute("flashMessage", "Editie modificata cu success");
@@ -109,10 +122,21 @@ public class EditionCtrl extends BaseController
         return "redirect://viewEditionProposals/" + id;
     }
 
+    @Secured({"ROLE_CHAIR", "ROLE_CO_CHAIR"})
     @RequestMapping(value = "/updateEdition/{id}", method = RequestMethod.GET)
     public String updateEdition(Model model, @PathVariable int id) {
-        model.addAttribute("edition", ((EditionRepository) this.get("repo.edition")).get(id));
+        Edition ed = ((EditionRepository) this.get("repo.edition")).get(id);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+
+        if (ed == null || ed.getAuthor().getId() != user.getId()) {
+            throw new AccessDeniedException("Nu puteti edita aceasta editie.");
+        }
+
+        model.addAttribute("edition", ed);
         model.addAttribute("conferences", ((ConferenceRepository) this.get("repo.conference")).all());
+
         return "edition/updateEdition";
     }
 }
