@@ -4,6 +4,10 @@ This project uses Spring MVC, Spring Security, Hibernate for back end and Bootst
 
 In the "Eclipse settings" folder you will find settings for eclipse so that all programmers use the same code formatting.
 
+### Diagrame, Documentatie
+
+https://drive.google.com/drive/folders/0B2q8KbrEbYT0Tm5OdjZzemFJZHM?usp=sharing
+
 ### How to install
 
 - download Eclipse for Java EE (https://www.eclipse.org/downloads/, get the installer and then choose "Eclipse for Java EE")
